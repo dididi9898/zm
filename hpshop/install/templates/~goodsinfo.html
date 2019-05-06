@@ -1,0 +1,856 @@
+﻿{php $SEO['site_title'] = '商品详情'}
+{template "hpshop","top-head"}
+
+
+<style>
+/*    .personal-head {
+        background: linear-gradient(90deg, #5f3ceb, #598cff);
+        color: #fff;
+    }
+    i.layui-icon.layui-icon-left {
+        color: #fff;
+    }
+*/
+    .member-index-head .more .layui-badge {
+        background: #321ab5;
+    }
+
+    .member-index-head .portrait {
+        border-radius: 0;
+    }
+    .jy-wall-icon .iconfont{font-size: .5rem;color: #fff}
+    .max-fs{font-size: .5rem}
+    .jy-cz-input{overflow: hidden;}
+    .bl1{border:1px solid #e6e6e6;}
+    .bg-1e90ff{background-color: #1e90ff}
+    .goods-img .swiper-pagination-fraction{
+    	width: 15%;
+    	background-color: rgba(0,0,0,.5);
+    	left: calc(50% - 0.1rem);
+    	margin-left: -5%;
+    	color: #fff;
+    	font-size: 0.15rem;
+    	line-height: 0.2rem;
+    	padding: 0 .1rem;
+    	border-radius: 20px;
+    }
+    .goods-tp .c-eb3c3c{font-weight:bolder;}
+    .goods-tp .c-eb3c3c span{
+    	font-weight:normal;
+    	text-decoration: line-through;
+    }
+    /*标题标签*/
+    .goods-tag1,.goods-tag2{
+    	font-size: .13rem;
+    	color: #ff6700;
+    	border:1px solid #ff6700;
+    	padding: 0 5px;
+    	border-radius: 5px;
+    	margin-right: 5px;
+    }
+    .goods-tag2{
+    	background-color: #ff6700;
+    	color: #fff;
+    }
+    .goods-kxy .layui-col-xs4{
+    	text-align: center;
+		font-size: .13rem;
+		color: #afafaf;
+    }
+    .personal-head nav{
+		display: inline-block;
+		line-height: 0.5rem;
+	    font-size: 0.15rem;
+	    height: 0.5rem;
+	    overflow: hidden;
+	    width: calc(100% - 1.4rem);
+    }
+    .personal-head nav a{
+    	position: relative;
+    	display: inline-block;
+    	width: calc((100%-0.3rem)/3 - 0.1rem)
+    }
+    /*头部商品-详情-评价选中效果*/
+    .goods-nav-on{color: #FF4F00 !important}
+    .goods-nav-on:after{
+    	content: '';
+    	position: absolute;
+    	width: 90%;
+    	bottom: 0;
+    	left: 50%;
+    	margin-left: -45%;
+    	height: 3px;
+    	background-color: #FF4F00;
+    }
+    .goods-tc-tit{
+    	float: left;
+    	width: 1rem;
+    	padding-left: .1rem;
+    	font-size: .15rem;
+    	color: #afafaf;
+    }
+    .goods-tc-txt{
+    	font-size: .15rem;
+    	width: calc(100%-1rem);
+    	margin-left: calc(1rem + 0.1rem);
+    }
+    .pj-user-img{
+		float: left;
+    	overflow: hidden;
+    	border-radius: 50%;
+    	width: .3rem;
+    	height: .3rem;
+    }
+    .pj-user-name{
+    	display:inline-block;
+    	line-height: .3rem; 
+    	font-size: .15rem;
+    	color: #737373
+    }
+    .pj-user-img img{width: 100%;}
+    .goods-pj-more{
+        text-align: center;
+    }
+    .goods-pj-more a{
+        font-size: 0.13rem;
+        border-radius: 20px;
+        border: 1px solid #e6e6e6;
+        display: inline-block;
+        padding: 0 .1rem;
+        line-height: .2rem;
+    }
+	.goods-img img{ width: 100%; height: 100%;object-fit: contain ;}
+    .goods-img-wall h3{
+        position: relative;
+        background-color: #fff;
+        font-size: .15rem;
+        padding-left: .1rem;
+        line-height: .35rem;
+    }
+    .goods-img-wall h3:after{
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: .35rem;
+        width: .05rem;
+        background-color: #eb3c3c;
+    }
+    .goods-img-wall img{
+        width: 100%;
+    }
+    /*选择套餐界面*/
+    .goods-tcw{
+        padding: 0 .2rem;
+        background-color: #fff;
+    }
+    .goods-tcn{
+        position: relative;
+    }
+    .goods-tcn-img{
+        position: absolute;
+        width: 1rem;
+        height: 1rem;
+        overflow: hidden;
+        left: 0;
+        top: -.5rem;
+        border: 1px solid #e6e6e6;
+        border-radius: 5px;
+    }
+    .goods-tcn-img img{width: 100%;}
+    .goods-tcn .text-left{
+        margin-left: calc( 1rem + 0.2rem);
+        padding-right: 0.1rem;
+        width: calc( 100% - 1rem - 0.2rem);
+    }
+    .goods-tc-opt span{
+        display: inline-block;
+        background-color: #f4f4f4;
+        margin: 0 .05rem .05rem 0;
+        padding: 0 .1rem;
+        border-radius: 5px;
+        font-size: .13rem;
+        color: #555;
+        line-height: .25rem;
+    }
+    .tc-on{background-color:#ffa101 !important;color: #fff !important;}
+    .goods-tcw{display: none;}
+    .goods-tcn-num-add{
+        float: right;
+        width: 1rem;
+        text-align: center;
+    }
+    .goods-tcn-num-add span{
+        display: inline-block;
+        width: .2rem;
+        line-height: .2rem;
+        background-color: #e6e6e6;
+        text-align:center; 
+        font-size: .15rem;
+    }
+    .goods-tcn-num-add input{
+        width: .35rem;
+        line-height: .2rem;
+        border-style: none;
+        text-align: center;
+    }
+    .jy-goods .layui-layer-page .layui-layer-content{overflow: inherit !important}
+    .jy-goods .layui-layer-setwin .layui-layer-close2{right: -.1rem}
+    /*评价列表*/
+    .goods-pjw{
+        display: none;
+        background-color: #fff
+    }
+    .goods-pj-tag{padding: 0 .1rem;}
+    .goods-pj-tag span{
+        border-radius: 8px;
+        color: #555;
+        padding: 0 .15rem;
+        line-height: .3rem;
+        background-color: #f5f5f5;
+        font-size: .13rem;
+        display: inline-block;
+        margin-top: .05rem;
+    }
+    .pj-tag-on{
+        background-color: #ff6700 !important;
+        color: #fff !important;
+    }
+    .goods-pj-con{
+        padding: 0 .1rem;
+    }
+    .goods-pj-user .pj-user-name{
+        font-size: .13rem;
+    }
+    .goods-pj-time{
+        float: right;
+        width: 1rem;
+        font-size: .13rem;
+        color: #737373;
+        text-align: right;
+        line-height: .3rem;
+    }
+    .goods-pj-w{
+        height: calc(100% - 1.25rem - 21px);
+        overflow-y: auto;
+        overflow: auto;
+        overflow-x: hidden;
+        width: 100%;
+    }
+    .goods-pj-con p{
+        font-size: .13rem;
+        color: #555;
+        text-indent: 2em;
+    }
+    .goods-pj-img li{
+        float: left;
+        width: .5rem;
+        height: .5rem;
+        overflow: hidden;
+        margin-right: .05rem;
+    }
+    .goods-pj-img li img{
+        width: 100%;
+    }
+</style>
+
+<body class="bg-f4f4f4">
+	<div class="personal-head">
+		<a onClick="javascript :history.back(-1);">
+			<div class="fl head-icon">
+				<i class="layui-icon layui-icon-left"></i>
+			</div>
+		</a>
+		<nav>
+			<a class="goods-nav-on">
+				<span>商品</span>
+			</a>
+			<a >
+				<span>详情</span>
+			</a>
+			<a >
+				<span>评价</span>
+			</a>
+		</nav>
+		<div class="fr head-icon">
+			<a href="{APP_PATH}">
+				<i class="layui-icon layui-icon-home"></i>
+			</a>
+		</div>
+	</div>
+    <div class="h5"></div>
+    <div class="layui-container jy-goods" style="min-height:calc(100vh - 0.5rem) ;">
+        <div class="layui-row" id="goods">
+        	<!-- 商品主图-轮播 -->
+        	<div class="goods-img">
+				<div class="swiper-container">
+	        		<div class="swiper-wrapper">
+	        			<div class="swiper-slide">
+	        				<img :src="thumb">
+	        			</div>
+	        			<div class="swiper-slide" v-for="thumbs in album">
+	        				<img :src="thumbs.url">
+	        			</div>
+	        		</div>
+				    <div class="swiper-pagination"></div>
+				</div>
+        	</div>
+        	<!-- 价格标题 -->
+        	<div class="goods-tp bg-fff">
+        		<div class="h1"></div>
+        		<div class="pl1 bg-fs c-eb3c3c">￥{{ shop_price }}<span class="pl05 sm-fs c-afafaf">￥{{ market_price }}</span></div>
+        		<div class="h05"></div>
+        		<h3 class="pl1"><!--<span class="goods-tag1">热销</span><span class="goods-tag2">店长推荐</span>-->{{ goods_name }}</h3>
+        		<div class="h1"></div>
+        		<div class="goods-kxy">
+        			<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+        				<span>库存：{{ stock }}件</span>
+        			</div>
+        			<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+        				<span>销量：0件</span>
+        			</div>
+        			<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+        				<span>运费：包邮</span>
+        			</div>
+        			<div class="clear"></div>
+        		</div>
+        		<div class="h1"></div>
+        	</div>
+        	<div class="h1"></div>
+        	<!-- 套餐选择 -->
+        	<div class="goods-tc bg-fff" @click="tc">
+                <div class="h1"></div>
+        		<div class="goods-tc-tit">规格：</div>
+        		<div class="goods-tc-txt">请选择<template v-for="specnames in specname">{{ specnames.name }} </template></div>
+        		<div class="clear"></div>
+        		<div class="h1"></div>
+        	</div>
+        	<div class="h1"></div>
+        	<!-- 评价 -->
+        	<div class="goods-pj bg-fff">
+        		<div class="h1"></div>
+				<div class="pl1 pr1">
+                    <span class="icon iconfont icon-community mr05"></span>商品评价(500+)
+                </div>
+                <hr>
+                <div class="pl1 pr1">
+                	<div class="pj-user-img"><img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png"></div>
+                	<span class="pj-user-name">用户名称</span>
+                	<div class="h1 clear"></div>
+                	<p class="pl1 sm-fs">很好，很喜欢。</p>
+                </div>
+                <hr>
+                <div class="pl1 pr1">
+                	<div class="pj-user-img"><img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png"></div>
+                	<span class="pj-user-name">用户名称</span>
+                	<div class="h1 clear"></div>
+                	<p class="pl1 sm-fs">测试内容测试内容测试内容测试内容测试内容。</p>
+                </div>
+                <hr>
+                <div class="goods-pj-more" @click="pj">
+                	<a>查看全部评价</a>
+                </div>
+                <hr>
+        	</div>
+            <!--  商品详情图片展示 -->
+            <div class="goods-img-wall">
+                <h3>商品详情</h3>
+                <div>
+                	
+                </div>
+            </div>
+            <!-- 商品评价-隐藏 -->
+            <div class="goods-pjw">
+                <div class="personal-head" style="position: unset;">
+                    <div class="fl head-icon" @click="shut">
+                        <i class="layui-icon layui-icon-left"></i>
+                    </div>
+                    <div class="title">
+                        <span>商品评价</span>
+                    </div>
+                </div>
+                <div class="goods-pj-tag">
+                    <div class="h05"></div>
+                    <span class="pj-tag-on">全部</span>
+                    <span>追加</span>
+                    <span>有图(10)</span>
+                    <span>好评(15)</span>
+                    <span>中评(8)</span>
+                    <span>差评(7)</span>
+                </div>
+                <hr>
+                <div class="goods-pj-w">
+                    <div class="goods-pj-con">
+                        <div class="goods-pj-user">
+                            <div class="pj-user-img">
+                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
+                            </div>
+                            <span class="pj-user-name">用户名称</span>
+                            <div class="goods-pj-time">2019-03-02</div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="h05"></div>
+                        <p>好评 有图</p>
+                        <div class="h05"></div>
+                        <ul class="goods-pj-img">
+                            <li><img src="{APP_PATH}statics/public/images/csshop.jpg"></li>
+                            <li><img src="{APP_PATH}statics/public/images/20170826043356617.jpg"></li>
+                            <div class="clear"></div>
+                        </ul>
+                        <div class="h05"></div>
+                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
+                    </div>
+                    <hr>
+                    <div class="goods-pj-con">
+                        <div class="goods-pj-user">
+                            <div class="pj-user-img">
+                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
+                            </div>
+                            <span class="pj-user-name">用户名称</span>
+                            <div class="goods-pj-time">2019-03-02</div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="h05"></div>
+                        <p>差评</p>
+                        <div class="h05"></div>
+                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
+                    </div>
+                    <hr>
+                    <div class="goods-pj-con">
+                        <div class="goods-pj-user">
+                            <div class="pj-user-img">
+                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
+                            </div>
+                            <span class="pj-user-name">用户名称</span>
+                            <div class="goods-pj-time">2019-03-02</div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="h05"></div>
+                        <p>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</p>
+                        <div class="h05"></div>
+                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
+                    </div>
+                    <hr>
+                    <div class="goods-pj-con">
+                        <div class="goods-pj-user">
+                            <div class="pj-user-img">
+                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
+                            </div>
+                            <span class="pj-user-name">用户名称</span>
+                            <div class="goods-pj-time">2019-03-02</div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="h05"></div>
+                        <p>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</p>
+                        <div class="h05"></div>
+                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
+                    </div>
+                    <hr>
+                    <div class="goods-pj-con">
+                        <div class="goods-pj-user">
+                            <div class="pj-user-img">
+                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
+                            </div>
+                            <span class="pj-user-name">用户名称</span>
+                            <div class="goods-pj-time">2019-03-02</div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="h05"></div>
+                        <p>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</p>
+                        <div class="h05"></div>
+                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        
+            
+            <!-- 套餐选择界面-隐藏 -->
+            <div class="goods-tcw" id="goods_spec">
+                <div class="goods-tcn">
+                    <div class="goods-tcn-img">
+                        <img src="{APP_PATH}statics/public/images/20170826043356617.jpg">
+                    </div>
+                    <div class="text-left">
+                        <div class="h05"></div>
+                        <template v-for="prices in specdata">
+							<div class="lg-fs lh2 c-eb3c3c" v-if="specid == prices.specid">￥{{ prices.specprice }}</div>
+						</template>
+                        <div class="sm-fs lh2 c-707070">请选择：<template v-for="spec_name in specname"> {{ spec_name.name }}</template></div>
+                        <template v-for="prices in specdata">
+                        	<div class="xs-fs lh2 c-707070" v-if="specid == prices.specid">库存：{{ prices.specstock }}</div>
+						</template>
+                    </div>
+                    <div class="h1"></div>
+                    
+                    <template v-for="(spec_name,index) in specname">
+						<div class="lg-fs">{{ spec_name.name }}</div>
+						<div class="h05"></div>
+						<div class="goods-tc-opt" :data-number="index">
+							<template  v-for="vallarr in spec_name.valarr">
+								<span v-if="vallarr.key == specid.split('-')[index]" class="tc-on" @click="specClass($event)" ref="ccc" :data-id="vallarr.key" >{{ vallarr.val }}</span>
+								<span :data-id="vallarr.key"  v-else @click="specClass($event)" ref="ccc">{{ vallarr.val }}</span>
+							</template>
+						</div>
+						<hr>
+                    </template>
+                    <div class="goods-tcn-num">
+                        <span class="lg-fs">数量</span>
+                        <div class="goods-tcn-num-add">
+                            <span class="jian" v-on:click="jiannum">-</span>
+                            <input type="number" v-model="s_shuliang" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
+                            <span class="jia" v-on:click="jianum">+</span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="h2"></div>
+                    <button class="layui-btn layui-btn-fluid layui-btn-danger" @click="submit($event)">确定</button>
+                    <div class="h1"></div>
+                </div>
+            </div>
+            
+        
+        
+    </div>
+
+	<div class="index-footer3" id="goods_footer" style=" box-shadow: 0px 0px 5px #ddd;">
+		<ul>
+			<li class="fl">
+				<!--<div style="width: 50%;float:left;text-align: center;">
+					<i class="icon iconfont icon-comment" style="font-size: 0.2rem;line-height: 0.275rem;"></i>
+					<p style="font-size: 0.11rem;line-height: 0.125rem;">客服</p>
+				</div>-->
+				<a href="{APP_PATH}index.php?m=hpshop&c=index&a=goodscart" class="d-b p-r" style="width: 50%;float:left;text-align: center; padding: 0;">
+					<span class="layui-badge-dot p-a" style="top: 0.05rem;right: 0.15rem;"></span>
+					<i class="layui-icon layui-icon-cart" style="font-size: 0.2rem;line-height: 0.275rem;"></i>
+					<p style="font-size: 0.11rem;line-height: 0.125rem;">购物车</p>
+				</a>
+				<div style="width: 50%;float:left;text-align: center;">
+					<i class="icon iconfont icon-like" style="font-size: 0.2rem;line-height: 0.275rem;"></i>
+					<p style="font-size: 0.11rem;line-height: 0.125rem;">收藏</p>
+				</div>
+				<div class="clear"></div>
+			</li>
+			<li class="fl" style="background: #ff5722;line-height: 0.4rem;text-align: center;color: #fff;" @click="add">
+				加入购物车
+			</li>
+			<li class="fl" style="background: #ff0000;line-height: 0.4rem;text-align: center;color: #fff;" @click="buy">
+				立即购买
+			</li>
+			<div class="clear"></div>
+		</ul>
+	</div>
+
+    {template "hpshop","footer"}
+
+
+
+
+
+    <script>
+	$(function(){
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+        ;
+        ! function () {
+
+            var layer = layui.layer,
+                form = layui.form,
+                $ = layui.jquery,
+                upload = layui.upload,
+                table = layui.table;
+			
+			
+			
+		
+		var gid = {$_GET[id]};
+		var goodsinfo;
+		var type='0';
+		aj.get('index.php?m=hpshop&c=goods_api&a=goodsinfo',{"gid":gid}, function (data) {
+			if (data.status == 'error') {
+				layer.msg(data.message);
+			} else {
+				goodsinfo = data.data;
+				goodsinfo.specname = '';
+				var goods = new Vue({
+				    el: '#goods',
+				    data: goodsinfo,
+					methods:{
+						// 选择套餐
+						tc:function(){
+							type ="0";
+							layer.open({
+							  type: 1,
+							  area: ['100%', 'auto'],
+							  offset: 'b',
+							  // closeBtn: 0,
+							  anim: 2,
+							  title: false, //不显示标题
+							  shadeClose: true,
+							  isOutAnim: false,
+							  scrollbar: false,
+							  content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                			});
+						},
+						// 商品评论列表
+						pj:function(){
+							$('.goods-pjw').height($(window).height())
+							layer.open({
+							  type: 1,
+							  area: ['100%', 'auto'],
+							  offset: 't',
+							  closeBtn: 0,
+							  anim: 2,
+							  title: false, //不显示标题
+							  shadeClose: true,
+							  isOutAnim: false,
+							  scrollbar: false,
+							  content: $('.goods-pjw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+							});
+						},
+						shut:function(){
+							layer.closeAll()
+						}
+					},
+					mounted(){
+						// 商品主图轮播
+						var mySwiper = new Swiper ('.goods-img .swiper-container', {	
+							loop: true, // 循环模式选项
+							observer: true, 
+							observeParents:true,//修改swiper的父元素时，自动初始化swiper
+							pagination: {
+							  el: '.swiper-pagination',
+							  type: 'fraction',
+							},
+						}) 
+					}
+				})
+				//console.log(goodsinfo);
+				//console.log(goodsinfo.isspec,goodsinfo.type_id);
+				if(goodsinfo.isspec == "1"){
+					console.log("进来了");
+					$.ajax({
+						url:'index.php?m=hpshop&c=goods_api&a=goodstypedata',
+						type:'POST', //GET
+						async:false,    //或true,是否同步
+						data:{
+							fid:goodsinfo.type_id
+						},
+						timeout:5000,    //超时时间
+						dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+						success:function(data){
+							console.log(data);
+							if(data.status == 'success'){
+								var spec = data.data.spec;
+								var specname = data.data.specname;
+								goods.specname = specname;
+								var goods_spec = new Vue({
+									el: '#goods_spec',
+									data: {
+										spec:spec,
+										specname:specname,
+										specid:'',
+										specdata:goods.specdata,
+										s_shuliang: "1",
+										max_sum:goods.specdata[0].specstock,
+										type:""
+									},
+									methods:{
+										specClass:function (event) {
+											if(!$(event.target).hasClass('tc-on')){
+												$(event.target).parent('.goods-tc-opt').find('span').removeClass('tc-on');
+												$(event.target).addClass('tc-on');
+												var specids = this.specid.split('-');
+												specids[$(event.target).parent('.goods-tc-opt').data('number')] = $(event.target).data('id');
+												this.specid = specids.join('-');
+												$.each(goods.specdata,function(index,val){
+													if(this.specid == val.specid){
+														this.max_sum = val.specstock
+													}
+												})
+												console.log(this.specid);
+												//console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
+											}
+										},
+										jiannum: function () {
+											if(this.s_shuliang<2){
+												this.s_shuliang = "1";
+												layer.msg('该宝贝不能再减了！');
+											}else{
+												this.s_shuliang --;
+											}
+										},
+										jianum: function () {
+											if(this.s_shuliang>this.max_sum){
+												layer.msg('该宝贝不能再多了！');
+											}else{
+												this.s_shuliang ++;
+											}
+										},
+										submit:function(event){
+											console.log('型号'+this.specid,'商品ID'+gid,'数量'+this.s_shuliang,'支付类型'+type);
+											//立即购买
+											if(type == "1"){
+												//buy
+												aj.post('index.php?m=hpshop&c=goods_api&a=buynow',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
+													console.log(data);
+													if(data.status == 'error'){
+														if(data.code == "0"){
+															layer.msg(data.message);
+															setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+														}else{
+															layer.msg(data.message);
+														}
+													}else{
+														layer.msg('购买成功');
+														setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=settlement&met=1'", 1000);
+													}
+												})
+											}else if(type == "2"){
+												//add
+												aj.post('index.php?m=hpshop&c=goods_api&a=addbuycart',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
+													console.log(data);
+													if(data.status == 'error'){
+														if(data.code == "0"){
+															layer.msg(data.message);
+															setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+														}else{
+															layer.msg(data.message);
+														}
+													}else{
+														layer.closeAll();
+														layer.msg('已成功加入购物车');
+													}
+												})
+											}else if(type == "0"){
+												layer.closeAll()
+												layer.msg('请选择结算方式（立刻购买/加入购物车）');
+											}else{
+												layer.closeAll();
+												layer.msg('空，购买失败');
+											}
+										}
+										
+									},
+									mounted(){
+											//console.log(this.specname);
+											var specid = [] ;
+											$.each(this.specname,function(i,v){
+												specid.push('1');
+											})
+											this.specid = specid.join('-');
+											console.log('默认勾选',this.specid);
+									}
+								});
+							}else{
+								layer.msg('产品规格获取失败');
+							}
+						}
+					})
+
+				}
+			}
+		});
+			
+			
+		var goods_footer = new Vue({
+				el: '#goods_footer',
+				data: {},
+				methods:{
+					// 选择套餐
+					buy:function(){
+						type = '1';
+						layer.open({
+						  type: 1,
+						  area: ['100%', 'auto'],
+						  offset: 'b',
+						  // closeBtn: 0,
+						  anim: 2,
+						  title: false, //不显示标题
+						  shadeClose: true,
+						  isOutAnim: false,
+						  scrollbar: false,
+						  content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+						});
+					},
+					// 选择套餐
+					add:function(){
+						type = '2';
+						layer.open({
+						  type: 1,
+						  area: ['100%', 'auto'],
+						  offset: 'b',
+						  // closeBtn: 0,
+						  anim: 2,
+						  title: false, //不显示标题
+						  shadeClose: true,
+						  isOutAnim: false,
+						  scrollbar: false,
+						  content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+						});
+					}
+				}
+		});
+            // 选择套餐
+            /*$('.goods-tc').on('click', function () {
+                layer.open({
+                  type: 1,
+                  area: ['100%', 'auto'],
+                  offset: 'b',
+                  // closeBtn: 0,
+                  anim: 2,
+                  title: false, //不显示标题
+                  shadeClose: true,
+                  isOutAnim: false,
+                  scrollbar: false,
+                  content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                });
+            });*/
+            // 商品评论列表
+            /*$('.goods-pj a').on('click', function () {
+                $('.goods-pjw').height($(window).height())
+                layer.open({
+                  type: 1,
+                  area: ['100%', 'auto'],
+                  offset: 't',
+                  closeBtn: 0,
+                  anim: 2,
+                  title: false, //不显示标题
+                  shadeClose: true,
+                  isOutAnim: false,
+                  scrollbar: false,
+                  content: $('.goods-pjw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                });
+            });*/
+			
+            // 商品评论图片弹出
+           $('.goods-pj-img img').click(function(){ 
+              layer.photos({
+              photos: '.goods-pj-img li'
+              ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+              ,move: false,
+              }); 
+
+           })
+            // 头部商品-详情、评价菜单
+            $('.personal-head nav a').click(function(){
+                var index = $('.personal-head nav a').index(this)
+                $('.personal-head nav .goods-nav-on').removeClass('goods-nav-on')
+                $('.personal-head nav a').eq(index).addClass('goods-nav-on')
+                
+            })
+        }();
+        // 规格1选择
+        $('.goods-tc-opt span').click(function(){
+            var index = $('.goods-tc-opt span').index(this)
+            // $('.goods-tcn .text-left sm-fs').text($('.goods-tc-opt1 span').eq(index).text())
+            $('.goods-tc-opt .tc-on').removeClass('tc-on')
+            $('.goods-tc-opt span').eq(index).addClass('tc-on')
+            
+        })
+			
+	});
+    </script>
+</body>
+
+</html>

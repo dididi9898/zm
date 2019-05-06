@@ -1,0 +1,519 @@
+	<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>商城</title>
+    <link rel="stylesheet" type="text/css" href="{CSS_PATH}shop/pe/loaders.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{CSS_PATH}shop/pe/loading.css"/>
+
+    <script src="{JS_PATH}shop/pe/jquery-3.2.1.min.js"></script>
+    <script src="{JS_PATH}shop/pe/auto-size.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="{CSS_PATH}shop/pe/swiper.min.css"/>
+	<link href="{CSS_PATH}shop/pe/app.css" rel="stylesheet">
+	<script src="{JS_PATH}shop/pe/swiper.min.js"></script>
+	<script src="{JS_PATH}shop/pe/jquery.lazyload.js"></script>
+   
+    <!--字体-->
+    <link rel="stylesheet" href="{CSS_PATH}font/demo.css">
+    <link rel="stylesheet" href="{CSS_PATH}font/iconfont.css">
+    <script type="text/javascript">
+		//加载
+    	$(window).load(function(){
+    		$(".loading").addClass("loader-chanage")
+    		$(".loading").fadeOut(300)
+    	})
+    </script>
+	<script type="text/javascript">
+			$(document).ready(function(){
+				var mySwiper = new Swiper('.swiper-container',{
+						loop: true,
+						speed:1000,
+						autoplay: 2000,
+						pagination: '.swiper-pagination',
+					  });
+			});
+		
+        $(function () {
+			//tophead渐变
+			$(window).scroll(function () {
+                //alert('1');
+                var sc = $(document).scrollTop();
+                //alert(sc);
+                var kh = $("figure").height() ;
+                //alert(kh);
+                var xs = sc / kh;
+				var xss =xs*100;
+                $('.show_nav').show();
+                $('.show_nav').css("opacity", xs).css("filter", "alpha("+xss+")");
+                $('.show_nav_head').css("opacity", xs).css("filter", "alpha("+xss+")");
+                if (sc == 0) {
+                    $('.show_nav').hide();
+                }
+
+            });
+			//headnav切换
+			$(window).scroll(function () {
+				var baby = $("#baby").scrollTop();
+				var babyh = $("#baby").height() ;
+				var evaluateh = $("#evaluate").height() + babyh ;
+				var detailsh = $("#display").height() + evaluateh ;
+				var recommendh = $("#recommend").height() + detailsh ;
+				
+				var sc = $(document).scrollTop();
+				if(sc <= babyh){
+					$(".show_nav_head ul li a").removeClass('current');
+					$(".show_nav_head ul li a.baby").addClass('current');
+				}
+				if(sc <= evaluateh && sc > babyh){
+					$(".show_nav_head ul li a").removeClass('current');
+					$(".show_nav_head ul li a.evaluate").addClass('current');
+				}
+				if(sc <= detailsh && sc > evaluateh){
+					$(".show_nav_head ul li a").removeClass('current');
+					$(".show_nav_head ul li a.details").addClass('current');
+				}
+				if(sc <= recommendh && sc > detailsh){
+					$(".show_nav_head ul li a").removeClass('current');
+					$(".show_nav_head ul li a.recommend").addClass('current');
+				}
+			});	
+
+        })
+	</script>
+
+</head>
+
+<body class="item">
+	<!--top-->
+	<div class="show_nav">
+		<div class="left"><a class="icon iconfont icon-back" href="javascript:history.go(-1);"></a></div>
+		<div class="right"><a href="{APP_PATH}" class="icon iconfont icon-shouye2"></a></div>
+		<!--<div class="center">2015冬季新款韩版加厚中长款小鹿毛呢大衣女系带加厚羊毛呢外套</div>-->
+	</div>
+	<div class="show_nav_head">
+		<ul>
+			<li><a href="#baby" class="baby current">宝贝</a></li>
+			<li><a href="#evaluate" class="evaluate">评价</a></li>
+			<li><a href="#display" class="details">详情</a></li>
+			<li><a href="#recommend" class="recommend">推荐</a></li>
+			<div class="clear"></div>
+		</ul>
+	</div>
+	<!--top end-->	
+	
+	<div class="contaniner fixed-contb" >
+		<!--baby-->	
+		<section class="detail" id="baby">
+			<figure class="swiper-container">
+				<ul class="swiper-wrapper">
+                {php for($nn=0;$nn<count($pictureurl);$nn++){ }
+					<li class="swiper-slide">
+						<a class="">
+							<img src="{thumb($pictureurl[$nn]['url'],800,800)}"/>
+						</a>
+					</li>
+                {php } }
+				</ul>
+				<div class="swiper-pagination">
+				</div>
+			</figure>
+			<dl class="jiage">
+				<dt>
+					<h3><span class="hot">热销</span><span class="owner">店长推荐</span><span>{$title}</span></h3>
+					<!--<div class="collect">
+						<img src="{IMG_PATH}shop/pe/detail-heart-hei.png"/>
+						<p>收藏</p>
+					</div>-->
+				</dt>
+				<dd>
+					<b>￥{$bw_price}</b>
+					<del>￥{$yj_price}</del>
+					<!--<small>+356积分</small>-->
+				</dd>
+				<ul class="basics">
+					<li><i>库存：</i><span>{$sellnum}件</span></li>
+					<li><i>销量：</i><span>{$sellnum}件</span></li>
+					<li><i>运费：</i><span>（包邮）</span></li>
+					<div class="clear"></div>
+				</ul>
+			</dl>			
+		</section>
+
+		<section class="sku">
+			<!--<dl class="sku-group">
+				<dt>已选：</dt>
+				<dd class="classify01">"<span>红色</span>"</dd>
+				<dd class="classify02">"<span>10</span>"</dd>
+				<dd class="total"><span>1</span>件</dd>
+				<i>...</i>
+			</dl>-->
+            <dl class="sku-group">
+				<dt>请选择：</dt>
+				<dd class="classify01">"<span>颜色</span>"</dd>
+				<dd class="classify02">"<span>尺寸</span>"</dd>
+				<i>...</i>
+			</dl>
+		</section>
+		<!--baby end-->	
+		<!--大标题-->
+		<!--<section class="show-tit">
+			<span class="show-line">一一一</span><span class="icon iconfont icon-edit">评价</span><span class="show-line">一一一</span>
+		</section>-->
+		<!--评价-->
+		<section class="evaluate" id="evaluate">
+			<a href=""><div class="evaluate-tit">商品评价<span>（100）</span></div></a>
+			<div class="evaluate-user">
+				<div class="user"><img src="https://img30.360buyimg.com/mobile/s60x60_jfs/t493/15/557644423/10532/62d3112/5473e62aNdb4251d8.png" /><span class="name">j***2</span><span class="real-star" style="padding:0 1.3rem"></span>
+				<div class="clear"></div>
+				</div>
+				<div class="content">
+					<p>物流速度还行，等了2天；东西拿到后略有味道，但组装起来蛮好，很结实，不软，踩上去有感觉；</p>
+					<p class="product-type">颜色：10片混装跑男款 </p>
+					<p class="pay-date">2017-08-18 23:52:16</p>
+				</div>
+			</div>
+			<div class="evaluate-user">
+				<div class="user"><img src="https://img30.360buyimg.com/mobile/s60x60_jfs/t493/15/557644423/10532/62d3112/5473e62aNdb4251d8.png" /><span class="name">j***2</span><span class="real-star" style="padding:0 1.3rem"></span>
+				<div class="clear"></div>
+				</div>
+				<div class="content">
+					<p>物流速度还行，等了2天；东西拿到后略有味道，但组装起来蛮好，很结实，不软，踩上去有感觉；</p>
+					<p class="product-type">颜色：10片混装跑男款 </p>
+					<p class="pay-date">2017-08-18 23:52:16</p>
+				</div>
+			</div>
+			<div class="more"><a href="">查看更多评价</a></div>
+		</section>
+		<!--评价 end-->
+		<!--图文详情-->
+		<section class="show-tit">
+			<span class="show-line">一一一</span><span class="icon iconfont icon-edit">图文详情</span><span class="show-line">一一一</span>
+		</section>
+		<section class="display" id="display">
+			<div class="content">
+				{$content}
+			</div>
+		</section>
+		<!--图文详情 end-->
+		<!--推荐-->
+		<ul class="index-wares-ul" id="recommend">
+			<section class="show-tit">
+				<span class="show-line">一一一</span><span class="icon iconfont icon-edit">为你推荐</span><span class="show-line">一一一</span>
+			</section>
+            
+		{pc:content action="position" posid="20" order="listorder DESC"}
+            {loop $data $r}
+			<li class="index-wares-li {if $n%2==0}left{/if}{if $n%2==1}right{/if}">
+				<a href="{$r['url']}">
+					<div class="wares-img">
+						<img src="{thumb($r[thumb],300,300)}" />
+					</div>
+					<div class="wares-word">
+						<p class="wares-keyword"><span style=" background: #ff0000;">新品</span><span style=" background: #ff6600;">HOT</span>{str_cut($r[title],56)}</p>
+						<div class="Price"><i>￥</i><span class="Front Price">{$r['bw_price']}</span><span class="prime">{$r['yj_price']}</span><span class="more">...</span></div>
+					</div>
+				</a>
+			</li>
+            {/loop}
+        {/pc}    
+            
+            
+            
+            
+		<div class="footer-Support">
+			<div class="footer-repair"></div>
+		</div>
+    
+		<!--隐藏 添加购物车-->
+		<section class="layer">
+			<div class="content">
+				<div class="classify-img"><img src="{IMG_PATH}shop/pe/111.jpg"/></div>
+				<div class="head">
+					<dl>
+						<dt><span>￥<b class="classify03">{$bw_price}</b></span></dt>
+                        <b class="classify04" style=" display:none">{$yj_price}</b>
+						<dd><span class="tit">已选：</span><span class="classify01">红色</span><span class="classify02">37码</span><span class="total">1</span><span>件</span></dd>
+						<dd><span class="tit">库存：</span><span class="">1000</span>件</dd>
+					</dl>
+					<a class="close"></a>
+				</div>
+				<div class="bd">
+					<dl>
+						<dt>颜色</dt>
+						<dd>
+							<ul id="sku01">
+                            {php $ii = 0}
+                            {php $a=$color}
+                            {php $dasan = explode("|", $bw_price2)}
+                            {php $dasan_xj = explode("|", $yj_price2)}
+                            {php for($n=0;$n<count($a);$n++){ }
+<li><a data-sku01="{$dasan[$ii]}" {if $ii==0}class="active"{/if} onClick="is_color('{$a[$n]['alt']}','{$a[$n]['url']}','{$dasan[$ii]}','{$dasan_xj[$ii]}');">{$a[$n]['alt']}</a><i></i></li>
+                            {php $ii++}
+                            {php } }
+								<!--这个是按钮不可点击<li><span class="no">大碎花</span><i></i></li>-->
+								<!--无库存加提示-->
+								<!--<li><span onclick="disp_alert()" class="no">大碎花</span><i></i></li>-->
+								<div class="clear"></div>
+							</ul>
+						</dd>
+					</dl>        
+					<dl>
+						<dt>尺码</dt>
+						<dd>
+							<ul id="sku02">
+                                {php $arr = explode('|',$size);}
+                                {php $i = 0}
+                                {php $dasan2 = explode("|", $bw_price2)}
+                                {loop $arr $j}
+                                <li><a data-sku02="{$dasan2[$i]}" {if $i==0}class="active"{/if}>{$j}</a><i></i></li>
+                                {php $i++}
+                                {/loop}                            
+								<!--这个是按钮不可点击 <li><span class="no">40</span><i></i></li>-->
+								<!--无库存加提示-->
+								<!--<li><span onclick="disp_alert()" class="no">40</span><i></i></li>-->
+								
+								<div class="clear"></div>
+							</ul>
+						</dd>
+					</dl>
+					<dl class="pieces">
+						<dt>购买数量</dt>
+						<dd><span class="jian" id="jian">－</span><input type="number" readonly id="pieces" value="1"><span class="jia" id="jia">＋</span><i></i></dd>
+						<div class="clear"></div>
+						
+					</dl>
+				</div>
+
+					<div class="foot">
+						<!--<a class="next" data-id="10" href="{:U('buy')}?id=10">确定</a>-->
+						<a class="next" data-id="10" onclick="add_buycar(this, '{$id}','{$catid}');">确定</a>
+					</div>
+			</div>
+
+		</section>
+		<!--隐藏 添加购物车 end-->
+	</div>
+	
+
+
+
+	
+
+<footer class="footer">
+	<span class="server collect"><a><img src="{IMG_PATH}shop/pe/collect_logo1.png"></a></span>
+	<span class="server cart"><i>10</i><a href="{APP_PATH}index.php?m=zyorder&c=index&a=buycar_list"><img src="{IMG_PATH}shop/pe/cart_buy.png"></a></span>
+    <div class="button_cart"><a class="buy" id="cs1" onClick="jr_lj()">加入购物车</a></div>
+    <div class="button_now"><a class="buy-now" id="cs2" onClick="jr_lj()">立即购买</a></div>
+</footer>
+
+<!--必须放下面-->
+<script>
+	  function jr_lj() {
+		  var othis = $(this);
+		  alert(othis.id);
+                var num = 0;
+                var conut = 0;
+                $(".xz").each(function () {
+                    if ($(this).attr("data") == 1) {
+                        var b = $(this).parent().next().next().find(".num").val();
+                        var jg = $(this).parent().next().next().next().find(".pri").text();
+                        conut += parseInt(b);
+                        num += b * jg;
+                    }
+                })
+
+                $('#zj').html(num);
+                $('#zsl').html(conut);
+            };
+	
+	$(function(){ 
+		$('.contaniner .detail .swiper-container ul li a').click(function(){
+			if($(".contaniner .detail .swiper-container ul li a").hasClass('click')){
+				$('.swiper-container').removeClass('click');
+				$('.swiper-slide').removeClass('click');
+				$('body').removeClass('h100vw');
+				$('.contaniner .detail .swiper-container ul li a').removeClass('click');
+			}else{
+				$('.swiper-container').addClass('click');
+				$('.swiper-slide').addClass('click');
+				$('body').addClass('h100vw');
+				$('.contaniner .detail .swiper-container ul li a').addClass('click');
+			}	
+		})
+	}); 
+var path = "{:U('buy')}?id=";
+function disp_alert()
+{
+alert("这个选项没有库存了！！");
+}
+(function(){
+	//sku
+	$('.buy-now,.sku,.buy').click(function(){
+		$('.layer').addClass('acitve');
+	})
+	$('.close').click(function(){
+		$('.layer').removeClass('acitve');
+	});
+	//已选规格01
+	$('#sku01 a').click(function(){
+		console.log(this);
+		$('#sku01 a').removeClass('active');
+		$(this).addClass('active');
+		$('.next').attr('href',path + $(this).data('sku01'));
+		$('.sku-group dd.classify01 span').text($(this).text());
+		$('.head dl dd .classify01').text($(this).text());
+		
+	});
+	//已选规格02
+	$('#sku02 a').click(function(){
+		console.log(this);
+		$('#sku02 a').removeClass('active');
+		$(this).addClass('active');
+		/*$('.next').attr('href',path + $(this).data('sku02'));*/
+		$('.head dl dd .classify02').text($(this).text());
+		$('.sku-group dd.classify02 span').text($(this).text());
+	});
+	
+	//加减购买数量
+	$('#jian').click(function(){
+		console.log(this);
+		var pieces = $("#pieces").val();
+		var pieces = parseInt(pieces) - 1;
+		if (pieces <= 0){
+			var pieces = 1;
+		}else{
+			
+			$('.pieces dd i').text("");
+		}
+		//$('#sku02 a').removeClass('active');
+		//$(this).addClass('active');
+		/*$('.next').attr('href',path + $(this).data('sku02'));*/
+		document.getElementById("pieces").value = pieces;
+		$('.head dl dd .total').text($('#pieces').val());
+		$('.sku-group dd.total span').text($('#pieces').val());
+	});
+	$('#jia').click(function(){
+		console.log(this);
+		var pieces = $("#pieces").val();
+		var pieces = parseInt(pieces) + 1;
+		if (pieces > 200){
+			var pieces = 200;
+			$('.pieces dd i').text("(限购200件)");
+		}else{
+			
+			$('.pieces dd i').text("");
+		}
+		//$('#sku02 a').removeClass('active');
+		//$(this).addClass('active');
+		/*$('.next').attr('href',path + $(this).data('sku02'));*/
+		document.getElementById("pieces").value = pieces;
+		$('.head dl dd .total').text($('#pieces').val());
+		$('.sku-group dd.total span').text($('#pieces').val());
+	});
+	//图片懒加载
+	$("img").lazyload({
+		effect : 'fadeIn',
+		placeholder :'http://img.weizhi.so/placeholder.png'
+	});
+	
+})();
+
+
+</script>
+
+
+
+<script>
+	//颜色
+	function is_color(color,url,price,price2){
+		//$('#is_color').text(color);
+		$('.classify-img>img').attr('src',url); 
+        $('.classify03').text(price);
+		$('.classify04').text(price2);
+	}
+</script>
+
+
+    <script>
+	//购物车	
+	function add_buycar(obj, id, catid, buy, status) {
+		var color=$('#sku01 .active').text();
+			if(!color){
+				alert('请选择颜色！');
+				return false;
+			}
+		var size=$('#sku02 .active').text();
+			if(!size){
+				alert('请选择尺码！');
+				return false;
+			}
+				
+				
+				
+		var price=$('.classify03').text();
+		var xj_price=$('.classify04').text();
+		var num = $('.total').text();
+		var num = parseInt(num);
+		var os = $(obj);
+		if(num<1){
+			alert('请填写数量！');
+		}
+		/*if({$activity_shop}==2){
+			var activity_shop =1;
+		}else{
+			var activity_shop =0;
+		}*/
+		
+		$.get('{APP_PATH}index.php', {m:'zyorder', c:'index', a:'buycar_ajxa', catid:catid,color:color,size:size,price:price,xj_price:xj_price,num:num,id:id, random:Math.random()}, function(data){
+			
+			alert(data);
+			return false;
+			
+			
+			if (data=='1') {
+				alert('此商品不存在或已下架！');
+			} else if (data=='2') {
+				alert('商品已售完！');
+			} else if(data=='3') {
+				window.location.href="{APP_PATH}index.php?m=member&c=index&a=login";
+			} else {
+				if (buy) {
+					window.location.href="{APP_PATH}index.php?m=zyshop&c=index&a=buycar_list";
+				} else {
+					var obj = eval('(' + data + ')');
+					
+					$('#product_num').html(obj.quantity);
+					$('#product_fee').html(obj.total);
+					var showBuycar=$(".show-buycar"),offset =os.offset();
+					showBuycar.css({"position":"absolute","z-index":"100",left:offset.left,top:offset.top+35});
+				
+						showBuycar.show();
+				
+					$('#buy_show').show();
+					$('#J-addone-cartnum').html(obj.quantity);
+					//window.location.reload()
+					
+					$('.layer').removeClass('acitve');
+					
+				}
+			}
+		});
+	}
+
+
+	/*$.get('{APP_PATH}index.php', {m:'zyshop', c:'index', a:'get_buycar', random:Math.random()},function(data){
+		var obj = eval('(' + data + ')');
+		if (obj.num) {
+			$('#buy_show').show();
+			$('#J-addone-cartnum').html(obj.num);
+		}
+	});*/
+		
+	</script>
+
+
+</body>
+</html>

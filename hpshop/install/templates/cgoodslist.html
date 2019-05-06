@@ -1,0 +1,178 @@
+﻿{php $SEO['site_title'] = '商品列表'}
+{template "hpshop","top-head"}
+<style>
+	.layui-flow-more{clear:both;}
+</style>
+
+<body class="bg-f4f4f4" >
+	<div style="width: 100vw; overflow: hidden;">
+		<div id="allcat">
+			<div class="personal-head" style="height: 0.6rem;">
+				<div class="index-search">
+					<div @click="open" class="search-box" style="color: #8a8a8a;"><template v-if="search != ''">{{ search }}</template><template v-else>搜索商品</template></div>
+				</div>
+			</div>
+			<div class="layui-container search-fl" style="height:100vh; display: none" >
+				<div class="layui-row">
+					<!-- 搜索页-隐藏 -->
+					<div class="fl-search">
+						<div class="personal-head" style="height: 0.6rem;">
+							<div class="index-search2">
+								<input type="text" placeholder="商品搜索" v-model="search">
+								<button @click="submit_search">搜索</button>
+							</div>
+						</div>
+						<div class="fl-tj" style="position: relative;">
+							<div class="h1 clear"></div>
+							<div class="lg-fs c-afafaf">搜索历史</div>
+							<div class="lg-fs c-afafaf" style="position: absolute;bottom: 0.5rem;width: 95%;text-align: center;z-index: 200" @click="close">关闭搜索</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="h3"></div>
+		<div class="h3"></div>
+		<div class="display-list">
+			<div class="screen">
+				<ul>
+					<!-- more 灰色箭头 Positive 下箭头  Aspect 上箭头 on 字体及下划线 manner 排版样式-->
+					<li class="fl on"><a href="#"><span>综合</span></a></li>
+					<li class="fl "><a href="#"><span>价格</span></a></li>
+					<li class="fl "><a href="#"><span>销量</span></a></li>
+					<li class="fl "><a href="#"><span>新品</span></a></li>
+					<div class="clear"></div>
+				</ul>
+			</div>
+			
+			
+			<ul class="index-wares-ul" id="sergoods">
+				
+				<div class="clear"></div>
+			</ul>
+			<!--<ul class="index-wares-ul" id="sergoods">
+				<li class="index-wares-li fl" v-for="(sergoods,index) in data">
+					<a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+ sergoods.id +''" >
+						<div class="wares-img">
+							<img :src="sergoods.thumb">
+						</div>
+						<div class="wares-word">
+							<p class="wares-keyword">{{ sergoods.goods_name }}</p>
+							<div class="Price"><i>￥</i><span class="Front Price">{{ sergoods.shop_price }}</span><span class="prime">{{ sergoods.market_price }}</span></div>
+						</div>
+					</a>
+					<div class="add-card"><i class="icon iconfont icon-cart"><span>1</span></i></div>
+				</li>
+				<div class="clear"></div>
+			</ul>-->
+		</div>
+    </div>
+
+    {template "hpshop","bottom-footer"}
+    {template "hpshop","footer"}
+
+
+
+    <script>
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+        ;
+        ! function () {
+
+            var layer = layui.layer,
+                form = layui.form,
+                $ = layui.jquery,
+                upload = layui.upload,
+                table = layui.table,
+				flow = layui.flow;
+			
+				var sercon = '{$_GET[sercon]}';
+
+				var allcat =  new Vue({
+					el: '#allcat',
+					data:{
+						search: sercon
+					},
+					methods:{
+						//打开搜索
+						open:function(){
+							$(".layui-container.search-fl").show();
+							$('.fl-tj').height($(window).height()-$('.search-fl .personal-head').height())
+							layer.open({
+							  type: 1,
+							  area: ['100%', 'auto'],
+							  offset: 't',
+							  closeBtn: 0,
+							  anim: 2,
+							  title: false, //不显示标题
+							  shadeClose: true,
+							  isOutAnim: false,
+							  scrollbar: false,
+							  content: $('.fl-search'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+							});
+							
+						},
+						//关闭搜索
+						close:function(){
+							$(".layui-container.search-fl").hide();
+							layer.closeAll()
+						},
+						submit_search:function(){
+							if(this.search){
+								aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.search},function(data){
+									console.log(data);
+								});
+								
+							}else{
+								layer.msg('搜索内容不能为空');
+							}
+							//console.log(this.search);
+							window.location.href="/index.php?m=hpshop&c=index&a=search&sercon="+this.search;
+						}
+					}
+				});
+			var catid = '{$_GET[catid]}';
+			if(catid){
+				  flow.load({
+					elem: '#sergoods' //指定列表容器
+					,mb:'10'
+					,isAuto:true
+					,end:'到底了'
+					,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+					  var lis = [];	
+						console.log(page);
+					  //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+						aj.get('index.php?m=hpshop&c=goods_api&a=catgoods&page='+page,{catid:catid},function(res){
+							console.log(res);
+							if(res.status == "success"){
+								layui.each(res.data, function(index, item){
+									var thumb = '<div class="wares-img"><img src="'+item.thumb+'"></div>';
+									var text = '<p class="wares-keyword">'+item.goods_name+'</p>';
+									var price = '<div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+'</span><span class="prime">'+item.market_price+'</span></div>';
+									
+									lis.push('<li class="index-wares-li fl"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+ item.id +'">'+thumb+'<div class="wares-word">'+text+price+'</div></a></li>');
+
+									
+								  
+								});
+								next(lis.join(''), page < res.page.totalpage );    
+
+								/*var sergoods =  new Vue({
+										el: '#sergoods',
+										data:data
+								});*/
+							}else{
+								layer.msg('栏目获取失败');
+							}
+						});
+					}
+				  });
+				
+			}else{
+				console.log('get不到栏目');
+				window.location.href="/index.php?m=hpshop&c=index&a=search";
+			}
+        }();
+    </script>
+</body>
+
+</html>

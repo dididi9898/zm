@@ -1,0 +1,759 @@
+﻿{template "hpshop","top-head"}
+<style>
+	.personal-head{ position: fixed; top:0; left: 0; width: 100%; opacity: 0;z-index: 999;background:#ed722d;}
+	.goods-checkbox .layui-form-item .layui-form-checkbox[lay-skin=primary]{ margin-left: 0.05rem;}
+	.layui-form-item .layui-form-checkbox[lay-skin=primary]{ margin-top: 0.1rem; margin-bottom: 0.1rem;}
+	.goods-list-checkbox::after{ padding-top: 280%; content: ''; width: 100%; display: block;}
+	.goods-list-checkbox .layui-form-item{ position: absolute; top: calc(50% - 0.18rem);}
+	.layui-form-checkbox[lay-skin=primary] i{
+		right: auto;
+		left: 0;
+		width: 0.16rem;
+		height: 0.16rem;
+		line-height: 0.16rem;
+		border: 0.01rem solid #d2d2d2;
+		font-size: 0.12rem;
+		border-radius: 0.16rem;
+	}
+	.layui-form-checkbox[lay-skin=primary]{
+		padding-left:0.18rem;
+		min-width: 0.18rem;
+		min-height:0.18rem;
+	}
+	.layui-badge{
+		height: 0.18rem;
+    	line-height: .18rem;}
+	.goods-list-right>.text>.content{
+		padding: 0 0.05rem;
+	}
+	.goods-list-right>.text>.content>.title{line-height: 0.18rem;height: 0.36rem;}
+	.layui-badge, .layui-badge-dot, .layui-badge-rim{ font-size: 0.12rem; border-radius: 0.02rem;padding: 0 0.06rem;}
+	.goods-list-right>.text::before{ padding-top:33.333%;display: none;}
+	.goods-list-right>.text>.content{ position: relative;}
+	.goods-amount{ border: 0.01rem solid #ddd; width: 0.78rem; border-radius: 0.02rem; position: absolute; right: 0.05rem; bottom: 0;}
+	.goods-amount>span{ font-size: 0.16rem; width: .23rem; line-height: .23rem; height: .23rem; text-align: center;}
+	.goods-amount>input{ width: 0.3rem; line-height: .23rem; height: 0.23rem; border: none; text-align: center;}
+	.goods-amount>span.reduce{ border-right: 0.01rem solid #ddd;}
+	.goods-amount>span.add{ border-left: 0.01rem solid #ddd;}
+	.goods-amount>span.disabled{color: #ddd;}
+	.layui-btn{ line-height: 0.38rem; height: 0.38rem; font-size: .14rem;}
+	.cart-count .layui-form-checkbox[lay-skin=primary] span{line-height: 0.17rem; height: 0.17rem; font-size: 0.15rem;}
+	.index-footer{ box-shadow: none;}
+	</style>
+	<script>
+	$(function(){
+		$(window).scroll(function(){
+			var height = document.body.offsetHeight;
+			var top = $(window).scrollTop();   //设置变量top,表示当前滚动条到顶部的值
+			$('.personal-head').css('opacity',top*10/height);
+		})
+	})
+
+	</script>
+<body>
+	<div class="personal-head">
+        <div class="title">
+			<span class="c-fff">购物车<i class="xs-fs pl05">(2)</i></span>
+
+        </div>
+		<div class="fr head-text">
+			<botton type="botton" class="d-b sm-fs c-fff manage" data-type="manage">管理</botton>
+		</div>
+
+	</div>
+	<!--购物车列表-->
+    <div class="layui-container" style=" min-height: calc(100vh - .5rem); background: #f5f5f5 url({APP_PATH}statics/public/images/bg02.png) no-repeat top; background-size: 100% auto;">
+		<div class="layui-row">
+			<form class="layui-form " action="">
+				<div class="box box-indent sm-fs pl1 pr1">
+					<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+						<ul>
+
+							<script id="cart" type="text/html">
+							<div class="h4 lh4">
+								<div class=""><span class="c-fff bg-fs ">购物车</span></div>
+							</div>
+							<div class="h1"></div>
+							<div class="h35 lh35">
+								<div class=""><span class="c-fff lg-fs">共{{ d.data.carts.length }}件宝贝</span></div>
+							</div>
+							<div class="h1"></div>
+
+							{{#  layui.each(d.data.carts, function(index, item){ }}
+
+							<div class="radius1 hidden bg-fff  pt1 pb1 pl05 pr05 carts">
+								<li class="">
+									<div class="goods-checkbox layui-col-xs1 layui-col-sm1 layui-col-md1">
+										<div class="layui-form-item">
+											<input type="checkbox" name="store[{{ item.shopid }}]" lay-filter="store-checkbox" lay-skin="primary">
+										</div>
+									</div>
+
+									<div class="shop-name layui-col-xs10 layui-col-sm10 layui-col-md10">
+										<a  class="d-b" style="padding-top: 10px;">
+											<!--<div class="img fl ml05">
+												<img src="images/logo.jpg" style="height: 0.18rem;">
+											</div>-->
+											<div class="fl ml05"><i class="layui-icon layui-icon-home"></i></div>
+											<div class="text fl ml05">
+												<span class="sm-fs" data="{{ item.shopid }}">{{ item.shopname }}</span>
+												<span class="layui-icon layui-icon-right c-afafaf sm-fs"></span>
+											</div>
+											<div class="clear"></div>
+										</a>
+									</div>
+									<div class="clear"></div>
+								</li>
+								{{#  layui.each(item.cartinfo, function(index, info){ }}
+								<li class="pt05 pb05">
+									<div class="goods-checkbox layui-col-xs1 layui-col-sm1 layui-col-md1 hidden">
+										<div class="goods-list-checkbox p-r">
+											<div class="layui-form-item">
+												<input type="checkbox" name="cartid[{{ info.cartid }}]" data-price="{{ info.goodsprice }}" lay-filter="goods-checkbox" lay-skin="primary" title="">
+											</div>
+										</div>
+									</div>
+									<div class="shop-name layui-col-xs11 layui-col-sm11 layui-col-md11">
+										<div class="goods-list-left layui-col-xs3 layui-col-sm3 layui-col-md3">
+											<a  class="d-b" href="index.php?m=hpshop&c=index&a=goodsinfo&id={{ info.goodsid }}" >
+												<div class="img p-r">
+													<img src="{{ info.goodsimg }}" width="100%">
+												</div>
+											</a>
+										</div>
+										<div class="goods-list-right layui-col-xs9 layui-col-sm9 layui-col-md9 ">
+											<div class="text">
+												<div class="content">
+													<a  class="d-b" href="index.php?m=hpshop&c=index&a=goodsinfo&id={{ info.goodsid }}">
+														<div class="sm-fs title text-clamp-2">{{ info.goodsname }}</div>
+													</a>
+													<div class="dot">
+														{{#  if(info.goodsspecs){ }}
+														<span class="layui-badge layui-bg-gray">{{ info.goodsspecs }}</span>
+														{{#  } }}
+													</div>
+													<div class="price lg-fs c-e2513c"><span>￥</span><span>{{ info.goodsprice }}</span></div>
+													<div class="goods-amount">
+														{{#  if(info.cartnum > 1){ }}
+														<span class="d-b fl reduce" >-</span>
+														{{#  } else { }}
+														<span class="d-b fl reduce disabled" >-</span>
+														{{#  }  }}
+
+														<input type="number" class="d-b fl alter" name="total[{{ info.cartid }}]" data-goodsid="{{ info.goodsid }}" data-goodsspec="{{ info.goodsspec }}" value="{{ info.cartnum }}" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
+														<span class="d-b fl add">+</span>
+														<div class="clear"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clear"></div>
+								</li>
+								{{#  }); }}
+							</div>
+							<div class="h2"></div>
+							{{#  }); }}
+							{{#  if(d.data.carts.length === 0){ }}
+
+							{{#  } }}
+
+
+							</script>
+							<div id="cart-box"></div>
+
+							<!--<div class="radius1 hidden bg-fff pt1 pb1 pl05 pr05">
+								<li class="">
+									<div class="goods-checkbox  layui-col-xs1 layui-col-sm1 layui-col-md1">
+										<div class="layui-form-item">
+											<input type="checkbox" name="store[]" lay-skin="primary" title="">
+										</div>
+									</div>
+									<div class="shop-name layui-col-xs10 layui-col-sm10 layui-col-md10">
+										<a href="" class="d-b" style="padding-top: 10px;">
+											<div class="img fl ml05">
+												<img src="images/logo.jpg" style="height: 0.18rem;">
+											</div>
+											<div class="text fl ml05">
+												<span class="sm-fs">卓远网络商城</span>
+												<span class="layui-icon layui-icon-right c-afafaf sm-fs"></span>
+											</div>
+											<div class="clear"></div>
+										</a>
+									</div>
+									<div class="clear"></div>
+								</li>
+								<li class="pt05 pb05">
+									<div class="goods-checkbox layui-col-xs1 layui-col-sm1 layui-col-md1 hidden">
+										<div class="goods-list-checkbox p-r">
+											<div class="layui-form-item">
+												<input type="checkbox" name="shops12[]" lay-skin="primary" title="">
+											</div>
+										</div>
+									</div>
+									<div class="shop-name layui-col-xs11 layui-col-sm11 layui-col-md11">
+										<div class="goods-list-left layui-col-xs3 layui-col-sm3 layui-col-md3">
+											<a  class="d-b no-way" >
+												<div class="img p-r">
+													<img src="images/logo.jpg" width="100%">
+												</div>
+											</a>
+										</div>
+										<div class="goods-list-right layui-col-xs9 layui-col-sm9 layui-col-md9 ">
+											<div class="text">
+												<div class="content">
+													<a  class="d-b no-way">
+														<div class="sm-fs title text-clamp-2">E27扁五线透明跑马灯带户外广告街道路引景观游乐场照明E27扁五线透明跑马灯带户外广告街道路引景观游乐场照明</div>
+													</a>
+													<div class="dot"><span class="layui-badge layui-bg-gray">白色;1000米</span></div>
+													<div class="price lg-fs c-e2513c"><span>￥</span><span>3500.00</span></div>
+													<div class="goods-amount">
+														<span class="d-b fl reduce disabled" >-</span>
+														<input type="number" name="" class="d-b fl" value="1">
+														<span class="d-b fl add">+</span>
+														<div class="clear"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clear"></div>
+								</li>
+								<li class="pt05 pb05">
+									<div class="goods-checkbox layui-col-xs1 layui-col-sm1 layui-col-md1 hidden">
+										<div class="goods-list-checkbox p-r">
+											<div class="layui-form-item">
+												<input type="checkbox" name="shops12[]" lay-skin="primary" title="">
+											</div>
+										</div>
+									</div>
+									<div class="shop-name layui-col-xs11 layui-col-sm11 layui-col-md11">
+										<div class="goods-list-left layui-col-xs3 layui-col-sm3 layui-col-md3">
+											<a  class="d-b no-way" >
+												<div class="img p-r">
+													<img src="images/logo.jpg" width="100%">
+												</div>
+											</a>
+										</div>
+										<div class="goods-list-right layui-col-xs9 layui-col-sm9 layui-col-md9 ">
+											<div class="text">
+												<div class="content">
+													<a class="d-b no-way">
+														<div class="sm-fs title text-clamp-2">E27扁五线透明跑马灯带户外广告街道路引景观游乐场照明E27扁五线透明跑马灯带户外广告街道路引景观游乐场照明</div>
+													</a>
+													<div class="dot"><span class="layui-badge layui-bg-gray">白色;1000米</span></div>
+													<div class="price lg-fs c-e2513c"><span>￥</span><span>3500.00</span></div>
+													<div class="goods-amount">
+														<span class="d-b fl reduce disabled" >-</span>
+														<input type="number" name="" class="d-b fl" value="1">
+														<span class="d-b fl add" >+</span>
+														<div class="clear"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clear"></div>
+								</li>
+							</div>
+							<div class="h2"></div>-->
+
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+
+				<div class="h4"></div>
+				<div class="h5"></div>
+				<div class="pl1 pr1 bg-fff cart-count" >
+					<li class="pt05 pb05">
+						<div class="goods-checkbox  layui-col-xs3 layui-col-sm3 layui-col-md3">
+							<div class="layui-form-item" style="margin-bottom: 0;">
+								<input type="checkbox" name="all" lay-skin="primary" lay-filter="all-checkbox" title="<span class='ml1 sm-fs'>全选</span>">
+							</div>
+						</div>
+						<div class="count-box layui-col-xs9 layui-col-sm9 layui-col-md9">
+							<div class="layui-form-item text-right count-right" style="margin-bottom: 0;">
+								<div class="d-ib lg-fs"><!--<span class="xs-fs c-d2d2d2 pr05 freight">不含运费</span>--><span>合计:</span><span class="c-e2513c account pr05"><i>￥</i><span>0</span></span></div>
+								<button class="layui-btn layui-btn-radius layui-btn-danger statements"  lay-submit="" lay-filter="statements">结算<span class="sm-fs">（<i>0</i>）</span></button>
+							</div>
+							<div class="layui-form-item text-right count-right" style="margin-bottom: 0; display: none;">
+								<button class="layui-btn layui-btn-primary layui-btn-sm layui-btn-delete" lay-submit="" lay-filter="delete"><i class="layui-icon"></i>删除</button>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</li>
+				</div>
+			</form>
+		</div>
+    </div>
+
+
+
+    {template "hpshop","bottom-footer"}
+    {template "hpshop","footer"}
+    <style>
+		.layui-table{ width: 100% !important;}
+		.layui-table-cell{ padding: 0 5px !important;}
+		.layui-table-cell .layui-input{ line-height: 28px; height: 28px;}
+
+
+		.count-right .layui-btn-sm{line-height: 0.28rem; height: 0.28rem; margin-top: 5px;}
+	</style>
+
+    <script>
+
+	$(function(){
+		/*var obj = {"status":"success","code":1,"message":"OK","data":{"carts":[{"shopid":"1","shopname":"自营店铺","cartinfo":[{"cartid":"2","goodsid":"1","goodsname":"诺基亚（NOKIA） 3310复刻版 老人机 老人手机 学生机 备用机 功能机 4G版/2G版 清新蓝 4G版本","goodsimg":"http://pub.300c.cn/uploadfile/2019/0226/20190226051315460.jpg ","goodsspec":"1-1","goodsspecs":"红,32G","goodsprice":"369.00","cartnum":"50"},{"cartid":"3","goodsid":"1","goodsname":"诺基亚（NOKIA） 3310复刻版 老人机 老人手机 学生机 备用机 功能机 4G版/2G版 清新蓝 4G版本","goodsimg":"http://pub.300c.cn/uploadfile/2019/0226/20190226051315460.jpg ","goodsspec":"2-1","goodsspecs":"黄,32G","goodsprice":"369.00","cartnum":"10"},{"cartid":"6","goodsid":"1","goodsname":"诺基亚（NOKIA） 3310复刻版 老人机 老人手机 学生机 备用机 功能机 4G版/2G版 清新蓝 4G版本","goodsimg":"http://pub.300c.cn/uploadfile/2019/0226/20190226051315460.jpg ","goodsspec":"2-2","goodsspecs":"黄,64G","goodsprice":"369.00","cartnum":"10"},{"cartid":"5","goodsid":"2","goodsname":"鲜菓篮 春见耙耙柑柑橘丑橘不知火 优选5斤钻石果 新鲜水果","goodsimg":"http://pub.300c.cn/uploadfile/2019/0301/20190301033830344.jpg ","goodsspec":null,"goodsspecs":null,"goodsprice":"26.80","cartnum":"20"}]},{"shopid":"12","shopname":"叶洋洋店铺","cartinfo":[{"cartid":"7","goodsid":"3","goodsname":"泰国黑金刚莲雾 雾莲果当季 进口水果 京东生鲜 8斤","goodsimg":"http://pub.300c.cn/uploadfile/2019/0304/20190304095655893.jpg ","goodsspec":null,"goodsspecs":null,"goodsprice":"220.00","cartnum":"10"}]}],"uid":"1"}}*/
+
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+	; !function () {
+		var layer = layui.layer
+		, form = layui.form
+		,$ = layui.jquery
+		,upload = layui.upload
+		,table = layui.table
+		,laytpl = layui.laytpl;
+
+		//count（产品数量统计）
+		var count = 0;
+		//amount（总价统计）
+		var amount = 0;
+		//alter（修改数量）
+		var alter = 0;
+		var all ;
+		aj.post('index.php?m=hpshop&c=goods_api&a=getcarts',{"uid":''},function(data){
+			if(data.status=="success"){
+				var data = data;
+				all = data.data;
+				var getTpl = cart.innerHTML
+				,view = document.getElementById('cart-box');
+				laytpl(getTpl).render(data, function(html){
+				  view.innerHTML = html;
+				  form.render();
+				});
+
+			}else{
+				layer.msg(data.message);
+				if(data.code == '0'){
+					setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+				}
+			}
+		})
+
+
+		$('.manage').on('click',function(){
+			layer.msg($(this).data('type'));
+			if($(this).data('type') == 'manage'){
+				$(this).data('type','finish');
+				$(this).text('完成');
+				$('.count-right').eq(0).hide();
+				$('.count-right').eq(1).show();
+			}else{
+				$(this).data('type','manage');
+				$(this).text('管理');
+				$('.count-right').eq(1).hide();
+				$('.count-right').eq(0).show();
+			}
+			/* 清除计算 */
+			count = 0;
+			amount = 0;
+			amount = amount.toFixed(2);
+			carts('all',$('.cart-count'),false,true);
+			carts('all',$('.cart-count'),false);
+			form.render('checkbox');
+			$('.statements').find('i').text(count);
+			$('.account').find('span').text(amount);
+		})
+
+		/* 减 */
+		$('#cart-box').on('click','.reduce',function(){
+			var _this = $(this);
+			if(parseInt(_this.next('input').val())-1>=1){
+				var cnum = parseInt(_this.next('input').val())-1;
+				var goodsid = _this.next('input').data('goodsid');
+				var goodsspec = _this.next('input').data('goodsspec');
+				if(goodsid){
+					aj.post('index.php?m=hpshop&c=goods_api&a=operacars',{gid:goodsid,spec:goodsspec,cnum:cnum},function(data){
+						console.log(data);
+						_this.next('input').val(cnum);
+						if(data.status == 'success'){
+							console.log('减','gid:'+goodsid,'spec:'+goodsspec,'cnum:'+cnum);
+							/*前端页面操作*/
+							if(_this.parents('li').find('[name*=cartid]:checked').length == 1){
+								var goods_count = _this.parents('li').find('[name*=cartid]:checked').data('price');
+								//console.log(_this.parents('li').find('[name*=cartid]:checked').data('price'));
+								amounts(false,goods_count,0,true);
+							}
+						}
+					})
+
+				}else{
+					layer.msg('产品不存在');
+					setTimeout(function(){window.location.reload()}, 1000);
+
+				}
+				$(this).siblings('.add').removeClass('disabled');
+			}else{
+				$(this).addClass('disabled');
+				layer.msg('该宝贝不能再减少了');
+			}
+			console.log($(this).next('input').val());
+
+		})
+		/* 加 */
+		$('#cart-box').on('click','.add',function(){
+			var _this = $(this);
+			if(parseInt(_this.prev('input').val())+1<=999){
+				var cnum = parseInt(_this.prev('input').val())+1;
+				var goodsid = _this.prev('input').data('goodsid');
+				var goodsspec = _this.prev('input').data('goodsspec');
+				if(goodsid){
+					aj.post('index.php?m=hpshop&c=goods_api&a=operacars',{gid:goodsid,spec:goodsspec,cnum:cnum},function(data){
+						console.log(data);
+						_this.prev('input').val(cnum);
+						if(data.status == 'success'){
+							/*前端页面操作*/
+							console.log('加','gid:'+goodsid,'spec:'+goodsspec,'cnum:'+cnum);
+							if(_this.parents('li').find('[name*=cartid]:checked').length == 1){
+								var goods_count = _this.parents('li').find('[name*=cartid]:checked').data('price');
+								//console.log(_this.parents('li').find('[name*=cartid]:checked').data('price'));
+								amounts(true,goods_count,0,true);
+							}
+						}
+					})
+
+				}else{
+					layer.msg('产品不存在');
+					setTimeout(function(){window.location.reload()}, 1000);
+
+				}
+
+
+				$(this).siblings('.reduce').removeClass('disabled');
+			}else{
+				$(this).addClass('disabled');
+				layer.msg('该宝贝不能再多了');
+			}
+			console.log($(this).prev('input').val());
+		})
+
+		/* 焦点事件 获取初始数量 */
+		$('#cart-box').on('focus','.alter',function(){
+			alter = $(this).val();
+			console.log($(this).val());
+		})
+
+		/* 监听 数量 */
+		$('#cart-box').on('input propertychange','.alter',function(){
+		//$(".alter").bind('input propertychange', function () {
+			//修改之后的价格
+			var goods_on_count = $(this).parents('li').find('[name*=cartid]:checked').data('price') * parseInt(alter);
+			if($(this).val() == ''){
+				$(this).val('1');
+				layer.msg('数量不能小于1');
+			}
+			//修改之前的价格
+			var goods_count = $(this).parents('li').find('[name*=cartid]:checked').data('price') * parseInt($(this).val()) ;
+			console.log($(this).val(),alter);
+
+			var cnum = $(this).val();
+			var goodsid = $(this).data('goodsid');
+			var goodsspec = $(this).data('goodsspec');
+			console.log('填写','gid:'+goodsid,'spec:'+goodsspec,'cnum:'+cnum);
+			if(goodsid){
+				aj.post('index.php?m=hpshop&c=goods_api&a=operacars',{gid:goodsid,spec:goodsspec,cnum:cnum},function(data){
+					console.log(data);
+					/* 前端页面操作 */
+					if($(this).parents('li').find('[name*=cartid]:checked').length == 1){
+
+						if(parseInt($(this).val()) - alter > 0){
+							//加
+							console.log('加');
+						}else{
+							console.log('减');
+							//减
+						}
+						//现总价 = 总价-（修改后的价格+修改前的价格）
+						amount = parseFloat(amount) - parseFloat(goods_on_count) + parseFloat(goods_count);
+						alter = $(this).val();
+						amount = amount.toFixed(2);
+						$('.account').find('span').text(amount);
+					}
+					/*if(data.status == 'success'){
+						layer.msg(data.message);
+					}else{
+						layer.msg(data.message);
+					}*/
+				})
+
+			}else{
+				layer.msg('产品不存在');
+				setTimeout(function(){window.location.reload()}, 1000);
+
+			}
+		})
+		/* 监听 全选 */
+		form.on('checkbox(all-checkbox)', function(data){
+			//购物车总价
+			var goods_count = 0;
+			$.each($(this).parents('form').find('[name*=cartid]'),function(i,val){
+				//console.log(i,val,$(this).data('price'),parseInt($(this).parents('li').find('[name*=total]').val()));
+				goods_count = goods_count + $(this).data('price')*parseInt($(this).parents('li').find('[name*=total]').val());
+			})
+			//店铺产品已选中总价
+			var goods_on_count = 0;
+			$.each($(this).parents('form').find('[name*=cartid]:checked'),function(i,val){
+				//console.log(i,val,$(this).data('price'),parseInt($(this).parents('li').find('[name*=total]').val()));
+				goods_on_count = goods_on_count + $(this).data('price')*parseInt($(this).parents('li').find('[name*=total]').val());
+			})
+			amounts(data.elem.checked,goods_count,goods_on_count,false);
+			console.log('计算数量',data.elem.checked,$(this).parents('form').find('[name*=cartid]').length,$(this).parents('form').find('[name*=cartid]:checked').length);
+			goods(data.elem.checked,$(this).parents('form').find('[name*=cartid]').length,$(this).parents('form').find('[name*=cartid]:checked').length);
+			carts('all',$(this),data.elem.checked,true);
+
+			form.render('checkbox');
+		    //console.log(data.elem); //得到checkbox原始DOM对象
+		    //console.log(data.elem.checked); //是否被选中，true或者false
+		    //console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+		    //console.log(data.othis); //得到美化后的DOM对象
+		});
+
+		/* 监听 单店铺全选 */
+		form.on('checkbox(store-checkbox)', function(data){
+			//店铺产品总价
+			var goods_count = 0;
+			$.each($(this).parents('.carts').find('[name*=cartid]'),function(i,val){
+				//console.log(i,val,$(this).data('price'),parseInt($(this).parents('li').find('[name*=total]').val()));
+				goods_count = goods_count + $(this).data('price')*parseInt($(this).parents('li').find('[name*=total]').val());
+			})
+			//店铺产品已选中总价
+			var goods_on_count = 0;
+			$.each($(this).parents('.carts').find('[name*=cartid]:checked'),function(i,val){
+				//console.log(i,val,$(this).data('price'),parseInt($(this).parents('li').find('[name*=total]').val()));
+				goods_on_count = goods_on_count + $(this).data('price')*parseInt($(this).parents('li').find('[name*=total]').val());
+			})
+			console.log(data.elem.checked,goods_count,goods_on_count,false);
+			amounts(data.elem.checked,goods_count,goods_on_count,false);
+			//店铺下产品个数
+			//console.log($(this).parents('.carts').find('[name*=cartid]').length);
+			//店铺个数
+			//console.log($(this).parents('#cart-box').find('[name*=store]').length);
+			//店铺选中的个数
+			//console.log($(this).parents('#cart-box').find('[name*=store]:checked').length);
+			//console.log('计算数量',data.elem.checked,$(this).parents('.carts').find('[name*=cartid]').length,$(this).parents('.carts').find('[name*=cartid]:checked').length);
+			goods(data.elem.checked,$(this).parents('.carts').find('[name*=cartid]').length,$(this).parents('.carts').find('[name*=cartid]:checked').length);
+			carts('store',$(this),data.elem.checked,true);
+
+			form.render('checkbox');
+		});
+		/* 监听 单店铺产品选择 */
+		form.on('checkbox(goods-checkbox)', function(data){
+			//console.log('计算数量',data.elem.checked,1,0);
+			goods(data.elem.checked,1,0);
+			var goods_count = $(this).data('price') * parseInt($(this).parents('li').find('[name*=total]').val());
+			//console.log('计算价格',$(this).data('price'),parseInt($(this).parents('li').find('[name*=total]').val()),'总和：',goods_count);
+			amounts(data.elem.checked,goods_count,0,true);
+			carts('goods',$(this),data.elem.checked);
+			form.render('checkbox');
+		});
+
+		/* 单店铺产品选择 _this($(this)操作的class)  status状态（选中/取消） 类型type（goods 产品操作  store店铺操作 all全选操作  对下级操作lower( 例如：点选店铺 选中其下级所有产品  点选全选 选中购物车里所有店铺->店铺再选中其下级所有产品 ) ）   */
+
+
+		function carts(type,_this,status,lower){
+			if(type == 'goods'){
+				//判断店铺下产品是否全选
+				//店铺下产品总个数
+				//console.log(_this.parents('.carts').find('[name*=cartid]').length);
+				//店铺下选中的产品个数
+				//console.log(_this.parents('.carts').find('[name*=cartid]:checked').length);
+				if(status){
+				//console.log('产品选中操作');
+					if(_this.parents('.carts').find('[name*=cartid]:checked').length == _this.parents('.carts').find('[name*=cartid]').length){
+						//console.log('店铺全选操作');
+						carts('store',_this,status);
+					}
+				}else{
+				//console.log('产品取消操作');
+					if(_this.parents('.carts').find('[name*=cartid]:checked').length != _this.parents('.carts').find('[name*=cartid]').length){
+						//console.log('店铺全不选操作');
+						carts('store',_this,status);
+					}
+				}
+			//店铺操作
+			}else if(type == 'store'){
+				if(lower){
+					if(status){
+						//console.log('店铺对下级全选操作');
+						_this.parents('.carts').find('[name*=cartid]').prop("checked",true);
+						if(_this.parents('#cart-box').find('[name*=store]:checked').length == _this.parents('#cart-box').find('[name*=store]').length){
+							//console.log('店铺对所有选中');
+							carts('all',_this,status);
+						}
+					}else{
+						//console.log('店铺对下级全不选操作');
+						_this.parents('.carts').find('[name*=cartid]').prop("checked",false);
+						if(_this.parents('#cart-box').find('[name*=store]:checked').length != _this.parents('#cart-box').find('[name*=store]').length){
+							//console.log('店铺对所有取消');
+							carts('all',_this,status);
+						}
+					}
+				}else{
+					if(status){
+					    //console.log('产品对店铺全选操作');
+						_this.parents('.carts').find('[name*=store]').prop("checked",true);
+						if(_this.parents('#cart-box').find('[name*=store]:checked').length == _this.parents('#cart-box').find('[name*=store]').length){
+							//console.log('产品对所有选择');
+							carts('all',_this,status);
+						}
+					}else{
+						//console.log('产品对店铺全不选操作');
+						_this.parents('.carts').find('[name*=store]').prop("checked",false);
+						if(_this.parents('#cart-box').find('[name*=store]:checked').length != _this.parents('#cart-box').find('[name*=store]').length){
+							//console.log('产品对所有选择');
+							carts('all',_this,status);
+						}
+					}
+
+				}
+			}else if(type == 'all'){
+				if(lower){
+					if(status){
+						console.log('all选中店铺选中产品');
+						_this.parents('form').find('[name*=store]').prop("checked",true);
+						_this.parents('form').find('[name*=cartid]').prop("checked",true);
+
+					}else{
+						console.log('all取消下级选中');
+						_this.parents('form').find('[name*=store]').prop("checked",false);
+						_this.parents('form').find('[name*=cartid]').prop("checked",false);
+					}
+				}else{
+					if(status){
+						console.log('all选中');
+						_this.parents('form').find('[name*=all]').prop("checked",true);
+					}else{
+						console.log('all取消');
+						_this.parents('form').find('[name*=all]').prop("checked",false);
+					}
+
+				}
+			}
+		}
+
+		//统计产品数量
+		// type操作类型（true/false 加/减）  总和（操作产品总和） checked（已经选中数量）
+		function goods(type,sum,checked){
+			//console.log(count);
+			if(type){
+				//console.log('加，总个数',sum,'选中数',checked);
+				count = count+(sum-checked);
+			}else{
+				//console.log('减，总个数',sum,'选中数',checked);
+				if(sum == checked){
+					count = count-checked;
+				}else{
+					count = count-sum-checked;
+				}
+			}
+			$('.statements').find('i').text(count);
+		}
+
+
+
+		//总价格
+		//type操作类型（true/false 加/减）  count_price 总价格   on_price 选中的价格    对单一产品操作one
+		function amounts(type,count_price,on_price,one){
+			if(type){
+				console.log('原总价',amount,'加，总数',count_price,'选中的价格',on_price);
+				amount = parseFloat(amount) + parseFloat(count_price) - parseFloat(on_price) ;
+				console.log(amount);
+			}else{
+				if(one){
+					amount = parseFloat(amount) - parseFloat(count_price) + parseFloat(on_price);
+				}else{
+					amount = parseFloat(amount) - parseFloat(on_price) ;
+				}
+			}
+			amount = amount.toFixed(2);
+			$('.account').find('span').text(amount);
+		}
+
+		//监听结算
+	    form.on('submit(statements)', function(data){
+			var goods_up = [] ;
+			//遍历选中购物车catid
+			$.each(data.field, function(idx, obj) {
+				console.log(idx,idx.indexOf("cartid[") == 0);
+				if(idx.indexOf("cartid[") == 0){
+					var goodsid = idx.substring(idx.indexOf("cartid[")+7,idx.indexOf("]"));
+					//console.log(idx,goodsid);
+					goods_up.push(goodsid);
+				}
+				//console.log(idx.substring(idx.indexOf("cartid[")+7,idx.indexOf("]")));
+				console.log(goods_up);
+			});
+			var carts = goods_up.join(',');
+			if(carts){
+				/*layer.alert(JSON.stringify(data.field), {
+					title: '最终的提交信息'
+				})*/
+				setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=settlement&met=0&carts='+carts}, 1000);
+			}else{
+				layer.msg('您还没选择宝贝哦！');
+			}
+			//遍历购物车产品
+			/*$.each(all.carts, function(i,v){
+				$.each(v.cartinfo,function(index,val){
+					console.log(index,val.cartid,val.goodsid,val.goodsspec);
+				});
+			})*/
+			return false;
+	    });
+
+		//监听删除
+	    form.on('submit(delete)', function(data){
+			var goods_delete = [] ;
+			$.each(data.field, function(idx, obj) {
+				//console.log(idx,idx.indexOf("cartid[") == 0);
+				if(idx.indexOf("cartid[") == 0){
+					var goodsid = idx.substring(idx.indexOf("cartid[")+7,idx.indexOf("]"));
+					//console.log(idx,goodsid);
+					goods_delete.push(goodsid);
+				}
+				//console.log(idx.substring(idx.indexOf("cartid[")+7,idx.indexOf("]")));
+
+			});
+			goods_delete = goods_delete.join(',');
+			if(goods_delete){
+				console.log(goods_delete);
+				aj.post('index.php?m=hpshop&c=goods_api&a=delcars',{cid:goods_delete},function(data){
+					console.log(data);
+					if(data.status == 'success'){
+						layer.msg('删除成功');
+						setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=goodscart'", 1000);
+					}else{
+						if(data.code == "0"){
+							layer.msg(data.message);
+							setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+						}else{
+							layer.msg(data.message);
+						}
+					}
+				})
+
+			}else{
+				layer.msg('您还没选择宝贝哦！');
+			}
+			/*layer.alert(JSON.stringify(data.field), {
+		    	title: '最终的提交信息'
+			})*/
+			return false;
+	    });
+
+	}();
+	})
+    </script>
+</body>
+</html>

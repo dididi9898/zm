@@ -1,0 +1,252 @@
+﻿{php $SEO['site_title'] = '商品发布'}
+{template "hpshop","top-head"}
+    
+	<!--产品发布-->
+    <div class="layui-container cpfb">  
+		<div class="layui-row">
+			<form class="layui-form " action="">
+				<!-- 图片上传 -->
+				<div class="upload">
+					<div class="layui-upload lg-layui-upload">
+						<div class="layui-upload-list" id="graph">
+							<img class="layui-upload-img" id="graphimg" src="images/upload/banner-no.png">
+						</div>
+						<p class="layui-upload-tips pt05 pb05" id="graphtext"></p>
+					</div>
+				</div>
+				<div class="box box-indent sm-fs ">
+					<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+						<ul>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">类目<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<a class="d-ib no-way"> <!--  d-ib 点文字触发 --> <!-- d-b 点区域块触发 -->
+											<span class="">请选择类目<i class="fa fa-angle-right pl1 lg-fs"></i></span>
+										</a>
+										
+									</div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">品牌<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<a class="d-b no-way"> <!--  d-ib 点文字触发 --> <!-- d-b 点区域块触发 -->
+											<span class="">请选择品牌<i class="fa fa-angle-right pl1 lg-fs"></i></span>
+										</a>
+										
+									</div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">商品型号<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请填写商品型号" class="layui-input primary-layui-input text-right">
+									</div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">商品简介<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请填写商品简介" class="layui-input primary-layui-input text-right">
+									</div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">商品规格<span class="layui-badge-dot"></span></label>
+								</div>
+							</li>
+							<hr>
+							<li>
+								
+								<table id="table" lay-filter="table" ></table>
+								<script type="text/html" id="bar-table">
+									<a class="layui-btn layui-btn-xs" lay-event="edit">禁用</a>
+								</script>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">图片展示<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<button type="button" class="layui-btn layui-btn-sm" id="graphs">多图片上传</button> 
+									</div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<style>
+									.layui-col-xs3 .layui-upload-img{ width: 100%; height: 100%;object-fit: cover;}
+								</style>
+								<div class="layui-upload pl05 pr05" >
+									<div class="layui-upload-list" id="demo2"><div class="layui-row layui-col-space10"></div><div class="clear"></div></div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<a class="d-b no-way">
+										<label class="layui-form-label primary-label-1">商品详情<span class="layui-badge-dot"></span></label>
+										<div class="layui-input-block text-right">
+											<span class=""><i class="fa fa-angle-right pl1 lg-fs"></i></span>
+										</div>
+									</a>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">商品库存<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请填写商品库存" class="layui-input primary-layui-input text-right">
+									</div>
+								</div>
+							</li>
+							<hr>
+							<li>
+								<div class="layui-form-item primary-item">
+									<label class="layui-form-label primary-label-1">本网售价<span class="layui-badge-dot"></span></label>
+									<div class="layui-input-block text-right">
+										<input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input text-right primary-layui-input">
+									</div>
+								</div>
+							</li>
+							<hr>
+							
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</form>
+		</div>
+    </div>
+    
+
+    {template "hpshop","footer"}
+	<style>
+		.layui-table{ width: 100% !important;}
+		.layui-table-cell{ padding: 0 5px !important;}
+		.layui-table-cell .layui-input{ line-height: 28px; height: 28px;}
+	</style>
+
+
+    
+    <script>
+	$(function(){
+		
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+	; !function () {
+		var layer = layui.layer
+		, form = layui.form
+		,$ = layui.jquery
+		,upload = layui.upload
+		,table = layui.table;
+
+	  	//普通图片上传
+		var uploadInst = upload.render({
+			elem: '#graph'
+			,url: '/upload/'
+			,before: function(obj){
+			  //预读本地文件示例，不支持ie8
+			  obj.preview(function(index, file, result){
+				$('#graphimg').attr('src', result); //图片链接（base64）
+				  $('#graph').css('background','none');
+			  });
+			}
+			,done: function(res){
+			  //如果上传失败
+			  if(res.code > 0){
+				return layer.msg('上传失败');
+			  }
+			  //上传成功
+			}
+			,error: function(){
+			  //演示失败状态，并实现重传
+			  var graphtext = $('#graphtext');
+			  graphtext.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+			  graphtext.find('.demo-reload').on('click', function(){
+				uploadInst.upload();
+			  });
+			}
+	    });
+		
+		
+		//多图片上传
+		upload.render({
+			elem: '#graphs'
+			,url: '/upload/'
+			,multiple: true
+			,choose: function(obj){
+				//将每次选择的文件追加到文件队列
+				var files = obj.pushFile();
+				//预读本地文件示例，不支持ie8
+				obj.preview(function(index, file, result){
+					$('#demo2>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 "><img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"></div>')
+				});
+			}
+			,done: function(res){
+			    //上传完毕
+				
+			}
+		});
+		
+		$('.no-way').on('click',function(){
+			layer.msg('该栏目正在开发中...');
+		});
+		
+		var obj = {"attr":[{"id":"5","goodstypeid":"1","attrname":"颜色","attrval":"","isshow":"1","sort":"500","attrtype":"0"},{"id":"4","goodstypeid":"1","attrname":"衣长","attrval":"","isshow":"1","sort":"500","attrtype":"0"},{"id":"4","goodstypeid":"1","attrname":"售价","attrval":"","isshow":"1","sort":"500","attrtype":"0"},{"id":"4","goodstypeid":"1","attrname":"库存","attrval":"","isshow":"1","sort":"500","attrtype":"0"}],"spec":[{"0":"红","keys":"0-0","vals":"红S","1":"S","price":"100","stock":""},{"0":"红","keys":"0-1","vals":"红M","1":"M","price":"","stock":""},{"0":"红","keys":"0-2","vals":"红XL","1":"XL","price":"","stock":""},{"0":"黄","keys":"1-0","vals":"黄S","1":"S","price":"","stock":""},{"0":"黄","keys":"1-1","vals":"黄M","1":"M","price":"","stock":""},{"0":"黄","keys":"1-2","vals":"黄XL","1":"XL","price":"","stock":""},{"0":"蓝","keys":"2-0","vals":"蓝S","1":"S","price":"","stock":""},{"0":"蓝","keys":"2-1","vals":"蓝M","1":"M","price":"","stock":""},{"0":"蓝","keys":"2-2","vals":"蓝XL","1":"XL","price":"","stock":""}],"specname":[{"attrval":"红,黄,蓝","attrname":"颜色"},{"attrval":"S,M,XL","attrname":"尺寸"}]}; 
+		console.log(obj);
+		table.render({
+			elem: '#table'
+			,data:obj.spec
+			//,url: '/demo/table/user/' //数据接口
+			,cols: [[ //表头
+			  //{type:'checkbox'}
+			  {field: 'spec01', title: obj.attr[0].attrname,width:'20%', align:'center',templet: function(d){
+				return '<span>'+ d[0] +'</span>'
+				}}
+			  ,{field: 'spec02', title: obj.attr[1].attrname,width:'20%', align:'center',templet: function(d){
+				return '<span>'+ d[1] +'</span>'
+				}}
+			  ,{field: 'price', title: obj.attr[2].attrname,width:'20%', align:'center', edit: 'text',templet: function(d){
+					return d.price
+				}}
+			  ,{field: 'stock', title: obj.attr[3].attrname,width:'20%', align:'center', edit: 'text',templet: function(d){
+				  if(d[4]>0){
+					  var stock=d[4];
+				  }else{
+					  var stock=0;
+				  }
+					return stock
+				}}
+			  ,{fixed: 'right', title:'操作', toolbar: '#bar-table',width:'20%', align:'center'}
+			]]
+			
+			
+		});
+		//监听单元格编辑
+		table.on('edit(table)', function(obj){
+			var value = obj.value //得到修改后的值
+			,data = obj.data //得到所在行所有键值
+			,field = obj.field; //得到字段
+			layer.msg('[keys: '+ data.keys +'] ' + field + ' 字段更改为：'+ value);
+			
+		});
+		
+
+		
+	}();
+	})
+
+    </script>
+</body>
+</html>
