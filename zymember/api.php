@@ -119,6 +119,7 @@ class api{
 	}
 
 
+
 	/**
 	* 登录_帐号密码登录
 	* @status [状态] -1帐号、密码不能为空/-2用户名格式错误/-3密码格式错误/-4帐号不存在/-5密码错误/-6帐号已锁定
@@ -220,6 +221,8 @@ class api{
 				param::set_cookie('_groupid', $memberinfo['groupid'], $cookietime);
 				param::set_cookie('cookietime', $_cookietime, $cookietime);
 			}
+			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
+			_crul_get($url);
 			$result = [
 				'status'=>'success',
 				'code'=>200,
@@ -350,7 +353,8 @@ class api{
 				];
 				_crul_post($config['url'],$curl);
 			//==================	获取其他接口-接口 END		
-
+			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
+			_crul_get($url);
 
 			$result = [
 				'status'=>'success',
@@ -488,6 +492,8 @@ class api{
 
 			//主表
 			$userid=$this->member_db->insert($userinfo,true);
+			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=insertMember&userid=".$userid;
+            _crul_get($url);
 			$this->member_db->update(array('phpssouid'=>$userid),'userid='.$userid);
 			
 			//sso表
