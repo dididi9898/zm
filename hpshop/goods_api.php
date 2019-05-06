@@ -490,6 +490,7 @@ class goods_api{
 				'status' => 'error',
 				'code' => -3,
 				'message' => '加入购物车失败，商品库存不足',
+				'data' => $check['data']['stock'],
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
