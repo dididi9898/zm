@@ -1,0 +1,17 @@
+{template "zyfunds","header"}
+<body style="background:#fff;">
+	<div class="mui-content" style="background:#fff;">
+		<div class="success_page">
+			<img src="{APP_PATH}statics/funds/images/s.png" width='100px' />
+			<div class='msg'>充值申请已提交</div>
+		</div>
+		{php $type = [1=>'支付宝',2=>'微信',3=>'银行卡']}
+		{php $result = $type[$info['type']]}
+		<ul class="mui-table-view success_list" style="font-size:16px;">
+			<li class="mui-table-view-cell">支付方式<span class='info'>{$result}</span></li>
+			<li class="mui-table-view-cell">充值金额<span class='info'>￥{$info['amount']}</span></li>
+		</ul>
+		<a href='index.php?m=zyfunds&c=index&a=wallet' class="mui-btn mui-btn-success sbtn">完成</a>
+	</div>
+</body>
+{template "zyfunds","footer"}

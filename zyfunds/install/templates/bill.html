@@ -1,0 +1,100 @@
+{template "zyfunds",'header'}
+<style>
+	.mui-segmented-control .mui-control-item.mui-active {
+		background-color: #ff7300;
+	}
+
+	.mui-segmented-control .mui-control-item {
+		color: #ff7300;
+		border-color: #ff7300;
+		border-left: 1px solid #ff7300;
+	}
+
+	.mui-segmented-control{
+		border: 1px solid #ff7300;
+	}
+
+	a{color:#fff;}
+</style>
+<body>
+	<div class="mui-content">
+		<div id="app">
+			<template v-if="result.code==200">
+				<div id="segmentedControl" class="mui-segmented-control">
+					<a class="mui-control-item mui-active" href="javascript:;">提现流水单</a>
+					<a class="mui-control-item" href="javascript:;">充值流水单</a>
+				</div>
+				<div id="item1" style="display:block;">
+					<div class="list_box" style="font-size:16px;" v-for="t in result['data']['tx']">
+						<div class="list_title">
+							单号:{{t['trade_sn']}}
+						</div>
+						<div class="list_content">
+							<div class="info">账户：<span>{{t['username']}}</span></div>
+							<div class="info">提现金额：<span>￥{{t['amount']}}</span></div>
+							<div class="info">状态：
+								<span v-if="t['status']==0">已到账</span>
+								<span v-else-if="t['status']==1">待审核</span>
+								<span v-else-if="t['status']==2">退回</span>
+								<span v-else-if="t['status']==3">支付失败</span>
+							</div>
+						</div>
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">
+								<a :href="'index.php?m=zyfunds&c=index&a=billdetail&id='+t['id']" class="mui-navigate-right">详情</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="item2" style="display:none;">
+					<div class="list_box" style="font-size:16px;" v-for="c in result['data']['cz']">
+						<div class="list_title">
+							单号:{{c['trade_sn']}}
+						</div>
+						<div class="list_content">
+							<div class="info">账户：<span>{{c['username']}}</span></div>
+							<div class="info">提现金额：<span>￥{{c['amount']}}</span></div>
+							<div class="info">状态：
+								<template v-if="c['status'] == 0">
+									<span>已到账</span>
+								</template>
+							</div>
+						</div>
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">
+								<a :href="'index.php?m=zyfunds&c=index&a=billdetails&id='+c['id']" class="mui-navigate-right">详情</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</template>
+			<template v-else>
+				<div class="error">
+					<dl style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-80%);-webkit-transform:translate(-50%,-80%);-moz-transform:translate(-50%,-80%);-o-transform:translate(-50%,-80%);width:100%;max-width:750px;">
+						<dt><img src="{APP_PATH}statics/funds/images/error.jpg" width="50%"></dt>
+						<dd style="font-size:18px;margin-top:40px;">ERROR</dd>
+						<dd style="color:#999;font-size:14px;">{$code}</dd>
+					</dl>
+				</div>
+			</template>
+		</div>
+	</div>
+</body>
+{template "zyfunds",'footer'}
+<script>
+	var res = {$results};
+	new Vue({
+		el: '#app',
+		data: {
+			result: res
+		}
+	});
+	$('.mui-control-item').each(function(el,index){
+		$(this).on('tap',function(){
+			var index = $(this).index()+1;
+			$('#item'+index+'').show().siblings('[id^=item]').hide();
+		});
+	});
+
+	$('.error').css({'height':$(window).height(),'background':'#fff'});
+</script>

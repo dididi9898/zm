@@ -1,0 +1,172 @@
+{template "zyfunds",'header'}
+<style>
+	.mui-table-view-cell{font-size:16px;}
+</style>
+<body>
+	<div id="app">
+	<form id='form'>
+		<div class="mui-content">
+		    <div class="mui-table-view" style="margin-top:0;">
+				<template v-if="result['code']==200">
+					<template v-if="len>0">
+						<li class="mui-table-view-cell mui-media" v-on:click="toggle" id='myacount' v-for="a in result['data']" style="font-size:16px;line-height:44px;">
+							<template v-if="a['tid']==1">
+							<div>
+								<img class="mui-media-object mui-pull-left" src="{APP_PATH}statics/funds/images/pic1.png">
+								<div class="mui-media-body">{{a['tname']}}&nbsp;&nbsp;&nbsp;{{a['hide_account']}}</div>
+								<input type="hidden" name="type" value="1" />
+							</div>
+							</template>
+							<template v-else-if="a['tid']==2">
+							<div>
+								<img class="mui-media-object mui-pull-left" src="{APP_PATH}statics/funds/images/pic2.png">
+								<div class="mui-media-body">{{a['tname']}}&nbsp;&nbsp;&nbsp;{{a['hide_account']}}</div>
+								<input type="hidden" name="type" value="2" />
+							</div>
+							</template>
+							<template v-else-if="a['tid']==3">
+							<div>
+								<img class="mui-media-object mui-pull-left" src="{$a['thumb']}">
+								<div class="mui-media-body">{{a['tname']}}&nbsp;&nbsp;&nbsp;{{a['hide_account']}}</div>
+								<input type="hidden" name="type" value="3" />
+							</div>
+							</template>
+							<input type="hidden" name="accountname" v-model="a['accountname']" />
+							<input type="hidden" name="account" v-model="a['account']" />
+						</li>
+					</template>
+					<template v-else>
+						<li class="mui-table-view-cell mui-media">
+							<a href="index.php?m=zyfunds&c=index&a=bcard">前往您的账户完善信息</a>
+							<input type="hidden" name="ac" value="" />
+						</li>
+					</template>
+					<input type="hidden" name="status" value="1" />
+				</template>
+			</ul>
+			<div class="cash">
+				<div class='cash_label'>提现金额</div>
+				<div class="cash_money">
+					<span class='symbol' style="margin-top:-18px;">￥</span>
+					<input type="text" class='input_text' name="amount" style="padding: 0 10px;" />
+				</div>
+				<div class="cash_mark" v-if="account.code==200">
+					可用余额￥<span>{{account['data']['cash']}}</span>,<a href='javascript:;' class="all">全部提现</a>
+				</div>
+			</div>
+			<button type="button" class="mui-btn mui-btn-success sbtn" style="margin-bottom:20px;">提交</button>
+		</div>
+	
+		<div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action " style="max-width:750px;">
+		    <!-- 可选择菜单 -->
+		    <ul class="mui-table-view">
+			  	<li class="mui-table-view-cell"><a href="index.php?m=zyfunds&c=index&a=bank&type=1">支付宝</a></li>
+				<li class="mui-table-view-cell"><a href="index.php?m=zyfunds&c=index&a=bank&type=2">微信</a></li>
+				<li class="mui-table-view-cell"><a href="index.php?m=zyfunds&c=index&a=bank&type=3">银行卡</a></li>
+		    </ul>
+		    <!-- 取消菜单 -->
+		    <ul class="mui-table-view">
+		      <li class="mui-table-view-cell">
+		        <a href="#sheet1"><b>取消</b></a>
+		      </li>
+		    </ul>
+		</div>
+	</form>
+	</div>
+</body>
+{template "zyfunds",'footer'}
+<script type="text/javascript">
+	var account = {$account};
+	var result = {$result};
+	var vm = new Vue({
+		el: "#app",
+		data: {
+			account: account,
+			result: result,
+			len:0
+		},mounted:function(){
+			this.len = this.result.data.length;
+		},methods: {
+			toggle: function(){
+				mui('#sheet1').popover('toggle');
+			}
+		}
+	});
+
+	/* 全部提现 */
+	$('.all').on('tap',function(){
+		var value = $(this).siblings('span').html();
+		$('.cash_money .input_text').val(value);
+	});
+
+	/* 提交 */
+	$('.sbtn').on('tap',function(){
+		var text = $('.cash_money .input_text').val();
+		var allmoney = parseFloat($(".cash_mark span").html());
+		if(text==''){
+			mui.toast('请输入提现金额');
+			return false;
+		}
+		if(text==0){
+			mui.toast('请输入有效的金额');
+			return false;
+		}
+		if(!$.isNumeric(text)){
+			mui.toast('请输入正确的金额格式');
+			return false;
+		}
+
+		if(account.code==200) {
+			var ac = $('input[name="ac"]').val();
+
+			if(ac==''){
+				mui.toast('请添加账户信息');
+				return false;
+			}
+
+			if (allmoney < text) {
+				mui.toast('提现金额超出资金范围');
+				return false;
+			}
+
+			mui.prompt('', '请填写你的支付密码', '交易提醒', ['确定', '取消'], function (e) {
+				if (e.index == 0) {
+					var data = $('#form').serialize();
+					data = data + "&pass=" + e.value + "&amount=" + text + "&total=" + allmoney;
+					$.ajax({
+						url: "index.php?m=zyfunds&c=index&a=checkTradePass",
+						type: 'post',
+						data: data,
+						dataType: 'json',
+						success: function (res) {
+							console.log(res);
+							if (res.code == 200) {
+								mui.toast(res.message);
+								window.location.href = 'index.php?m=zyfunds&c=index&a=txsuccess&id=' + res.data.id;
+							} else {
+								mui.toast(res.message);
+							}
+						}
+					});
+				}
+			});
+			document.querySelector('.mui-popup-input input').type = 'password';
+		}else {
+			var data = $('#form').serialize();
+			$.ajax({
+				url: "index.php?m=zyfunds&c=index&a=checkTradePass",
+				type: 'post',
+				data: data,
+				dataType: 'json',
+				success: function (res) {
+					if (res.code == 200) {
+						mui.toast(res.message);
+						window.location.href = 'index.php?m=zyfunds&c=index&a=txsuccess&id=' + res.data.id;
+					} else {
+						mui.toast(res.message);
+					}
+				}
+			});
+		}
+	});
+</script>

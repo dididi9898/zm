@@ -1,0 +1,155 @@
+{template 'zyfunds','header'}
+<body>
+	<div class="mui-content">
+		<div id="app">
+		<template v-if="result.code==200">
+			<div class="bcard" v-for="d in result.data">
+				<div class="avatar">
+					<!--资金账户图标-->
+					<template v-if="d['tid'] == 1">
+						<img src="{APP_PATH}statics/funds/images/pic1.png" />
+					</template>
+					<template v-if="d['tid'] == 2">
+						<img src="{APP_PATH}statics/funds/images/pic2.png" />
+					</template>
+					<template v-if="d['tid'] == 3">
+						<img :src="d['thumb']" />
+					</template>
+					<!--资金账户图标-->
+					<div class="title">
+						{{d['tname']}}
+						<template v-if="d['is_first'] == 1">
+							<span class="type">(默认)</span>
+						</template>
+						<template v-else>
+							<span class="type"></span>
+						</template>
+					</div>
+				</div>
+				<div class="number">
+					{{d['hide_account']}}
+				</div>
+				<i class="mui-icon mui-icon-trash card_icon" v-on:click="del(d['id'],$event);"></i>
+				<template v-if="d['is_first'] == -1">
+					<span class='setting' v-on:click="setting(d['id'],d['is_first'],$event);return false;">设为默认</span>
+				</template>
+				<template v-if="d['is_first'] == 1">
+					<span class='setting' v-on:click="setting(d['id'],d['is_first'],$event);return false;">取消默认</span>
+				</template>
+			</div>
+		</template>
+		<template v-else>
+			<div class="error" style="background:#fff;">
+				<dl style="text-align:center;width:100%;max-width:750px;padding:20px 0;">
+					<dt><img src="{APP_PATH}statics/funds/images/error.jpg" width="50%"></dt>
+					<dd style="font-size:18px;margin-top:40px;">ERROR</dd>
+					<dd style="color:#999;font-size:14px;">{{result.message}}</dd>
+				</dl>
+			</div>
+		</template>
+		<a href="index.php?m=zyfunds&c=index&a=account_add" class="mui-btn mui-btn-success sbtn">+添加账户</a>
+		{if $this->config == 1}
+			<a href="index.php?m=zyfunds&c=index&a=wallet" class="mui-btn sbtn">我的钱包</a>
+		{else}
+			<a href="index.php?m=zyfunds&c=index&a=wcash" class="mui-btn mui-btn-warning sbtn">提现</a>
+			<a href="index.php?m=zyfunds&c=index&a=czcash" class="mui-btn mui-btn-primary sbtn">充值</a>
+		{/if}
+		</div>
+	</div>
+</body>
+<script>
+	$('.error').css({'background':'#fff'});
+	var app = new Vue({
+		el: '#app',
+		data: {
+			result:{$result},
+		},
+		methods:{
+			setting(id,is_first,e){
+				$.ajax({
+					url: "index.php?m=zyfunds&c=index&a=bcardtype",
+					type: 'post',
+					data: {id:id,is_first:is_first},
+					dataType: 'json',
+					success: function(res){
+						if(res.code==0){
+							if(res.is_first==1){
+								$('.setting').html('设为默认');
+								$('.bcard .title span').html('');
+								$(e.target).parent('.bcard').find('.title span').html("(默认)");
+								$(e.target).after("<span class='setting' onclick='setting("+res.id+","+res.is_first+",this);return false;'>取消默认</span>");
+								$(e.target).remove();
+							}else{
+								$(e.target).parent('.bcard').find('.title span').html("");
+								$(e.target).after("<span class='setting' onclick='setting("+res.id+","+res.is_first+",this);return false;'>设为默认</span>");
+								$(e.target).remove();
+							}
+						}else{
+							mui.toast(res.msg);
+						}
+					}
+				});
+			},del:function(id,el){
+				mui.confirm('确定删除账户吗？','提醒',['确定','取消'],function(e){
+					// 0 确定 1 取消
+					if(e.index==0){
+						$.ajax({
+							url: "index.php?m=zyfunds&c=index&a=bcarddel",
+							type: 'post',
+							data: {id:id},
+							dataType: 'json',
+							success: function(res){
+								$(el.target).parents('.bcard').remove();
+								mui.toast(res.message);
+							}
+						});
+					}
+				});
+			}
+		}
+	});
+	function setting(id,is_first,obj){
+		$.ajax({
+			url: "index.php?m=zyfunds&c=index&a=bcardtype",
+			type: 'post',
+			data: {id:id,is_first:is_first},
+			dataType: 'json',
+			success: function(res){
+				if(res.code==0){
+					if(res.is_first==1){
+						$('.setting').html('设为默认');
+						$('.bcard .title span').html('');
+						$(obj).parent('.bcard').find('.title span').html("(默认)");
+						$(obj).after("<span class='setting' onclick='setting("+res.id+","+res.is_first+",this);return false;'>取消默认</span>");
+						$(obj).remove();
+					}else{
+						$(obj).parent('.bcard').find('.title span').html("");
+						$(obj).after("<span class='setting' onclick='setting("+res.id+","+res.is_first+",this);return false;'>设为默认</span>");
+						$(obj).remove();
+					}
+				}else{
+					mui.toast(res.msg);
+				}
+			}
+		});
+	}
+	/*删除账户*/
+	/*function del(id,obj){
+		mui.confirm('确定删除账户吗？','提醒',['确定','取消'],function(e){
+			// 0 确定 1 取消
+			if(e.index==0){
+				$.ajax({
+					url: "index.php?m=zyfunds&c=index&a=bcarddel",
+					type: 'post',
+					data: {id:id},
+					dataType: 'json',
+					success: function(res){
+						$(obj).parents('.bcard').remove();
+						mui.toast(res.msg);
+					}
+				});
+			}
+		});
+	}*/
+</script>
+{template 'zyfunds','footer'}

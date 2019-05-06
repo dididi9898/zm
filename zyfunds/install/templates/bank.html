@@ -1,0 +1,35 @@
+{template "zyfunds","header"}
+<style>
+	.mui-media-body{font-size:16px;}
+</style>
+<body style="background:#fff;">
+	<div class="mui-content">
+		<div id="app">
+			<ul class="mui-table-view" style="margin-top:0;">
+				<template v-if="code==200">
+					<li class="mui-table-view-cell mui-media" v-for="d in data">
+						<a :href="'index.php?m=zyfunds&c=index&a=wcash&id='+d['id']">
+							<template v-if="d['tid']==1">
+								<img class="mui-media-object mui-pull-left" src="{APP_PATH}statics/funds/images/pic1.png" />
+							</template>
+							<template v-else-if="d['tid']==2">
+								<img class="mui-media-object mui-pull-left" src="{APP_PATH}statics/funds/images/pic2.png" />
+							</template>
+							<template v-else-if="d['tid']==3">
+								<img class="mui-media-object mui-pull-left" :src="d['thumb']" />
+							</template>
+							<div class="mui-media-body">{{d['hide_account']}}<p>{{d['accountname']}}</p></div>
+						</a>
+					</li>
+				</template>
+			</ul>
+		</div>
+	</div>
+</body>
+{template "zyfunds","footer"}
+<script>
+	new Vue({
+		el: '#app',
+		data: {$result},
+	});
+</script>

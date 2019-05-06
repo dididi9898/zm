@@ -1,0 +1,99 @@
+{template "zyfunds","header"}
+<body>
+	<form id='form'>
+		<div class="mui-content" style="font-size:16px;">
+			<div class="cash">
+				<div class='cash_label'>充值金额</div>
+				<div class="cash_money" style='padding-bottom:25px;border:none;'>
+					<span class='symbol' style="margin-top:-18px;">￥</span>
+					<input type="text" class='input_text' name="amount" style="padding:0 10px;" />
+					<input type="hidden" name="status" value="0" />
+				</div>
+			</div>
+			<div class="recharge">
+				<dl class="recharge_cash" style="margin-top:30px;">
+					<dt>充值金额</dt>
+					<dd>
+						<div class="money">50</div>
+						<div class="money">100</div>
+						<div class="money">200</div>
+						<div class="money">500</div>
+					</dd>
+				</dl>
+			</div>
+			<button type="button" class="mui-btn mui-btn-success sbtn">提交</button>
+		</div>
+		<div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
+			<!-- 可选择菜单 -->
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell alipay"><a href="javascript:;">支付宝</a></li>
+				<li class="mui-table-view-cell wechat"><a href="javascript:;">微信</a></li>
+			</ul>
+			<!-- 取消菜单 -->
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a href="#sheet1"><b>取消</b></a>
+				</li>
+			</ul>
+		</div>
+	</form>
+</body>
+{template "zyfunds","footer"}
+<script>
+	$('.money').on('tap',function(){
+		$('.money').removeClass('active');
+		$(this).addClass('active');
+		var value = parseFloat($(this).html());
+		$('.input_text').val(value);
+	});
+	$('.sbtn').on('tap',function(){
+		var text = $('.input_text').val();
+		if(text==''){
+			mui.toast("请输入充值金额");
+			return false;
+		}
+		if(text==0){
+			mui.toast('请输入有效的金额');
+			return false;
+		}
+		if(!$.isNumeric(text)){
+			mui.toast('请输入正确的金额格式');
+			return false;
+		}
+
+		mui('#sheet1').popover('toggle');
+	});
+
+	$('.alipay').on('tap',function(){
+		var text = $('.input_text').val();
+		mui('#sheet1').popover('hide');
+		var data = $('#form').serialize();
+		data = data+"&amount="+text+"&type=1";
+		ajaxform(data);
+	});
+
+	$('.wechat').on('tap',function(){
+		var text = $('.input_text').val();
+		mui('#sheet1').popover('hide');
+		var data = $('#form').serialize();
+		data = data+"&amount="+text+"&type=2";
+		ajaxform(data);
+	});
+
+	function ajaxform(data){
+		$.ajax({
+			url: "index.php?m=zyfunds&c=index&a=cztradecash",
+			type: 'post',
+			data: data,
+			dataType: 'json',
+			success: function(res){
+				if(res.code==200){
+					mui.toast(res.message);
+					window.location.href = 'index.php?m=zyfunds&c=index&a=paysuccess&id='+res.data.id;
+				}else{
+					mui.toast(res.message);
+				}
+			}
+		});
+	}
+</script>

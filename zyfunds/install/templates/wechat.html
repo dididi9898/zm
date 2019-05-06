@@ -1,0 +1,56 @@
+{template "zyfunds",'header'}
+<body style="background:#fff;">
+	<div class="mui-content">
+		<div class="input_label">请绑定本人微信</div>
+		<form class="mui-input-group" id="form">
+			<div class="mui-input-row">
+				<label>微信</label>
+				<input type="text" class="mui-input-clear" name="account" placeholder="请输入微信" id="account">
+			</div>
+			<div class="mui-input-row">
+				<label>收款人</label>
+				<input type="text" class="mui-input-clear" name="accountname" placeholder="请填写微信收款名" id="accountname">
+			</div>
+			<div class="mui-button-row" style='height:85px;'>
+				<input type="hidden" name="tid" value="2" />
+				<input type="hidden" name="tname" value="微信" />
+				<input type="hidden" name="status" value="1" />
+				<input type="hidden" name="is_first" value="-1" />
+				<button type="button" class="mui-btn mui-btn-success sbtn">确认</button>
+			</div>
+		</form>
+	</div>
+</body>
+{template "zyfunds",'footer'}
+<script>
+	$('.sbtn').on('tap',function(){
+		var account = $('#account').val();
+		var accountname = $('#accountname').val();
+
+		if(account==''){
+			mui.toast('请输入微信账号');
+			return false;
+		}
+
+		if(accountname == ''){
+			mui.toast('请填写收款人');
+			return false;
+		}
+
+		$.ajax({
+			url: "index.php?m=zyfunds&c=index&a=wechat_add",
+			type: "post",
+			data: $('#form').serialize(),
+			dataType: 'json',
+			success: function(res){
+				if(res.code == 200){
+					mui.toast(res.message);
+					window.location.href = "index.php?m=zyfunds&c=index&a=bcard";
+				}else{
+					mui.toast(res.message);
+				}
+			}
+		});
+		return false;
+	});
+</script>

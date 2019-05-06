@@ -1,0 +1,71 @@
+{template "zyfunds",'header'}
+<body style="background:#fff;">
+	<div class="mui-content">
+		<div class="input_label">请绑定持卡本人的银行卡</div>
+		<form class="mui-input-group" id="form">
+			<div class="mui-input-row">
+				<label>卡号</label>
+				<input type="text" class="mui-input-clear" name="account" placeholder="请输入银行卡号" id="account">
+			</div>
+			<div class="mui-input-row">
+				<label>收款人</label>
+				<input type="text" class="mui-input-clear" name="accountname" placeholder="请填写银行卡收款人" id="accountname">
+			</div>
+			<div class="mui-input-row">
+				<label>银行选择</label>
+				<span id="showbank" class="mui-btn mui-btn-block" type="button"
+						style="width:65%;border:none;float:left;font-size:16px;margin-bottom:0;padding:17px 0;text-align:left;"
+				>--请选择银行--</span>
+			</div>
+			<div class="mui-button-row" style='height:85px;'>
+				<input type="hidden" name="tid" value="3" />
+				<input type="hidden" name="status" value="1" />
+				<input type="hidden" name="is_first" value="-1" />
+				<button type="button" class="mui-btn mui-btn-success sbtn">确认</button>
+			</div>
+		</form>
+	</div>
+</body>
+{template "zyfunds",'footer'}
+<script>
+	$('#showbank').on('tap',function(){
+		var picker = new mui.PopPicker();
+		picker.setData({$result});
+		picker.show(function (selectItems) {
+			var text = selectItems[0].value+','+selectItems[0].text;
+			$('#showbank').html(selectItems[0].text);
+			$('#showbank').after("<input type='hidden' name='tname' value='"+text+"' />");
+		})
+	});
+
+	$('.sbtn').on('tap',function(){
+		var account = $('#account').val();
+		var accountname = $('#accountname').val();
+
+		if(account==''){
+			mui.toast('请输入银行卡号');
+			return false;
+		}
+
+		if(accountname == ''){
+			mui.toast('请填写收款人');
+			return false;
+		}
+
+		$.ajax({
+			url: "index.php?m=zyfunds&c=index&a=banks_add",
+			type: "post",
+			data: $('#form').serialize(),
+			dataType: 'json',
+			success: function(res){
+				if(res.code == 200){
+					mui.toast(res.message);
+					window.location.href = "index.php?m=zyfunds&c=index&a=bcard";
+				}else{
+					mui.toast(res.message);
+				}
+			}
+		});
+		return false;
+	});
+</script>

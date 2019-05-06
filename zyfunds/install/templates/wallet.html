@@ -1,0 +1,35 @@
+{template "zyfunds",'header'}
+<body>
+	<div class="mui-content">
+		<div id="app">
+			<div v-if="code==200">
+				<div class="bg">
+					<div class="money_label" style="text-align:center;">账户余额</div>
+					<div class='money' style="text-align:center;">￥{{data['cash']}}</div>
+					<div style="position:relative;width:60%;margin:20px auto;">
+						<a href="index.php?m=zyfunds&c=index&a=bill" class='link right'>流水明细</a>
+						<a href="index.php?m=zyfunds&c=index&a=bcard" class='link left'>账号管理</a>
+					</div>
+				</div>
+				<a href='index.php?m=zyfunds&c=index&a=wcash' class="mui-btn mui-btn-warning sbtn">提现</a>
+				<a href='index.php?m=zyfunds&c=index&a=czcash' class="mui-btn sbtn">充值</a>
+			</div>
+			<div class="error" v-else>
+				<dl style="text-align:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-80%);-webkit-transform:translate(-50%,-80%);-moz-transform:translate(-50%,-80%);-o-transform:translate(-50%,-80%);width:100%;max-width:750px;">
+					<dt><img src="{APP_PATH}statics/funds/images/error.jpg" width="50%"></dt>
+					<dd style="font-size:18px;margin-top:40px;">ERROR</dd>
+					<dd style="color:#999;font-size:14px;">{{message}}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</body>
+{template "zyfunds",'footer'}
+<script>
+	$('.error').css({'height':$(window).height(),'background':'#fff'});
+	var data = {$res};
+	var vm = new Vue({
+		el: '#app',
+		data: data,
+	});
+</script>
