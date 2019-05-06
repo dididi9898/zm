@@ -16,6 +16,7 @@ class index{
 	 * */
 	public function index_show()
 	{
+		$s=1;
 	    if($_GET['obj']){
 	        $project=$_GET['obj'];
 	        //echo $project;
