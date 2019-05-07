@@ -78,7 +78,7 @@
 					upload = layui.upload,
 					table = layui.table;
 				var userid = {$_userid};
-				aj.post('/index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'mobile' }, function (data) {
+				aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'mobile' }, function (data) {
 					//console.log(data.data);
 					if (data.status == 'error') {
 						layer.msg(data.message);
@@ -97,12 +97,12 @@
 					var d = {};
 					data.field.userid = {$_userid};
 					data.field.progress = "1";
-					data.field.forward = "/index.php?m=zymember&c=index&a=psd_edit&progress=2&verify_code="+data.field.verify_code+"&mobile="+data.field.mobile;
+					data.field.forward = "index.php?m=zymember&c=index&a=psd_edit&progress=2&verify_code="+data.field.verify_code+"&mobile="+data.field.mobile;
 					//console.log(data.field);
 					
 					if (data.field.mobile && data.field.verify_code) {
 						data.field.type = '1';
-						aj.post('/index.php?m=zymember&c=api&a=psd_edit', data.field , function (data) {
+						aj.post('index.php?m=zymember&c=api&a=psd_edit', data.field , function (data) {
 							console.log(data);
 							if (data.status == 'error') {
 								layer.msg(data.message);
@@ -131,7 +131,7 @@
 				//console.log(phone);
 				//60秒倒计时
 				if (!_this.hasClass("on")) {
-					aj.post('/index.php?m=zymessagesys&c=messagesys_api&a=pub_sendsms',{'mobile':phone}, function (data) {
+					aj.post('index.php?m=zymessagesys&c=messagesys_api&a=pub_sendsms',{'mobile':phone}, function (data) {
 						console.log(data);
 						layer.msg('发送成功');
 						$.leftTime(60, function (d) {

@@ -86,7 +86,7 @@
 				var d = {};
 				data.field.userid = {$_userid};
 				if(data.field.rawpassword  && (data.field.password  ==　data.field.repassword)){
-					aj.post('/index.php?m=zymember&c=api&a=trapsd_edit_jd',data.field,function(data){
+					aj.post('index.php?m=zymember&c=api&a=trapsd_edit_jd',data.field,function(data){
 						console.log(data);
 						if(data.status == 'error'){
 							layer.msg(data.message);

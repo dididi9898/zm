@@ -269,7 +269,7 @@
         <script>
         $(function () {
             var userid = {$_userid};
-            aj.post('/index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'nickname,userid,shopname' }, function (data) {
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'nickname,userid,shopname' }, function (data) {
                 //console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);

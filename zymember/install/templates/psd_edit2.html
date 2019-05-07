@@ -86,7 +86,7 @@
 					
 					if (data.field.password && data.field.repassword) {
 						data.field.type = '1';
-						aj.post('/index.php?m=zymember&c=api&a=psd_edit', data.field , function (data) {
+						aj.post('index.php?m=zymember&c=api&a=psd_edit', data.field , function (data) {
 							console.log(data);
 							if (data.status == 'error') {
 								layer.msg(data.message);

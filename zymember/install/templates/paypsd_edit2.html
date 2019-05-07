@@ -81,18 +81,18 @@
 					data.field.progress = "2";
 					data.field.mobile = {$_GET[mobile]};
 					data.field.verify_code = {$_GET[verify_code]};
-					data.field.forward = "/index.php?m=zymember&c=index&a=init";
+					data.field.forward = "index.php?m=zymember&c=index&a=init";
 					console.log(data.field);
 					
 					if (data.field.password && data.field.repassword) {
 						data.field.type = '1';
-						aj.post('/index.php?m=zymember&c=api&a=trapsd_edit', data.field , function (data) {
+						aj.post('index.php?m=zymember&c=api&a=trapsd_edit', data.field , function (data) {
 							console.log(data);
 							if (data.status == 'error') {
 								layer.msg(data.message);
 							} else {
 								layer.msg(data.message);
-								//setTimeout("javascript:location.href='" + data.data.forward + "'", 1000);
+								setTimeout("javascript:location.href='" + data.data.forward + "'", 1000);
 							}
 						})
 						console.log(data.field);

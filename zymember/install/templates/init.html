@@ -1,235 +1,179 @@
 ﻿{template "zymember","top-head"}
-<style>
-    .member-index-head .more .layui-badge { background: #321ab5; }
+<!--zm-->
+<link href="{APP_PATH}statics/zm/css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+<link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_q9b3h1uvs8.css">
+<link href="{APP_PATH}statics/zm/css/picture_upload.css" rel="stylesheet" type="text/css">
+<script src="{APP_PATH}statics/zm/js/auto-size.js" type="text/javascript"></script>
+<script src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="{APP_PATH}statics/zm/layer/layer.js"></script>
+<body style="background: #f1f1f1;">
 
-    p.text.text-center { color: #8a8a8a; }
-
-    .hui .icon-box * { color: #8a8a8a; }
-</style>
-
-<body class="bg-f4f4f4">
-    <div class="personal-center-head">
-        <div class="personal-center-head-left">
-            <a href="{APP_PATH}index.php?m=zymember&c=index&a=personal_data">
-                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png" class="w-100">
-            </a>
+    <!--head_food-->
+    <div class='per-head'>
+        <div class='per-head-left'>
+<!--             <a href='javascript:history.go(-1);'>
+                <img src='images/fh-b.png' class='tb-dw'>
+            </a> -->
         </div>
-        <div class="personal-center-head-center" id="info">
-            <div class="name mt15">
-                <span class="c-fff">用户昵称：{{ nickname }}</span>
+        <a class='per-head-hd'>我的资料</a>
+        <div class='per-head-right'>
+        </div>
+        <div class='clear'></div>
+    </div>
+    <!--head_food_end-->
+    
+    <!--内容-->
+    <div class="per-content info">
+        <div class="user-info" style="height: 4rem;background: #55acef">
+            <div class="pl2 pr2" style="padding-top: 1rem">
+                <div class="bt15"></div>
+                    <div class="user-logo">
+                        <a href="{APP_PATH}index.php?m=zymember&c=index&a=personal_data">
+                            <img class="user-logo" src="{APP_PATH}statics/zm/images/cssdbz.jpg" class="w-100">
+                        </a>
+                    </div>
+                    <div class="user-text" >
+                        <h3 class="lg-fs lh1 c-fff">昵称：{{ nickname }}</h3>
+                        <p class="md-fs lh1 c-fff">手机号： {{ mobile }}</p>
+                    </div>
+                    <div class="user-xx" style="margin-top: 1rem">
+                        <a href="{APP_PATH}index.php?m=zyqrcode&c=index&a=show_member">
+                            <div class="iconfont icon-qrcode c-fff"></div>
+                            <div class="iconfont icon-right c-fff"></div>
+                        </a>
+                    </div>
+                    <div class="clear"></div>
+                <div class="bt15"></div>
             </div>
-            <p class="more">
-                <!-- <span class="layui-badge mt1">普通会员</span> -->
-                <span class="c-fff d-ib ">用户ID: {{ userid }}</span>
-            </p>
-            <p class="more mt1">
-                <span class="layui-badge radius5 layui-badge-more">积分： {{ point }}<i class="layui-icon layui-icon-right"></i></span>
-            </p>
         </div>
-
-        <!-- <div class="personal-center-head-right">
-            <img src="{APP_PATH}statics/public/images/qiandao.png" class="w-100">
-        </div> -->
-    </div>
-    <div class="h1" style="background: #fff;"></div>
-    <!--     <div class="personal-center-head2">
-            <a href="个人中心.html">
+        <div>
+            <div class="user-list">
+                <div class="bt10"></div>
                 <div class="div1">
-                    个人中心
+                    <h3>我的团队</h3>
+                    <div class="iconfont icon-friend"></div>
+                    <p>我的下级</p>
                 </div>
-            </a>
-            <a href="个人中心-我的团队.html">
                 <div class="div2">
-                    我的团队
+                    <h3>我的佣金</h3>
+                    <ul>
+                        <li>
+                            <span class="c-73d13d">￥0.00</span>
+                            <p>佣金金额</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-moneybag"></div>
+                            <p>佣金明细</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-vipcard"></div>
+                            <p>提现</p>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
                 </div>
-            </a>
-        </div> -->
-    <div class="chunk-list bg-fff sm-fs hui">
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=1&status=1">
-                <div class="h1"></div>
-                <div class="icon-box icon-linear">
-                    <span class="icon iconfont icon-sponsor"></span>
+                <div class="clear bt10"></div>
+            </div>
+            <div class="bt10"></div>
+            <div class="user-list">
+                <div class="bt10"></div>
+                <div class="div3">
+                    <h3>我的订单</h3>
+                    <ul>
+                        <li>
+                            <div class="iconfont icon-pay"></div>
+                            <p>待付款</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-send"></div>
+                            <p>待发货</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-deliver"></div>
+                            <p>待收货</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-message"></div>
+                            <p>评价</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-transaction"></div>
+                            <p>退款/售后</p>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
                 </div>
-                <div class="h05"></div>
-                <p class="text text-center icon-linear">待付款</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=1&status=2">
-                <div class="h1"></div>
-                <div class="icon-box icon-linear">
-                    <span class="icon iconfont icon-deliver"></span>
+                <div class="bt10"></div>
+            </div>
+            <div class="bt10"></div>
+            <div class="user-list">
+                <div class="bt10"></div>
+                <div class="div4">
+                    <h3>我的积分</h3>
+                    <ul>
+                        <li>
+                            <span>{{ point }}</span>
+                            <p>总积分</p>
+                        </li>
+                        <li>
+                            <span class="c-fa541c">{{new_point}}</span>
+                            <p>最近新增积分</p>
+                        </li>
+                        <li>
+                            <span class="c-597ef7">{{used_point}}</span>
+                            <p>已使用积分</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-present"></div>
+                            <p>兑换礼品</p>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
                 </div>
-                <div class="h05"></div>
-                <p class="text text-center icon-linear">待发货</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=1&status=3">
-                <div class="h1"></div>
-                <div class="icon-box icon-linear">
-                    <span class="icon iconfont icon-goods"></span>
+                <div class="bt10"></div>
+            </div>
+            <div class="bt10"></div>
+            <div class="user-list">
+                <div class="bt10"></div>
+                <div class="div5">
+                    <h3>我的优惠券</h3>
+                    <ul>
+                        <li>
+                            <div class="iconfont icon-ticket"></div>
+                            <p>去领券</p>
+                        </li>
+                        <li>
+                            <span class="c-f5222d">10个</span>
+                            <p>优惠券数量</p>
+                        </li>
+                        <li>
+                            <div class="iconfont icon-goodsnewfill"></div>
+                            <p>使用优惠券</p>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
                 </div>
-                <div class="h05"></div>
-                <p class="text text-center icon-linear">待收货</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=1&status=4">
-                <div class="h1"></div>
-                <div class="icon-box icon-linear">
-                    <span class="icon iconfont icon-comment"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center icon-linear">待评价</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <div class="chunk-list bg-fff sm-fs hui">
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="">
-                <div class="h1"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-repair"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">退换货商品</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="">
-                <div class="h1"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-footprint"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">我的足迹</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="{APP_PATH}index.php?m=zymember&c=index&a=collect">
-                <div class="h1"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-favor"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">我的收藏</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=1">
-                <div class="h1"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-goods"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">全部订单</p>
-                <div class="h1"></div>
-            </a>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <div class="h1"></div>
-    <!-- <div class="w-100">
-        <img src="{APP_PATH}statics/public/images/xuanchuanerweima.png" class="w-100">
-    </div>
-    <div class="h1"></div> -->
-    <!--全部工具-->
-    <div class="chunk-list bg-fff sm-fs">
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3 br-bb_f1f1f1">
-            <a class="d-b" href="index.php?m=zymember&c=index&a=security">
-                <div class="h2"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-safe c-00bfff"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">安全中心</p>
-                <div class="h2"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3 br-bb_f1f1f1">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyfunds&c=index&a=wallet">
-                <div class="h2"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-moneybagfill c-ff4f00"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">我的钱包</p>
-                <div class="h2"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3 br-bb_f1f1f1">
-            <a class="d-b" href="{APP_PATH}index.php?m=zyaddr&c=index&a=init">
-                <div class="h2"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-location c-7cba59"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">我的地址</p>
-                <div class="h2"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3 bb_f1f1f1">
-            <a class="d-b" href="{APP_PATH}index.php?m=zymember&c=index&a=shop_init">
-                <div class="h2"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-taoxiaopu c-ff1493"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">店铺中心</p>
-                <div class="h2"></div>
-            </a>
-        </div>
-        <div class="clear"></div>
-    </div>
-
-    <div class="chunk-list bg-fff sm-fs">
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3 br_f1f1f1">
-            <a class="d-b" href="">
-                <div class="h2"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-comment c-ff0000"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">消息</p>
-                <div class="h2"></div>
-            </a>
-        </div>
-        <div class="layui-col-xs3 layui-col-sm3 layui-col-md3 br_f1f1f1">
-            <a class="d-b" href="{APP_PATH}index.php?m=member&c=index&a=logout">
-                <div class="h2"></div>
-                <div class="icon-box">
-                    <span class="icon iconfont icon-pulldown c-333"></span>
-                </div>
-                <div class="h05"></div>
-                <p class="text text-center">退出</p>
-                <div class="h2"></div>
-            </a>
+                <div class="bt10"></div>
+            </div>
         </div>
 
-        <div class="clear"></div>
+        
     </div>
+    <div class="bt10"></div>
+<!--head_fod-->
     {template "zymember","bottom-footer"}
     {template "zymember","footer"}
     <script>
         $(function () {
             var userid = {$_userid};
-            aj.post('/index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'nickname,userid,point' }, function (data) {
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'nickname,userid,point,new_point,used_point,mobile' }, function (data) {
                 //console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);
                 } else {
                     var info = new Vue({
-                        el: '#info',
+                        el: '.info',
                         data: data.data
                     })
                 }
@@ -237,13 +181,13 @@
         })
 
             //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
-            ;
+        ;
         ! function () {
             var layer = layui.layer,
-                form = layui.form,
-                $ = layui.jquery,
-                upload = layui.upload,
-                table = layui.table;
+                    form = layui.form,
+                    $ = layui.jquery,
+                    upload = layui.upload,
+                    table = layui.table;
 
             $('.no-way').on('click', function () {
                 layer.msg('该栏目正在开发中...');
@@ -251,6 +195,7 @@
 
 
         }();
-    </script>
+        </script>
+
 </body>
 </html>
