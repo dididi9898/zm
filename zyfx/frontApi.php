@@ -67,7 +67,7 @@ class frontApi
         Res::AssertOk($this->member->addchild($userid, $pid) ,"2");
         returnAjaxData("1", "添加成功");
     }
-    function awardMoney()//奖励钱
+    function awardMoney()//奖励钱****
     {
         $neadArg = ["userid"=>[true, 1], "shopprice"=>[false, 1]];
         $info = checkArg($neadArg);

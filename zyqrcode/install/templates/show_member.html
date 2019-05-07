@@ -15,7 +15,7 @@
    
     <div class='per-head'>
         <div class='per-head-left'>
-            <a href='javascript:history.go(-1);'>
+            <a onclick="destroy()" >
                 <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
             </a>
         </div>
@@ -27,8 +27,8 @@
 
     <div class="bt30"></div>
     <!-- 银行卡 -->
-	<div class="bb2 ewm-kj" id="info" style="margin-top: 0.5rem">
-        <div class="jy-ewm-user">
+	<div  id="info" class="bb2 ewm-kj" style="margin-top: 0.5rem">
+        <div class="jy-ewm-user" >
             <div class="ewm-user-img">
                 <img :src= "headimgurl" >
             </div>
@@ -37,25 +37,54 @@
             </div>
         </div>
         <div class="ewm-yh" style=" text-align: center;">
-            <img src="{APP_PATH}statics/zm/images/qr.png" style="border: none;vertical-align: middle;">
+            <img id="qrcode" :src="qrcode" style="border: none;vertical-align: middle;">
         </div>
-        <div class="ewm-ewm" id="qrcode"></div>
+        <div class="ewm-ewm"></div>
         <div class="ewm-wz"><p class="md-fs">扫描二维码加入我们！</p></div>
     </div>
     {template "zymember","footer"}
     <script>
         $(function () {
             var userid = {$_userid};
-            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,nickname,mobile,wechat_name' }, function (data) {
-                console.log(data.data);
-                if (data.status == 'error') {
-                    layer.msg(data.message);
-                } else {
-                    var info = new Vue({
-                        el: '#info',
-                        data: data.data
+            $.ajax({
+                'type': 'POST',
+                'url': 'index.php?m=zymember&c=zymember_api&a=pub_memberinfo',
+                'data': { 'userid': userid, 'field': 'headimgurl,nickname,mobile,wechat_name' },
+                'cache': false,
+                'async': false,
+                'dataType': "json",
+                'beforeSend': function () {
+                    index = layer.msg('加载中', {
+                        icon: 16,
+                        shade: 0.01
                     });
-                };
+                },
+                'complete': function () {
+                    layer.close(index);
+                },
+                'success': function (data) {
+                    console.log(data.data);
+                    if (data.status == 'error') {
+                        layer.msg(data.message);
+                        setTimeout("javascript:location.href='" + data.data.forward + "'", 1000);
+                    } else {
+                        var thumb=data.data.headimgurl;
+                        console.log(thumb);
+                        aj.post('index.php?m=zyqrcode&c=api&a=create_qrcode_api', { 'userid': userid, 'thumb': thumb, 'msg': 1}, function (data2) {
+                            console.log(data2.data);
+                            if (data2.status == 'error') {
+                                layer.msg(data2.message);
+                            } else {
+                                data.data.qrcode=data2.data.qrcode;
+                                console.log(data.data);
+                                var info = new Vue({
+                                    el: '#info',
+                                    data: data.data
+                                });
+                            };
+                        });
+                    };
+                }
             });
         });
 
@@ -73,6 +102,18 @@
             });
 
         }();
+        function destroy(qrcode) {
+            qrcode = $('#qrcode')[0].src;
+            aj.post('index.php?m=zyqrcode&c=api&a=destroy_qrcode_api', {'thumburl': qrcode,}, function (data) {
+                console.log(data);
+                if (data.status == 'error') {
+                    layer.msg(data.message);
+                } else {
+                    setTimeout("javascript:history.go(-1)", 100);
+                }
+            });
+        };
+
         </script>
 
 </body>
