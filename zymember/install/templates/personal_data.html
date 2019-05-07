@@ -124,15 +124,12 @@
         </div>
     </div>
 
-
-
-    {template "zymember","bottom-footer"}
     {template "zymember","footer"}
 
     <script>
         $(function () {
             var userid = {$_userid};
-            aj.post('/index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,username,nickname,sex,mobile,wechat_name' }, function (data) {
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,username,nickname,sex,mobile,wechat_name' }, function (data) {
                 console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);
@@ -165,7 +162,7 @@
                 d.userid = {$_userid};
                 d.type = 1;
                 d.nickname = name;
-                aj.post('/index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
+                aj.post('index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
                     console.log(data);
                     if (data.status == 'error') {
                         layer.msg(data.message);
@@ -195,7 +192,7 @@
                 , btn: ['男', '保密', '女'] //可以无限个按钮
                 , btn1: function () {
                     d.sex = "男";
-                    aj.post('/index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
+                    aj.post('index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
                         console.log(data);
                         if (data.status == 'error') {
                             layer.msg(data.message);
@@ -207,7 +204,7 @@
                 }
                 , btn2: function () {
                     d.sex = "保密";
-                    aj.post('/index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
+                    aj.post('index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
                         console.log(data);
                         if (data.status == 'error') {
                             layer.msg(data.message);
@@ -218,7 +215,7 @@
                     });
                 }, btn3: function () {
                     d.sex = "女";
-                    aj.post('/index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
+                    aj.post('index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
                         console.log(data);
                         if (data.status == 'error') {
                             layer.msg(data.message);
