@@ -82,7 +82,7 @@
 					upload = layui.upload,
 					table = layui.table;
 				var userid = {$_userid};
-				aj.post('/index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'mobile' }, function (data) {
+				aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'mobile' }, function (data) {
 					//console.log(data.data);
 					if (data.status == 'error') {
 						layer.msg(data.message);
@@ -105,14 +105,13 @@
 					
 					if (data.field.mobile && data.field.verify_code && data.field.newmobile) {
 						data.field.type = '1';
-						aj.post('/index.php?m=zymember&c=api&a=update_mobile', data.field , function (data) {
+						aj.post('index.php?m=zymember&c=api&a=update_mobile', data.field , function (data) {
 							console.log(data);
 							if (data.status == 'error') {
 								layer.msg(data.message);
 							} else {
 								layer.msg(data.message);
-								//setTimeout("javascript:location.href='" + data.data.forward + "'", 1000);
-
+								setTimeout("javascript:location.href='" + data.data.forward + "'", 1000);
 							}
 						})
 						console.log(data.field);
@@ -133,7 +132,7 @@
 				//console.log(phone);
 				//60秒倒计时
 				if (!_this.hasClass("on")) {
-					aj.post('/index.php?m=zymessagesys&c=messagesys_api&a=pub_sendsms',{'mobile':phone}, function (data) {
+					aj.post('index.php?m=zymessagesys&c=messagesys_api&a=pub_sendsms',{'mobile':phone}, function (data) {
 						console.log(data);
 						layer.msg('发送成功');
 						$.leftTime(60, function (d) {

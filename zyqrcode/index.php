@@ -11,12 +11,22 @@ class index{
 	}
 
 
+	public function show_member()
+	{
+		if($_GET['obj']){
+			$project=$_GET['obj'];
+			//echo $project;
+		}
+		//echo $this->strget(APP_PATH.'uploadfile/qrcode/1552286253.png');
+		//echo $this->scerweima1('https://www.baidu.com');
+		//echo $this->update_qrcode('http://www.baidu.com','uploadfile/qrcode/1552286253.png');//调用查看结果
+		include template('zyqrcode','show_member');
+	}
 	/*
 	 * 显示信息
 	 * */
 	public function index_show()
 	{
-		$s=1;
 	    if($_GET['obj']){
 	        $project=$_GET['obj'];
 	        //echo $project;

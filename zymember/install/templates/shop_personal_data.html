@@ -76,7 +76,7 @@
     <script>
         $(function () {
             var userid = {$_userid};
-            aj.post('/index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,shopname,userid' }, function (data) {
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,shopname,userid' }, function (data) {
                 console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);
@@ -110,7 +110,7 @@
 				d.type = 1;
                 d.shopname = name;
 				console.log(d);
-                aj.post('/index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
+                aj.post('index.php?m=zymember&c=api&a=edit_memberdata', d, function (data) {
                     console.log(data);
                     if (data.status == 'error') {
                         layer.msg(data.message);
