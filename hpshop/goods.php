@@ -110,7 +110,8 @@ class goods extends admin {
 				}
 			}
 			
-
+			$awardNumber = json_encode($_POST["awardNumber"]);
+			$trialAwardNumber = json_encode($_POST["trialAwardNumber"]);
 			$goodsimg = array2string($goodsimg);
         	$data=[
         		'shopid' => 1,
@@ -127,7 +128,11 @@ class goods extends admin {
 				'brand_id' => $_POST['bid'],
 				'type_id' => $_POST['tid'],
 				'addtime'=>time(),
-        	];
+				'point_mode'=>$_POST["point_mode"],
+				'point_value'=>$_POST["point_value"],
+				'trialAwardNumber'=>$trialAwardNumber,
+				'awardNumber'=>$awardNumber,
+            ];
         	
         	$results=$this->goods_db->insert($data,true);
         	if(isset($_POST['pos'])){
@@ -268,8 +273,9 @@ class goods extends admin {
 						'alt'=>$_POST['goodsimg_alt'][$i],
 					];
 				}
-			}		
-
+			}
+            $awardNumber = json_encode($_POST["awardNumber"]);
+            $trialAwardNumber = json_encode($_POST["trialAwardNumber"]);
 			$goodsimg = array2string($goodsimg);
         	$data=[
         		'goods_name'=>$_POST['gname'],
@@ -284,6 +290,10 @@ class goods extends admin {
 				'brand_id' => $_POST['bid'],
 				'type_id' => $_POST['tid'],
 				'stock'=>$_POST['stock'],
+                'point_mode'=>$_POST["point_mode"],
+                'point_value'=>$_POST["point_value"],
+                'trialAwardNumber'=>$trialAwardNumber,
+                'awardNumber'=>$awardNumber,
         	];
 
         	
@@ -353,7 +363,8 @@ class goods extends admin {
 			
 		}else{
 			$info = $this->goods_db->get_one(array('id'=>$_GET['id']));
-			
+			$info["awardNumber"] = json_decode($info["awardNumber"], true);
+			$info["trialAwardNumber"] = json_decode($info["trialAwardNumber"], true);
 			$gattr = $this->goodsattr_db->select(array('goodstypeid'=>$info['type_id'],'attrtype'=>1));
 
 			// $num = count($gattr);
