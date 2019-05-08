@@ -223,7 +223,7 @@ class api{
 			}
 			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
 			_crul_get($url);
-			$result = [
+			$result = [ 
 				'status'=>'success',
 				'code'=>200,
 				'message'=>'登录成功',

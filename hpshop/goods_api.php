@@ -1326,7 +1326,7 @@ class goods_api{
         }
 
         $token_url= APP_PATH.'index.php?m=zyorder&c=zyorder_api&a=addorder';
-
+        
         $data = array (
         	'userid' => $uid,
         	'province' => $province,  
