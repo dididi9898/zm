@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `zy_zypoint_setting`;

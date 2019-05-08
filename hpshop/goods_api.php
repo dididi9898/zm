@@ -1406,7 +1406,6 @@ class goods_api{
 			$sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status','',$order = ' id ASC ');
 			$info['specdata'] = $sinfo;
 		}
-
 		$result = [
 			'status' => 'success',
 			'code' => 1,
