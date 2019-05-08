@@ -359,8 +359,8 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                                     <div class="fjpz" style=" width: 50%;">
                                         <!--                                                                <span style=" margin:0 10px;">--><?php //echo $value['tname']?><!--</span>-->
                                         <td>等级<?php echo $i?></td>
-                                        <td><input type="text" name="awardNumber[<?php echo $i;?>]" required=""  value=<?php echo $info["awardNumber"][$i]?> onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
-                                        <td><input type="text" name="trialAwardNumber[<?php echo $i;?>]" required=""  value=<?php echo $info["trialAwardNumber"][$i]?> onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
+                                        <td><input type="text" name="awardNumber[<?php echo $i;?>]" required=""  value="<?php echo $info["awardNumber"][$i]?>" onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
+                                        <td><input type="text" name="trialAwardNumber[<?php echo $i;?>]" required=""  value="<?php echo $info["trialAwardNumber"][$i]?>" onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
                                     </div>
                                 </tr>
                             <?php }?>
