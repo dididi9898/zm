@@ -48,7 +48,7 @@ class Fx
         }
         return $data;
     }
-    public function awardMoney($_userid, $shopPrice = 0, $shopType = 0)
+    public function awardMoney($_userid, $shopPrice = 0)
     {
         try{
             $memberInfo = $this->getMemberInfo($_userid);
@@ -62,7 +62,7 @@ class Fx
                 $memberInfo = $this->getMemberInfo(array('userid'=>$memberInfo["pid"]));
                 if($memberInfo != null) //计算各个pid应该发放多少奖励
                 {
-                    $info = $this->fxBeDec->returnAwardMoney($memberInfo, $i, $shopPrice, $shopType);//修改用户表的金额
+                    $info = $this->fxBeDec->returnAwardMoney($memberInfo, $i, $shopPrice);//修改用户表的金额
                     $fxMoney->update($info, array("userid"=>$memberInfo['userid']));
 //                $sql = "update `fxBack`.`zy_tx_table` set `WTXmoney`=WTXmoney+".$money.", `moneyCount`=WTXmoney+TXmoney where `userid`=".$memberInfo["userid"].";";
 //                $this->tx_table->spcSql($sql);
@@ -175,7 +175,7 @@ class Fx
         $where = $this->fxBeDec->returnWhereSQL($info);
         list($info, $count) = $this->zyfxmember->moreTableSelect(
             array("zy_zyfxmember"=>array("*"), "zy_zyfxgradetitle"=>array("*"), "zy_zyfxmoney"=>array("*"),"zy_member"=>array("username", "mobile")),
-            array("titleID", "userid", "userid"),
+            array("titleID"=>"titleID", "userid"=>"userid", "userid"=>"userid"),
             $where
             , ((string)($page-1)*$pageSize).",".$pageSize, "B1.userid ASC","1"
         );

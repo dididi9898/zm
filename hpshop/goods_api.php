@@ -1326,7 +1326,7 @@ class goods_api{
         }
 
         $token_url= APP_PATH.'index.php?m=zyorder&c=zyorder_api&a=addorder';
-
+        
         $data = array (
         	'userid' => $uid,
         	'province' => $province,  
@@ -1406,7 +1406,6 @@ class goods_api{
 			$sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status','',$order = ' id ASC ');
 			$info['specdata'] = $sinfo;
 		}
-
 		$result = [
 			'status' => 'success',
 			'code' => 1,
