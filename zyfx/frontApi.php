@@ -69,7 +69,7 @@ class frontApi
     }
     function awardMoney()//奖励钱****
     {
-        $neadArg = ["userid"=>[true, 1], "shopprice"=>[false, 1]];
+        $neadArg = ["userid"=>[true, 1], "shopType"=>[true, 0] ,"shopprice"=>[false, 1]];
         $info = checkArg($neadArg);
         $shopprice = isset($info["shopprice"])?array_pop($info):0;
         Res::AssertOk($this->member->awardMoney($info,$shopprice),"2");
