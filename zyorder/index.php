@@ -35,7 +35,7 @@ class index{
 		if($pagesize == null){
 			$pagesize = 10;
 		}
-		if($_userid==null){
+		if($_userid ==null){
 			exit($this->show_error("no userid"));
 		}
 		$where = 'storeid='.$_storeid;
