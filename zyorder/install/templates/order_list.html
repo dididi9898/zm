@@ -4,9 +4,33 @@
     <style>
         .layui-layer-content { text-align: center }
     </style>
+	<style>
+		container{overflow-x: scroll;
+			overflow-y: hidden;
+			/*解决ios上滑动不流畅*/
+			-webkit-overflow-scrolling: touch;
+			padding-bottom: 25px;}
+		::-webkit-scrollbar {color:transparent;}
+
+		#pic_list
+		{
+			display:block;
+			white-space:nowrap;
+			width:calc(100%);;
+			overflow:auto;
+		}
+		#pic_list li
+		{
+			float: none;
+			display:inline-block;
+		}
+		.order-head ul li {
+
+		}
+	</style>
     <div class="personal-order-head">
-		<div class="personal-head" style=" position: relative;">
-			<a onclick="javascript :history.back(-1);">
+		<div class="personal-head container" style=" position: relative;">
+			<a href="{APP_PATH}index.php?m=zymember&c=index&a=init">
 				<div class="fl head-icon">
 					<i class="layui-icon layui-icon-left"></i>
 				</div>
@@ -23,7 +47,8 @@
 				<i class="layui-icon layui-icon-search"></i>
 			</div>
 		</div>
-		<div class="order-head">
+
+		<div class="order-head"  id="pic_list">
             <ul>
                 
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list">
@@ -41,6 +66,12 @@
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=4">
                     <li {if $_GET[status]== 4} class="on" {/if}>待评价</li>
                 </a>
+				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">
+					<li {if $_GET[status]== 5} class="on" {/if}>退款/售后</li>
+				</a>
+				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=6">
+					<li {if $_GET[status]== 6} class="on" {/if}>待审核</li>
+				</a>
             </ul>
             <div class="clear"></div>
         </div>

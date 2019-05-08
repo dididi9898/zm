@@ -376,7 +376,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                 </tr>
                 <tr>
                     <th width="125">积分奖励</th>
-                    <td><input type="text" name="point_value" class="input-text" value=<?php echo $info["point_value"]?>></td>
+                    <td><input type="text" name="point_value" class="input-text" value="<?php echo $info["point_value"]?>"></td>
                 </tr>
 				<tr>
 					<th width="125">商品内容信息</th>  

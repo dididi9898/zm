@@ -79,27 +79,43 @@
             <div class="user-list">
                 <div class="bt10"></div>
                 <div class="div3">
-                    <h3>我的订单</h3>
+                    <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list"><h3>我的订单</h3></a>
                     <ul>
                         <li>
-                            <div class="iconfont icon-pay"></div>
-                            <p>待付款</p>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1">
+                                <div class="iconfont icon-pay"></div>
+                                <p>待付款</p>
+                            </a>
                         </li>
                         <li>
-                            <div class="iconfont icon-send"></div>
-                            <p>待发货</p>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=2">
+                                <div class="iconfont icon-send"></div>
+                                <p>待发货</p>
+                            </a>
                         </li>
                         <li>
-                            <div class="iconfont icon-deliver"></div>
-                            <p>待收货</p>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=3">
+                                <div class="iconfont icon-deliver"></div>
+                                <p>待收货</p>
+                            </a>
                         </li>
                         <li>
-                            <div class="iconfont icon-message"></div>
-                            <p>评价</p>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=4">
+                                <div class="iconfont icon-message"></div>
+                                <p>评价</p>
+                            </a>
                         </li>
                         <li>
-                            <div class="iconfont icon-transaction"></div>
-                            <p>退款/售后</p>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">
+                                <div class="iconfont icon-transaction"></div>
+                                <p>退款/售后</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=6">
+                                <div class="iconfont icon-attention"></div>
+                                <p>待审核</p>
+                            </a>
                         </li>
                         <div class="clear"></div>
                     </ul>
