@@ -17,7 +17,7 @@ class fxAwardExent extends fxAbs//装饰器，装饰fxBeDec函数
         parent::__construct($fx);
     }
 
-    public function returnAwardMoney($_userid, $num, $shopPrice)
+    public function returnAwardMoney($_userid, $num, $shopPrice, $shoptype)
     {
         $data = $this->fx->returnAwardMoney($_userid, $num, $shopPrice);
         $data["WTXmoney"] .= "+ 400";
