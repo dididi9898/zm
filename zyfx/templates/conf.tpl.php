@@ -57,7 +57,8 @@ input[type="radio"]:checked + label::before { background-color: #01cd78; backgro
 input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 
 </style>
-
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 
 <div class="pad-10">
 	<div class="common-form">
@@ -102,7 +103,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 										?>
 										<div class="fjpz cont">
 											<span><?php echo $key?>级成员</span>
-											<input  type="text" style="width: 70px; text-align: center" name="awardNumber[<?php echo $key?>]" value="<?php echo $value?>">
+											<input class="c1" type="text" style="width: 70px; text-align: center" name="awardNumber[<?php echo $key?>]" value="<?php echo $value?>" onkeyup="value=value.replace(/[^\d]/g,'')">
 										</div>
 										<?php
 
@@ -112,6 +113,26 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 									</td>
 
 								</tr>
+                                <tr id='gjfhl' ">
+                                <th>试用模式各级分红设置</th>
+
+                                <td class="rankfather1 ">
+                                    <?php
+
+                                    foreach($info["trialAwardNumber"] as $key => $value){
+                                        ?>
+                                        <div class="fjpz cont1">
+                                            <span><?php echo $key?>级成员</span>
+                                            <input  type="text" style="width: 70px; text-align: center" name="awardNumber[<?php echo $key?>]" value="<?php echo $value?>" onkeyup="value=value.replace(/[^\d]/g,'')">
+                                        </div>
+                                        <?php
+
+                                    }
+                                    ?>
+
+                                </td>
+
+                                </tr>
 
 								<tr id='gjfhls'>
 									<th>是否统一头衔</th>
@@ -244,24 +265,33 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
     function change() {
         $s = $('#rankval').val();
         $num = $('.cont').size();
+        $num_1 = $('.cont1').size();
         $a = 1;
-        while($s != $num)
+        while($s != $num || $s != $num_1)
         {
             if($s > $num)
             {
-                var imgshow ='<div class="fjpz cont"> <span>'+($num+1)+'级成员</span> <input class="input-text" type="text" style="width: 70px; text-align: center" name="awardNumber['+($num + 1)+']" value=" "> </div>'
+                var imgshow ='<div class="fjpz cont"> <span>'+($num+1)+'级成员</span> <input class="input-text" type="text" style="width: 70px; text-align: center" name="awardNumber['+($num + 1)+']" value="" onkeyup="value=value.replace(/[^\d]/g,'')"> </div>'
                 $('.rankfather').append(imgshow);
             }
             else if($s < $num)
                 $('.cont').last().remove();
-            $s = $('#rankval').val();
+            if($s > $num_1)
+            {
+                var imgshow ='<div class="fjpz cont1"> <span>'+($num_1+1)+'级成员</span> <input class="input-text" type="text" style="width: 70px; text-align: center" name="trialAwardNumber['+($num_1 + 1)+']" value="" onkeyup="value=value.replace(/[^\d]/g,'')"> </div>'
+                $('.rankfather1').append(imgshow);
+            }
+            else if($s < $num_1)
+                $('.cont1').last().remove();
             $num = $('.cont').size();
+            $num_1 = $('.cont1').size();
             $a =$a+1;
             if($a >50)
                 break;
         }
     }
 </script>
+
 <script>
 	onload = function(){
 	  //单选	  
