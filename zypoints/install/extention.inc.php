@@ -84,6 +84,21 @@ $userid = $menu_db->insert(
 );
 
 /**
+ * 添加子菜单:参考管理
+ */
+$userid = $menu_db->insert(
+	array(
+		'name'=>'zypoint_setting', //菜单名称
+		'parentid'=>$pids, //添加到积分商城。
+		'm'=>'zypoints', //模块
+		'c'=>'zypoints',//文件
+		'a'=>'zypoint_setting', //方法
+		'data'=>'', //附加参数
+		'listorder'=>2, //菜单排序
+		'display'=>'1' //显示菜单 1是显示 0是隐藏
+	),true//插入菜单之后，是否返回id
+);
+/**
  * 菜单名称翻译
  */
 $language = array(
@@ -91,6 +106,7 @@ $language = array(
 	'zypoints_manage'=>'积分模块',
 	'zypoints'=>'积分物品管理',
 	'zypoints_user'=>'积分兑换管理',
+	'zypoint_setting'=>'积分设置',
 );
 
 ?>
