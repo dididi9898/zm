@@ -5,6 +5,7 @@ pc_base::load_sys_class('form', '', 0);
 pc_base::load_sys_class('format', '', 0);
 
 class zyorder_api{
+
 	function __construct() {
 		$this->get_db = pc_base::load_model('get_model');
 		$this->order_db = pc_base::load_model('zy_order_model');
@@ -460,9 +461,9 @@ class zyorder_api{
 			];
 
 			$len = count($vs['cartinfo']);
-    		$sql= "insert into phpcms_order_goods ( `order_id`, `goods_id`, `goods_name`, `goods_num`, `goods_img`, `goods_price`, `specid`, `specid_name`) values";
+    		$sql= "insert into phpcms_order_goods ( `order_id`, `goods_id`, `goods_name`, `goods_num`, `goods_img`, `goods_price`, `specid`, `specid_name`,`final_price`) values";
 			foreach ($vs['cartinfo'] as $key => $val) {
-				$sql.="(".$id.", ".$val['goodsid'].", '".$val['goodsname']."', '".$val['cartnum']."', '".$val['goodsimg']."', '".$val['goodsprice']."', '".$val['goodsspec']."', '".$val['goodsspecs']."'),";
+				$sql.="(".$id.", ".$val['goodsid'].", '".$val['goodsname']."', '".$val['cartnum']."', '".$val['goodsimg']."', '".$val['goodsprice']."', '".$val['goodsspec']."', '".$val['goodsspecs']."', '".$val['goodsprice']*$val['cartnum']."'),";
 			};
 			$sql = substr($sql,0,strlen($sql)-1);
 			$this->ordergoods_db->query($sql);
