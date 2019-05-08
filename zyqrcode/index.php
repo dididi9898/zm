@@ -8,18 +8,14 @@ class index{
 	function __construct() {
 		$this->get_db = pc_base::load_model('get_model');
 		$this->qrcode_db = pc_base::load_model('zyqrcode_model');
+
+		$this->_userid = param::get_cookie('_userid');
 	}
 
 
 	public function show_member()
 	{
-		if($_GET['obj']){
-			$project=$_GET['obj'];
-			//echo $project;
-		}
-		//echo $this->strget(APP_PATH.'uploadfile/qrcode/1552286253.png');
-		//echo $this->scerweima1('https://www.baidu.com');
-		//echo $this->update_qrcode('http://www.baidu.com','uploadfile/qrcode/1552286253.png');//调用查看结果
+		$_userid = $this->_userid;
 		include template('zyqrcode','show_member');
 	}
 	/*
