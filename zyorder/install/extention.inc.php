@@ -40,22 +40,35 @@ $pid = $menu_db->insert(
 		'display'=>'1'), //显示菜单 1是显示 0是隐藏
 		true //插入菜单之后，是否返回id
 	);
-	$menu_db->insert(
-	array(
-		'name'=>'logistics_company', //菜单名称
-		'parentid'=>$pid, //添加到后台的主菜单里
-		'm'=>'zyorder', //模块
-		'c'=>'order', //文件
-		'a'=>'logistics_company',//方法
-		'data'=>'', //附加参数
-		'listorder'=>0, //菜单排序
-		'display'=>'1'), //显示菜单 1是显示 0是隐藏
-		true //插入菜单之后，是否返回id
-	);
+$menu_db->insert(
+array(
+	'name'=>'logistics_company', //菜单名称
+	'parentid'=>$pid, //添加到后台的主菜单里
+	'm'=>'zyorder', //模块
+	'c'=>'order', //文件
+	'a'=>'logistics_company',//方法
+	'data'=>'', //附加参数
+	'listorder'=>0, //菜单排序
+	'display'=>'1'), //显示菜单 1是显示 0是隐藏
+	true //插入菜单之后，是否返回id
+);
+$menu_db->insert(
+    array(
+        'name'=>'EXInfo', //菜单名称
+        'parentid'=>$pid, //添加到积分商城。
+        'm'=>'zyorder', //模块
+        'c'=>'order',//文件
+        'a'=>'EXInfo', //方法
+        'data'=>'', //附加参数
+        'listorder'=>0, //菜单排序
+        'display'=>'1' //显示菜单 1是显示 0是隐藏
+    )
+);
 $language = array
 (
     'ordermodule'=>'订单模板',
 	'logistics'=>'物流管理',
+    "EXInfo"=>"快递鸟认证",
 	'logistics_company'=>'物流配置',
 	'order'=>'订单管理',
 	'order_list'=>'订单管理列表',

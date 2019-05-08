@@ -27,7 +27,7 @@ if(is_array($info)){
          <td align="center"><a target="_blank" href="<?php echo $info['url']?>"><?php echo $info['goods_name']?></a></td>
          <td align="center"><?php echo $info['specid_name']?></td>
         <td align="center"><?php echo $info['goods_price']?></td>
-         <td align="center">1</td>
+         <td align="center"><?php echo $info['goods_num']?></td>
         <td align="center"><?php echo $info['final_price']?></td>
         
 	</tr>

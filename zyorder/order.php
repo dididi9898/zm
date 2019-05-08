@@ -4,11 +4,14 @@ defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_class('admin', 'admin', 0);	//加载应用类方法
 pc_base::load_sys_class('form', 0, 0);
 pc_base::load_app_func('global');
-
+pc_base::load_app_func("EX");
 class order extends admin {
 	/**
 	*构造函数，初始化
 	*/
+    public static $statusType = ["1"=>"代付款","2"=>"待发货","3"=>"待收货","4"=>"待评价","5"=>"已评价","6"=>"已删除"];
+    public static $pay_type = ["1"=>"余额","2"=>"支付宝", "3"=>"微信"];
+
 	public function __construct()
 	{
 		
@@ -32,7 +35,8 @@ class order extends admin {
 
 		//快递公司表
 		$this->express_db = pc_base::load_model('zyexpress_model');
-
+		//$this->zy_logistics_company = pc_base::load_model('zy_logistics_company');
+        $this->pagesize = 10;
 
 		//引入卓远网络公共函数库
 		//require_once 'zywl/functions/global.func.php';
@@ -60,56 +64,136 @@ class order extends admin {
 /**
 * 订单管理===========================================
 */
-	
-	
-    
-	
-	
+
+
+
+
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
 	/**
 	* 订单管理
 	*/
-	public function order_list(){		
+	public function order_list(){
 
+        $status = isset($_GET["status"])?intval($_GET["status"]):"";
+        $page = isset($_GET["page"])?intval($_GET["page"]):1;
+        $start_addtime = isset($_GET["start_addtime"])?strtotime($_GET["start_addtime"]):"";
+        $end_addtime = isset($_GET["end_addtime"])?strtotime($_GET["end_addtime"]):"";
 		$where = '1';
+        if(!empty($status)) $where .= " AND `status` = ".$status." ";
+        if(!empty($start_addtime))
+            $where .= " AND `add_time` > '$start_addtime' AND "; //优先考虑几天之内的筛选框中内容去查询数据
+        if(!empty($end_addtime))
+            $where .= " AND `add_time` < '$end_addtime' AND ";
 		if($_GET['ordersn']){
-			$where .= " and ordersn ='".$_GET['ordersn']."'";
+			$where .= " and ordersn ='".$_GET['ordersn']."' ";
 		}
 		if($_GET['pay_type']){
 			//1 .余额 
 		    //2 .微信
 			//3 .支付宝
-			$where .= " and pay_type ='".$_GET['pay_type']."'";
-		}
-		if($_GET['status']){
-			if($_GET['status'] == 1){
-				$where .= " and status=1";
-			}else if($_GET['status'] == 2){
-				$where .= " and status=2";
-			}else if($_GET['status'] == 3){
-				$where .= " and status=3";
-			}else if($_GET['status'] == 4){
-				$where .= " and status=4";
-			}else if($_GET['status'] == 5){
-				$where .= " and status=5";
-			}
-		}
-		if($_GET['start_addtime']){
-			$where .= " and addtime >= '".strtotime($_GET['start_addtime'])."'";
-		}
-		if($_GET['end_addtime']){
-			$where .= " and addtime <= '".strtotime($_GET['end_addtime'])."'";
+			$where .= " and pay_type ='".$_GET['pay_type']."' ";
 		}
 
-		$order = 'id DESC';
-		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
-		$pages = $this->order_db->pages;  //分页
-		include $this->admin_tpl('order_manage'); //和模板对应上
+		$order = 'order_id DESC';
+        list($info,$count) = $this->members_db->moreTableSelect(
+            array("zy_zy_order"=>array("*"), "zy_order_goods"=>array("*"), "zy_member"=>array("nickname", "mobile")),
+            array("order_id", "userid"),
+            $where
+            , ((string)($page-1)*$this->pagesize).",".$this->pagesize, "B1.order_id DESC","1"
+        );
+        list($page, $pagenums) = getPage($page, $this->pagesize, $count);
+//		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
+//		$pages = $this->order_db->pages;  //分页
+		include $this->admin_tpl('order/order_manage'); //和模板对应上
+//		include $this->admin_tpl('order_manage'); //和模板对应上
 	}
-	
 
-	
-
+    function showShop()
+    {
+        $neadArg = ["order_id"=>[true,1]];
+        $info = checkArgBcak($neadArg);
+        list($data, $count) = $this->members_db->moreTableSelect(
+            array("zy_order_goods"=>array("*"), "zy_zy_order"=>array("*")),
+            array("order_id"),
+            "B1.order_id=".$info["order_id"],"","","0"
+        );
+        include $this->admin_tpl("order/shopShow");
+    }
+    function showAddress()
+    {
+        $neadArg = ["order_id"=>[true,1]];
+        $info = checkArgBcak($neadArg);
+        $data = $this->order_db->get_one($info);
+        include $this->admin_tpl("order/addressShow");
+    }
+    function addEX()
+    {
+        if(isset($_POST["dosubmit"]))
+        {
+            $neadArg = ["EXid"=>[true, 1], "logistics_order"=>[true, 0], "ordersn"=>[true,0]];
+            $info = checkArgBcak($neadArg, "POST");
+            $where["ordersn"] = array_pop($info);
+            $info["status"] = "3";
+            $info["deltime"] = time();
+            $this->order_db->update($info, $where);
+            showmessage(L('operation_success'),'index.php?m=zymanagement&c=order&a=showOrder', '5', 'deliver');
+        }
+        else
+        {
+            $neadArg = ["ordersn"=>[true,0]];
+            $info = checkArgBcak($neadArg);
+            $data = $this->logistics_company_db->select("1", "*");
+            include $this->admin_tpl("order/addOrderEx");
+        }
+    }
+    function EXInfo()
+    {
+        $EBINfo = pc_base::load_config('EXinfo');
+        include $this->admin_tpl("EX/config");
+    }
+    function changeEXInfo()
+    {
+        $neadArg = ["EBusinessID"=>[true,0], "AppKey"=>[true,0], "ReqURL"=>[true,0]];
+        $info = checkArgBcak($neadArg, "POST");
+        set_config($info,'EXinfo');	 //保存进config文件
+        showmessage(L('update_success'), HTTP_REFERER, '', 'view');
+    }
+    function checkEX()
+    {
+        $neadArg = ["ordersn"=>[true,0]];
+        $info = checkArgBcak($neadArg);
+        list($orderInfo,$count) = $this->members_db->moreTableSelect(
+            array("zy_zy_order"=>array("logistics_order"), "zy_zy_logistics_company"=>array("name,value")),
+            array("EXid"),
+            $info
+        );
+        if($orderInfo == null)
+            showmessage("没有该订单信息");
+        $EBINfo = pc_base::load_config('EXinfo');
+        $data = getOrderTracesByJson($EBINfo, $orderInfo["value"],$orderInfo["logistics_order"]);
+        $EXinfo = json_decode($data);
+        //$EXname = $this->zyexcompany->get_one(array("abbreviation"=>$EXinfo->ShipperCode), "*");
+        include $this->admin_tpl("EX/checkEX");
+    }
+    function dropOrder()
+    {
+        $neadArg = ["order_id"=>[true,0]];
+        $info = checkArgBcak($neadArg);
+        $this->ordergoods_db->delete($info);
+        $this->order_db->delete($info);
+        showmessage(L('operation_success'), 'index.php?m=zyorder&c=order&a=order_list', '5', '');
+    }
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
 	
 	/**
 	* 订单管理_删除
@@ -219,7 +303,6 @@ class order extends admin {
 	
 	}
 
-   
     /**
 	* 物流管理
 	*/
@@ -232,7 +315,7 @@ class order extends admin {
 			$where .= " and name like '%$name%'  ";
 		}
 
-		$order = 'id ASC';
+		$order = 'EXid ASC';
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		
     

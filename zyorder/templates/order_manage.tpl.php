@@ -1,4 +1,4 @@
-	<?php
+<?php
 defined('IN_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
@@ -18,7 +18,7 @@ include $this->admin_tpl('header', 'admin');
              <option value="1">余额</option>
              <option value="2">支付宝</option>
              <option value="3">微信</option>
-			  <option value="">待支付</option>
+             <option value="">待支付</option>
             </select>
             <?php echo 下单时间?>  <?php echo form::date('start_addtime',$_GET['start_addtime'])?><?php echo L('to')?>   <?php echo form::date('end_addtime',$_GET['end_addtime'])?> 
             <select name="status">
@@ -99,7 +99,7 @@ include $this->admin_tpl('header', 'admin');
 	  ?>
 	  <?php echo $info['remind'];?>
 	  </td>
-      <td>
+      <td align="center">
 	  <?php 
 	    switch($info['shstatus']){
 		   case 1:echo '同意退款';break;	
