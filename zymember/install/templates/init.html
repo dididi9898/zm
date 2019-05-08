@@ -30,7 +30,7 @@
                 <div class="bt15"></div>
                     <div class="user-logo">
                         <a href="{APP_PATH}index.php?m=zymember&c=index&a=personal_data">
-                            <img class="user-logo" src="{APP_PATH}statics/zm/images/cssdbz.jpg" class="w-100">
+                            <img class="user-logo" :src="headimgurl" class="w-100">
                         </a>
                     </div>
                     <div class="user-text" >
@@ -167,7 +167,7 @@
     <script>
         $(function () {
             var userid = {$_userid};
-            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'nickname,userid,point,new_point,used_point,mobile' }, function (data) {
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,nickname,userid,point,new_point,used_point,mobile' }, function (data) {
                 //console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);

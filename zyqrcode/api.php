@@ -53,13 +53,18 @@ class api
     {
         $msg = empty($_POST['msg']) ? 0 : $_POST['msg'];
         $data['thumb'] = empty($_POST['thumb']) ? 0 : $_POST['thumb'];
-        $data['userid'] = empty($_POST['userid']) ? $this->_userid : $_POST['userid'];
+        $data['userid'] = empty($_POST['userid']) ? $this->_userid : $this->_userid;
         if(!empty($data['userid'])){
             if ($msg==1){
                 $data['qrcode']= $this->create_qrcode_pic( $data['userid'],$data['thumb']);
             }else {
                 $data['qrcode'] = $this->create_qrcode($data['userid']);
             }
+        }else{
+            $json['status']='error';
+            $json['code']='0';
+            $json['message']='登录超时';
+            exit(json_encode($json,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
         }
         if($data['qrcode']){
             $json['status']='success';
