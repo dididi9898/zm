@@ -218,7 +218,46 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 					<th width="125">总库存</th>  
 					<td><input type="text" name="stock" class="input-text" value="100"></input><span> （若填写了商品规格则可不填）</span></td>
 				</tr>
+                <tr>
+                    <th width="125">分销比例</th>
+                    <td>
+                        <table  style="width: 100%;text-align: center">
+                            <tr >
+                                <th style="text-align: center">
 
+                                </th>
+                                <th style="text-align: center">
+                                    购买分销奖金比例
+                                </th>
+                                <th style="text-align: center">
+                                    试用分销奖金比例
+                                </th>
+                            </tr>
+                            <?php  for($i = 1; $i <=3; $i++){ ?>
+                            <tr class="fixinput">
+
+                                <div class="fjpz" style=" width: 50%;">
+                                    <!--                                                                <span style=" margin:0 10px;">--><?php //echo $value['tname']?><!--</span>-->
+                                    <td>等级<?php echo $i?></td>
+                                    <td><input type="text" name="awardNumber[<?php echo $i;?>]" required=""  value="" onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
+                                    <td><input type="text" name="trialAwardNumber[<?php echo $i;?>]" required=""  value="" onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
+                                </div>
+                            </tr>
+                            <?php }?>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="125">积分奖励模式</th>
+                    <td>
+                        <input type="radio" name="point_mode"  <?php if ($info['point_mode']==0) {?>checked <?php }?> id="fhmet1" value="1"><label for="fhmet1">固定积分（元）</label>
+                        <input type="radio" name="point_mode"  <?php if ($info['point_mode']==1) {?>checked <?php }?> id="fhmet2" value="2"><label for="fhmet2">商品百分比（%）</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="125">积分奖励</th>
+                    <td><input type="text" name="point_value" class="input-text" value=""></td>
+                </tr>
 				<tr>
 					<th width="125">商品内容信息</th>  
 					<td>

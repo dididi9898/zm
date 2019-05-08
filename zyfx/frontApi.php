@@ -84,7 +84,7 @@ class frontApi
         returnAjaxData("1", "得到金额成功", $TXmoney);
     }
     function TXAffirm()
-    {
+    { 
         $neadArg = ["userid"=>[true, 1], "money"=>[true, 0]];
         $info = checkArg($neadArg);
         $money = array_pop($info);
