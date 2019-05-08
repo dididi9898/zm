@@ -30,7 +30,6 @@ class fxConfig
     function updateConfig($info)
     {
         $info["awardNumber"] = json_encode($info["awardNumber"]);
-        $info["trialAwardNumber"] = json_encode($info["trialAwardNumber"]);
         $this->configModel->update($info, array("ID"=>1));
     }
     function updateGradetitle($info)
