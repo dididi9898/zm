@@ -43,10 +43,10 @@ if(is_array($info)){
     foreach($info as $info1){
         ?>
     <tr>
-        <td align="center" width="35"><input type="checkbox" name="id[]" value="<?php echo $info1['id']?>"></td>
-        <td align="center"><?php echo $info1['id']?></td>
+        <td align="center" width="35"><input type="checkbox" name="id[]" value="<?php echo $info1['EXid']?>"></td>
+        <td align="center"><?php echo $info1['EXid']?></td>
 
-         <td align="center"><a href="#" onClick="edit(<?php echo $info1['id']?>);"><?php echo $info1['name']?></a></td>
+         <td align="center"><a href="#" onClick="edit(<?php echo $info1['EXid']?>);"><?php echo $info1['name']?></a></td>
          <td align="center"><?php echo $info1['value']?></td>
 
     </tr>
