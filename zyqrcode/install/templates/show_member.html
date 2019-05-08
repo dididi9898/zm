@@ -1,0 +1,120 @@
+﻿<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>推广二维码</title>
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_uc1z8j3m7d.css">
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
+</head>
+<body style="background-color: #f1f1f1" >
+   
+    <div class='per-head'>
+        <div class='per-head-left'>
+            <a onclick="destroy()" >
+                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
+            </a>
+        </div>
+        <a class='per-head-hd'>我的推广二维码</a>
+        <div class='per-head-right'>
+        </div>
+        <div class='clear'></div>
+    </div>
+
+    <div class="bt30"></div>
+    <!-- 银行卡 -->
+	<div  id="info" class="bb2 ewm-kj" style="margin-top: 0.5rem">
+        <div class="jy-ewm-user" >
+            <div class="ewm-user-img">
+                <img :src= "headimgurl" >
+            </div>
+            <div class="ewm-user-name">
+                {{ nickname }}
+            </div>
+        </div>
+        <div class="ewm-yh" style=" text-align: center;">
+            <img id="qrcode" :src="qrcode" style="border: none;vertical-align: middle;">
+        </div>
+        <div class="ewm-ewm"></div>
+        <div class="ewm-wz"><p class="md-fs">扫描二维码加入我们！</p></div>
+    </div>
+    {template "zymember","footer"}
+    <script>
+        $(function () {
+            var userid = {$_userid};
+            $.ajax({
+                'type': 'POST',
+                'url': 'index.php?m=zymember&c=zymember_api&a=pub_memberinfo',
+                'data': { 'userid': userid, 'field': 'headimgurl,nickname,mobile,wechat_name' },
+                'cache': false,
+                'async': false,
+                'dataType': "json",
+                'beforeSend': function () {
+                    index = layer.msg('加载中', {
+                        icon: 16,
+                        shade: 0.01
+                    });
+                },
+                'complete': function () {
+                    layer.close(index);
+                },
+                'success': function (data) {
+                    console.log(data.data);
+                    if (data.status == 'error') {
+                        layer.msg(data.message);
+                        setTimeout("javascript:location.href='" + data.data.forward + "'", 1000);
+                    } else {
+                        var thumb=data.data.headimgurl;
+                        console.log(thumb);
+                        aj.post('index.php?m=zyqrcode&c=api&a=create_qrcode_api', { 'userid': userid, 'thumb': thumb, 'msg': 1}, function (data2) {
+                            console.log(data2.data);
+                            if (data2.status == 'error') {
+                                layer.msg(data2.message);
+                            } else {
+                                data.data.qrcode=data2.data.qrcode;
+                                console.log(data.data);
+                                var info = new Vue({
+                                    el: '#info',
+                                    data: data.data
+                                });
+                            };
+                        });
+                    };
+                }
+            });
+        });
+
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+        ;
+        ! function () {
+            var layer = layui.layer,
+                    form = layui.form,
+                    $ = layui.jquery,
+                    upload = layui.upload,
+                    table = layui.table;
+
+            $('.no-way').on('click', function () {
+                layer.msg('该栏目正在开发中...');
+            });
+
+        }();
+        function destroy(qrcode) {
+            qrcode = $('#qrcode')[0].src;
+            aj.post('index.php?m=zyqrcode&c=api&a=destroy_qrcode_api', {'thumburl': qrcode,}, function (data) {
+                console.log(data);
+                if (data.status == 'error') {
+                    layer.msg(data.message);
+                } else {
+                    setTimeout("javascript:history.go(-1)", 100);
+                }
+            });
+        };
+
+        </script>
+
+</body>
+</html>
