@@ -175,7 +175,7 @@ class Fx
         $where = $this->fxBeDec->returnWhereSQL($info);
         list($info, $count) = $this->zyfxmember->moreTableSelect(
             array("zy_zyfxmember"=>array("*"), "zy_zyfxgradetitle"=>array("*"), "zy_zyfxmoney"=>array("*"),"zy_member"=>array("username", "mobile")),
-            array("titleID", "userid", "userid"),
+            array("titleID"=>"titleID", "userid"=>"userid", "userid"=>"userid"),
             $where
             , ((string)($page-1)*$pageSize).",".$pageSize, "B1.userid ASC","1"
         );

@@ -1292,7 +1292,7 @@ class zyorder_api{
 			$orderid = explode(",", $orderid);
 			$shopcount = count($shopid);
 			for ($i=0; $i < $shopcount; $i++) { 
-				$orderarr[$i] = $this->order_db->get_one(['id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`id`,`storeid`,`status`,`userid`,`lx_mobile`,`lx_name`,`lx_code`,`province`,`city`,`area`,`address`,`totalprice`,`usernote`');
+				$orderarr[$i] = $this->order_db->get_one(['id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`id`,`storeid`,`status`,`userid`,`lx_mobile`,`lx_name`,`lx_code`,`province`,`city`,`area`,`address`,`totalprice`,`freight`,`usernote`');
 
 				$orderinfo['dianpu'][$i] = $this->order_db->get_one(['id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`id`,`ordersn`');
 
