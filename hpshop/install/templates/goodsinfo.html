@@ -11,6 +11,13 @@
         color: #fff;
     }
 */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    input[type="number"]{
+        -moz-appearance: textfield;
+    }
     .member-index-head .more .layui-badge {
         background: #321ab5;
     }
@@ -68,7 +75,7 @@
     .personal-head nav a{
     	position: relative;
     	display: inline-block;
-    	width: calc((100%-0.3rem)/3 - 0.1rem)
+    	width: calc((100%- 0.3rem)/3 - 0.1rem)
     }
     /*头部商品-详情-评价选中效果*/
     .goods-nav-on{color: #FF4F00 !important}
@@ -91,7 +98,7 @@
     }
     .goods-tc-txt{
     	font-size: .15rem;
-    	width: calc(100%-1rem);
+    	width: calc(100%- 1rem);
     	margin-left: calc(1rem + 0.1rem);
     }
     .pj-user-img{
@@ -574,6 +581,7 @@
 		var goodsinfo;
 		var type='0';
 		aj.get('index.php?m=hpshop&c=goods_api&a=goodsinfo',{"gid":gid}, function (data) {
+            console.log(data);
 			if (data.status == 'error') {
 				layer.msg(data.message);
 			} else {
@@ -587,35 +595,20 @@
 						// 选择套餐
 						tc:function(){
 							type ="0";
-                            if(goodsinfo.isspec == 1){
-                                layer.open({
-                                    type: 1,
-                                    area: ['100%', 'auto'],
-                                    offset: 'b',
-                                    // closeBtn: 0,
-                                    anim: 2,
-                                    title: false, //不显示标题
-                                    shadeClose: true,
-                                    isOutAnim: false,
-                                    scrollbar: false,
-                                    content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-                                });
-                            }else{
-                                aj.post('index.php?m=hpshop&c=goods_api&a=addbuycart',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
-                                    console.log(data);
-                                    if(data.status == 'error'){
-                                        if(data.code == "0"){
-                                            layer.msg(data.message);
-                                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
-                                        }else{
-                                            layer.msg(data.message);
-                                        }
-                                    }else{
-                                        layer.closeAll();
-                                        layer.msg('已成功加入购物车');
-                                    }
-                                })
-                            }
+                            console.log(goodsinfo.isspec);
+                            layer.open({
+                                type: 1,
+                                area: ['100%', 'auto'],
+                                offset: 'b',
+                                // closeBtn: 0,
+                                anim: 2,
+                                title: false, //不显示标题
+                                shadeClose: true,
+                                isOutAnim: false,
+                                scrollbar: false,
+                                content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                            });
+
 						},
 						// 商品评论列表
 						pj:function(){
@@ -653,7 +646,7 @@
 				//console.log(goodsinfo);
 				//console.log(goodsinfo.isspec,goodsinfo.type_id);
 				if(goodsinfo.isspec == "1"){
-					console.log("进来了");
+					console.log("羊进来了");
 					$.ajax({
 						url:'index.php?m=hpshop&c=goods_api&a=goodstypedata',
 						type:'POST', //GET
@@ -777,7 +770,128 @@
 					})
 
 				}else{
+                    console.log("狼进来了");
+                    $.ajax({
+                        url:'index.php?m=hpshop&c=goods_api&a=goodstypedata',
+                        type:'POST', //GET
+                        async:false,    //或true,是否同步
+                        data:{
+                            fid:goodsinfo.type_id
+                        },
+                        timeout:5000,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        success:function(data){
+                            console.log(data);
+                            if(data.status == 'success'){
+                                var spec = data.data.spec;
+                                var specname = data.data.specname;
+                                var thumb = goodsinfo.thumb;
+                                console.log(goodsinfo.thumb);
+                                goods.specname = specname;
+                                var goods_spec = new Vue({
+                                    el: '#goods_spec',
+                                    data: {
+                                        spec:spec,
+                                        specname:specname,
+                                        specid:'',
+                                        specdata:goods.specdata,
+                                        s_shuliang: "1",
+                                        max_sum:goods.stock,
+                                        type:"",
+                                        thumb:thumb
+                                    },
+                                    methods:{
+                                        specClass:function (event) {
+                                            if(!$(event.target).hasClass('tc-on')){
+                                                $(event.target).parent('.goods-tc-opt').find('span').removeClass('tc-on');
+                                                $(event.target).addClass('tc-on');
+                                                var specids = this.specid.split('-');
+                                                specids[$(event.target).parent('.goods-tc-opt').data('number')] = $(event.target).data('id');
+                                                this.specid = specids.join('-');
+                                                $.each(goods.specdata,function(index,val){
+                                                    if(this.specid == val.specid){
+                                                        this.max_sum = val.specstock
+                                                    }
+                                                })
+                                                console.log(this.specid);
+                                                //console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
+                                            }
+                                        },
+                                        jiannum: function () {
+                                            if(this.s_shuliang<2){
+                                                this.s_shuliang = "1";
+                                                layer.msg('该宝贝不能再减了！');
+                                            }else{
+                                                this.s_shuliang --;
+                                            }
+                                        },
+                                        jianum: function () {
+                                            if(this.s_shuliang >= this.max_sum){
+                                                layer.msg('该宝贝不能再多了！');
+                                            }else{
+                                                this.s_shuliang ++;
+                                            }
+                                        },
+                                        submit:function(event){
+                                            console.log('型号'+this.specid,'商品ID'+gid,'数量'+this.s_shuliang,'支付类型'+type);
+                                            //立即购买
+                                            if(type == "1"){
+                                                //buy
+                                                aj.post('index.php?m=hpshop&c=goods_api&a=buynow',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
+                                                    console.log(data);
+                                                    if(data.status == 'error'){
+                                                        if(data.code == "0"){
+                                                            layer.msg(data.message);
+                                                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                                                        }else{
+                                                            layer.msg(data.message);
+                                                        }
+                                                    }else{
+                                                        layer.msg('购买成功');
+                                                        setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=settlement&met=1'", 1000);
+                                                    }
+                                                })
+                                            }else if(type == "2"){
+                                                //add
+                                                aj.post('index.php?m=hpshop&c=goods_api&a=addbuycart',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
+                                                    console.log(data);
+                                                    if(data.status == 'error'){
+                                                        if(data.code == "0"){
+                                                            layer.msg(data.message);
+                                                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                                                        }else{
+                                                            layer.msg(data.message);
+                                                        }
+                                                    }else{
+                                                        layer.closeAll();
+                                                        layer.msg('已成功加入购物车');
+                                                    }
+                                                })
+                                            }else if(type == "0"){
+                                                layer.closeAll()
+                                                layer.msg('请选择结算方式（立刻购买/加入购物车）');
+                                            }else{
+                                                layer.closeAll();
+                                                layer.msg('空，购买失败');
+                                            }
+                                        }
 
+                                    },
+                                    mounted(){
+                                        //console.log(this.specname);
+                                        var specid = [] ;
+                                        $.each(this.specname,function(i,v){
+                                            specid.push('1');
+                                        })
+                                        this.specid = specid.join('-');
+                                        console.log('默认勾选',this.specid);
+                                    }
+                                });
+                            }else{
+                                layer.msg('产品规格获取失败');
+                            }
+                        }
+                    })
                 }
 				
 
@@ -806,18 +920,19 @@
 						// 选择套餐
 						add:function(){
 							type = '2';
-							layer.open({
-							  type: 1,
-							  area: ['100%', 'auto'],
-							  offset: 'b',
-							  // closeBtn: 0,
-							  anim: 2,
-							  title: false, //不显示标题
-							  shadeClose: true,
-							  isOutAnim: false,
-							  scrollbar: false,
-							  content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-							});
+                                layer.open({
+                                    type: 1,
+                                    area: ['100%', 'auto'],
+                                    offset: 'b',
+                                    // closeBtn: 0,
+                                    anim: 2,
+                                    title: false, //不显示标题
+                                    shadeClose: true,
+                                    isOutAnim: false,
+                                    scrollbar: false,
+                                    content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                                });
+
 						},
 						Collect:function(event){
 							var _this = this;
