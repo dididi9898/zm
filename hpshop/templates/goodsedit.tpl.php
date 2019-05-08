@@ -359,8 +359,8 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                                     <div class="fjpz" style=" width: 50%;">
                                         <!--                                                                <span style=" margin:0 10px;">--><?php //echo $value['tname']?><!--</span>-->
                                         <td>等级<?php echo $i?></td>
-                                        <td><input type="text" name="awardNumber[<?php echo $i;?>]" required=""  value=<?php echo $info["awardNumber"][$i]?> onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
-                                        <td><input type="text" name="trialAwardNumber[<?php echo $i;?>]" required=""  value=<?php echo $info["trialAwardNumber"][$i]?> onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
+                                        <td><input type="text" name="awardNumber[<?php echo $i;?>]" required=""  value="<?php echo $info["awardNumber"][$i]?>" onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
+                                        <td><input type="text" name="trialAwardNumber[<?php echo $i;?>]" required=""  value="<?php echo $info["trialAwardNumber"][$i]?>" onkeyup="value=value.replace(/[^\d]/g,'')">%</td>
                                     </div>
                                 </tr>
                             <?php }?>
@@ -376,7 +376,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                 </tr>
                 <tr>
                     <th width="125">积分奖励</th>
-                    <td><input type="text" name="point_value" class="input-text" value=<?php echo $info["point_value"]?>></td>
+                    <td><input type="text" name="point_value" class="input-text" value="<?php echo $info["point_value"]?>"></td>
                 </tr>
 				<tr>
 					<th width="125">商品内容信息</th>  
