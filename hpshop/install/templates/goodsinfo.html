@@ -325,6 +325,7 @@
         	</div>
         	<div class="h1"></div>
         	<!-- 套餐选择 -->
+            <template >
         	<div class="goods-tc bg-fff" @click="tc">
                 <div class="h1"></div>
         		<div class="goods-tc-tit">规格：</div>
@@ -332,6 +333,7 @@
         		<div class="clear"></div>
         		<div class="h1"></div>
         	</div>
+            </template>
         	<div class="h1"></div>
         	<!-- 评价 -->
         	<div class="goods-pj bg-fff">
@@ -484,10 +486,18 @@
                         <template v-for="prices in specdata">
 							<div class="lg-fs lh2 c-eb3c3c" v-if="specid == prices.specid">￥{{ prices.specprice }}</div>
 						</template>
+                        <template>
+                            <div class="lg-fs lh2 c-eb3c3c" v-if="specid == ''">￥{{ specdata }}</div>
+                        </template>
+                        <template v-if="specid !='' ">
                         <div class="sm-fs lh2 c-707070">请选择：<template v-for="spec_name in specname"> {{ spec_name.name }}</template></div>
+                        </template>
                         <template v-for="prices in specdata">
-                        	<div class="xs-fs lh2 c-707070" v-if="specid == prices.specid">库存：{{ prices.specstock }}</div>
+                        	<div class="xs-fs lh2 c-707070" v-if="specid == prices.specid ">库存：{{ prices.specstock }}</div>
 						</template>
+                        <template>
+                            <div class="xs-fs lh2 c-707070" v-if="specid =='' ">库存：{{ max_sum }}</div>
+                        </template>
                     </div>
                     <div class="h1"></div>
                     
@@ -647,6 +657,7 @@
 				//console.log(goodsinfo.isspec,goodsinfo.type_id);
 				if(goodsinfo.isspec == "1"){
 					console.log("羊进来了");
+                    $('.goods-tc').show();
 					$.ajax({
 						url:'index.php?m=hpshop&c=goods_api&a=goodstypedata',
 						type:'POST', //GET
@@ -771,6 +782,7 @@
 
 				}else{
                     console.log("狼进来了");
+                    $('.goods-tc').hide();
                     $.ajax({
                         url:'index.php?m=hpshop&c=goods_api&a=goodstypedata',
                         type:'POST', //GET
@@ -792,11 +804,11 @@
                                     el: '#goods_spec',
                                     data: {
                                         spec:spec,
-                                        specname:specname,
+                                        //specname:specname,
                                         specid:'',
-                                        specdata:goods.specdata,
+                                        specdata:goodsinfo.shop_price,
                                         s_shuliang: "1",
-                                        max_sum:goods.stock,
+                                        max_sum:goodsinfo.stock,
                                         type:"",
                                         thumb:thumb
                                     },
