@@ -118,10 +118,11 @@ class order extends admin {
         $neadArg = ["order_id"=>[true,1]];
         $info = checkArgBcak($neadArg);
         list($data, $count) = $this->members_db->moreTableSelect(
-            array("zy_order_goods"=>array("*"), "zy_zy_order"=>array("*")),
+            array("zy_zy_order"=>array("*"), "zy_order_goods"=>array("*")),
             array("order_id"),
             "B1.order_id=".$info["order_id"],"","","0"
         );
+		//exit(var_dump($data));
         include $this->admin_tpl("order/shopShow");
     }
     function showAddress()
@@ -281,7 +282,7 @@ class order extends admin {
 			}		
 		}else{
 			$orderid = $_GET['id'];
-			$info = $this->express_db->get_one(array('id' =>$id));
+			$info = $this->express_db->get_one(array('id' =>$orderid));
 			$infok = $this->express_db->select();
 			include $this->admin_tpl('order_manage_ddfh');  //和模板对应上
 		}
@@ -406,7 +407,7 @@ class order extends admin {
 	    	$value = $_POST['value'];
 	    	$data = [
                  "name"=>$name,
-                 "value"=>$valua
+                 "value"=>$value
 	    	];
             $result  = $this->evaluate_set_db->insert($data);
             if($result){

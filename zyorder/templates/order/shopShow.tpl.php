@@ -29,7 +29,7 @@ include $this->admin_tpl('header', 'admin');
 
                         <td >缩略图:</td>
                         <td colspan="2">
-                            <img src=<?php echo $data["goods_img"]?>  height="90" width="90" >
+                            <img src="<?php echo $data["goods_img"]?>"  height="90" width="90" >
                         </td>
                     </tr>
 <!--                    <tr>-->
