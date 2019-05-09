@@ -147,6 +147,36 @@ class index{
 		include template('zyfunds', 'wcash');
 	}
 
+	/**
+	 * 零钱提现
+	 */
+	public function with_cash()
+	{
+		// 从资金账户里获取资金总额
+		$url = $this->zyconfig_db->get_one(array('key'=>'zyfunds2')); // cash
+		$params = array('id'=>$this->userid,"key"=>"zyfunds1");
+		$paramstring = http_build_query($params);
+		$account = $this->juhecurl($url['url'],$paramstring);
+
+		/* 显示账户是用默认还是选择的账户 */
+		$where['userid'] = $this->userid;
+
+		if(empty($_GET['id'])){
+			$is_first = 1;
+			$id = '';
+		}else{
+			$id = $_GET['id'];
+			$is_first = '';
+		}
+
+		$urls = $this->zyconfig_db->get_one(array('key'=>'zyfunds3'));  // account
+		$param = array('is_first'=>$is_first,'userid'=>$this->userid,'id'=>$id,'limit'=>1);
+		$paramstrings = http_build_query($param);
+		$result = $this->juhecurl($urls['url'],$paramstrings);
+
+		include template('zyfunds', 'with_cash');
+	}
+
 	/*
 	 * 选择账户信息
 	 * */
