@@ -1,5 +1,12 @@
 ﻿{template "hpshop","top-head"}
 <style>
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+	}
+	input[type="number"]{
+		-moz-appearance: textfield;
+	}
 	.personal-head{ position: fixed; top:0; left: 0; width: 100%; opacity: 0;z-index: 999;background:#ed722d;}
 	.goods-checkbox .layui-form-item .layui-form-checkbox[lay-skin=primary]{ margin-left: 0.05rem;}
 	.layui-form-item .layui-form-checkbox[lay-skin=primary]{ margin-top: 0.1rem; margin-bottom: 0.1rem;}

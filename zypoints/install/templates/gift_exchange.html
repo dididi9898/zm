@@ -1,0 +1,187 @@
+﻿<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>礼品兑换</title>
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_ulpy0d2oow.css">
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+</head>
+<body style="background: #f1f1f1">
+    <!--head_food-->
+    <div class='per-head'>
+        <div class='per-head-left'>
+            <a href='javascript:history.go(-1);'>
+                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
+            </a>
+        </div>
+        <a class='per-head-hd'>礼品兑换</a>
+        <div class='per-head-right'>
+            <img src='{APP_PATH}statics/zm/images/gd-b.png' class='tb-dw'>
+        </div>
+        <div class='clear'></div>
+    </div>
+    <div class="lpdh-head" id="info" >
+        <div class="iconfont icon-moneybag"></div>
+        <p>剩余积分</p>
+        <p>{{ point }}</p>
+    </div>
+    <div class="lpdh-nav">
+        <ul>
+            <li class="on">兑换列表</li>
+            <li>兑换明细</li>
+            <div class="clear"></div>
+        </ul>
+    </div>
+    <div class="lpdh-list">
+        <div class="list dis-b" id="gift">
+            <div class="bt10"></div>
+            <template  v-for="k in data">
+            <div class="pl1 pr1 bg-fff">
+                <div class="bt10"></div>
+                <div class="img fl">
+                    <img :src="k.thumb">
+                </div>
+                <div class="fr">
+                    <h3>{{k.giftname}}</h3>
+                    <p style="color: #0C0C0C">{{k.giftdes}}</p>
+                    <div class="bt30"></div>
+                    <p>所需积分：{{k.giftpoint}}</p>
+                    <p>剩余：{{k.giftnum}}个<button class="dh fr exchange" v-on:click="exchange(k.giftname,k.id)">兑换</button></p>
+                </div>
+                <div class="bt10 clear"></div>
+            </div>
+            <div class="bt15"></div>
+            </template>
+
+            
+        </div>
+
+        <div class="list" id="mygift">
+            <div class="bt10"></div>
+
+            <template v-for="v in data">
+            <div class="pl1 pr1 bg-fff">
+                <div class="bt10"></div>
+                <div class="img fl">
+                    <img :src="v.thumb">
+                </div>
+                <div class="fr">
+                    <h3>{{v.giftname}}</h3>
+                    <div class="bt20"></div>
+                    <p style="color: #0C0C0C">{{v.giftdes}}</p>
+                    <div class="bt30"></div>
+                    <p><button disabled="disabled" style="width: auto;float: right">已兑换</button></p>
+                </div>
+                <div class="bt10 clear"></div>
+            </div>
+            <div class="bt15"></div>
+            </template>
+            
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/public/js/leftTime.min.js"></script>
+    <script src="{APP_PATH}statics/zm/js/ajax.js"></script>
+    <script src="{APP_PATH}statics/public/layui-v2.4.5/layui/layui.all.js"></script>
+    <script src="{APP_PATH}statics/public/swiper-4.4.6/dist/js/swiper.min.js"></script>
+    <script>
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+        ;
+        ! function () {
+
+            var layer = layui.layer,
+                    form = layui.form,
+                    $ = layui.jquery,
+                    upload = layui.upload,
+                    table = layui.table;
+
+            var userid = '{$_userid}';
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid':  userid, 'field': 'nickname,userid,point,new_point,used_point,mobile' }, function (data) {
+                //console.log(data.data);
+                if (data.status == 'error') {
+                    if(data.code==-1){
+                        layer.msg('登陆超时');
+                        setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                    }else{
+                        layer.msg(data.message);
+                    }
+                } else {
+                    var info = new Vue({
+                        el: '#info',
+                        data: data.data
+                    });
+                    //兑换
+                    aj.post('index.php?m=zypoints&c=api&a=api_gift_info', { 'userid': userid}, function (data) {
+                        //console.log(data.data);
+                        if (data.status == 'error') {
+                            layer.msg(data.message);
+                        } else {
+                            var gift = new Vue({
+                                el: '#gift',
+                                data: data,
+                                methods:{
+                                    exchange: function (reccept,gid) {
+                                        // `this` 在方法里指向当前 Vue 实例
+                                        layer.confirm('您确定兑换'+ reccept +'？', {
+                                            title: '提示',
+                                            btnAlign: 'c',
+                                            btn: ['确定','取消'] //按钮
+                                        }, function(){
+                                            layer.msg('兑换成功');
+                                            aj.post('index.php?m=zypoints&c=api&a=api_gift_take', { 'userid': userid,'_giftid':gid}, function (data) {
+                                                //console.log(data.data);
+                                                if (data.status == 'error') {
+                                                    layer.msg(data.message);
+                                                } else {
+                                                    layer.msg(data.message);
+                                                    console.log(data);
+                                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zypoints&c=index&a=gift_exchange'", 1000);
+                                                }
+                                            });
+                                        }, function(){
+                                            //layer.msg('取消兑换');
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    });
+                    //已兑换礼物列表
+                    aj.post('index.php?m=zypoints&c=api&a=api_gift_user', { 'userid': userid}, function (data) {
+                        //console.log(data.data);
+                        if (data.status == 'error') {
+                            if(data.code==-200){
+                                //setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                                $('#mygift').append('<p style="text-align: center;font-size: small;padding-top: 0.5rem;color: grey">还没有兑换礼物</p>');
+                            }else{
+                                layer.msg(data.message);
+                            }
+                        } else {
+                            var mygift = new Vue({
+                                el: '#mygift',
+                                data: data
+                            })
+                        }
+                    });
+                }
+            });
+
+        }();
+    </script>
+    <!--head_food_end-->
+    <script>
+        $(".lpdh-nav li").click(function(){
+            var index =  $(".lpdh-nav li").index(this);
+            $(".lpdh-nav .on").removeClass("on");
+            $(".lpdh-list .list.dis-b").removeClass("dis-b");
+            $(".lpdh-nav li").eq(index).addClass("on");
+            $(".lpdh-list .list").eq(index).addClass("dis-b")
+        });
+    </script>
+</body>
+</html>
