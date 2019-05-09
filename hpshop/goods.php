@@ -130,6 +130,7 @@ class goods extends admin {
 				'addtime'=>time(),
 				'point_mode'=>$_POST["point_mode"],
 				'point_value'=>$_POST["point_value"],
+				'point_sy_value'=>$_POST["point_sy_value"],
 				'trialAwardNumber'=>$trialAwardNumber,
 				'awardNumber'=>$awardNumber,
             ];
@@ -292,6 +293,7 @@ class goods extends admin {
 				'stock'=>$_POST['stock'],
                 'point_mode'=>$_POST["point_mode"],
                 'point_value'=>$_POST["point_value"],
+                'point_sy_value'=>$_POST["point_sy_value"],
                 'trialAwardNumber'=>$trialAwardNumber,
                 'awardNumber'=>$awardNumber,
         	];

@@ -91,7 +91,7 @@ class index{
 			exit($this->show_error("no id"));
 		}
 		if($this->check_uid($id,$uid)){
-			$order = $this->order_db->get_one(array('id'=>$_GET['id'],'userid'=>$uid));
+			$order = $this->order_db->get_one(array('order_id'=>$_GET['id'],'userid'=>$uid));
 			exit($this->show_success($order));
 		}else{
 			exit($this->show_error(""));
@@ -236,7 +236,7 @@ class index{
 			exit($this->show_error("no id"));
 		}
 		if($this->check_uid_status($id,$_userid,5)){	
-			$result = $this->order_db->delete(array('id'=>$id));
+			$result = $this->order_db->delete(array('order_id'=>$id));
 			echo $this->show_success($result);
 		}else{	
 			echo $this->show_error("");
@@ -246,7 +246,7 @@ class index{
     //判断当前订单是否与userid 相关联，订单状态
 	public function check_uid_status($id,$_userid,$status){	
 		if($_userid!=null){	
-			$order = $this->order_db->get_one(array('id'=>$id));
+			$order = $this->order_db->get_one(array('order_id'=>$id));
 			if($order['status'] != $status||$order['userid']!= $_userid){
 				return false;
 			}
@@ -271,7 +271,7 @@ class index{
 	*/
 	public function check_uid($id,$_userid){	
 		if($_userid!=null){	
-			$order = $this->order_db->get_one(array('id'=>$id));
+			$order = $this->order_db->get_one(array('order_id'=>$id));
 			if($order['userid'] != $_userid){	
 				$data = [
 					"status"=>'error',
@@ -306,7 +306,7 @@ class index{
 	public function order_pay(){
 		$id = $_POST['id'];
 		if($this->order_check($id)){
-			$result =  $this->order_db->update(array('status'=>2),array('id'=>$id));
+			$result =  $this->order_db->update(array('status'=>2),array('order_id'=>$id));
 			$this->echo_result($result);
 		}else{
 			$this->echo_result(0);
@@ -342,7 +342,7 @@ class index{
 		if($this->check_uid_status($id,$_userid,3)){
 			$KdApi = pc_base::load_app_class('KdApiSearch');
 			$KdApi = new KdApiSearch();
-			$order = $this->order_db->get_one(array('id'=>$id,'userid'=>$_userid));
+			$order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$_userid));
 			$logisticResult=$KdApi->getOrderTracesByJson($order['shipper_code'],$order['logistics_order']);
 			echo $logisticResult;
 		}
@@ -421,7 +421,7 @@ class index{
 		$_userid = $_POST['userid'];
 		if($this->check_uid_status($id,$_userid,2));
 		$wuliu = $this->logistics_company_db->get_one(array('value'=>$shippercode)); //获取物流
-		$info = $this->order_db->update(array('shipper_name' =>$wuliu['name'],'shipper_code' =>$wuliu['value'],'logistics_order' =>$logistics_order,'fhtime'=>time(),'status'=>'3'),array('id'=>$id));
+		$info = $this->order_db->update(array('shipper_name' =>$wuliu['name'],'shipper_code' =>$wuliu['value'],'logistics_order' =>$logistics_order,'fhtime'=>time(),'status'=>'3'),array('order_id'=>$id));
 		if($info){
 			exit($this->show_success(""));
 		}else{
@@ -439,7 +439,7 @@ class index{
 			exit($this->show_error("no id"));
 		}
 		if($this->check_uid_status($id,$_userid,3)){
-			$result = $this->order_db->update(array('status'=>4),array('id'=>$id));
+			$result = $this->order_db->update(array('status'=>4),array('order_id'=>$id));
 			exit($this->show_success($result));
 		}else{
 			exit($this->show_error(""));

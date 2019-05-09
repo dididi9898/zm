@@ -110,7 +110,7 @@ class order extends admin {
 //		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
 //		$pages = $this->order_db->pages;  //分页
 		include $this->admin_tpl('order/order_manage'); //和模板对应上
-//		include $this->admin_tpl('order_manage'); //和模板对应上
+		//include $this->admin_tpl('order_manage'); //和模板对应上
 	}
 
     function showShop()
@@ -202,7 +202,7 @@ class order extends admin {
 		//删除单个
 		$id=intval($_GET['id']);
 		if($id){
-			$result=$this->order_db->delete(array('id'=>$id));
+			$result=$this->order_db->delete(array('order_id'=>$id));
 			if($result)
 			{
 				showmessage(L('operation_success'),HTTP_REFERER);
@@ -214,7 +214,7 @@ class order extends admin {
 		//批量删除；
 		if(is_array($_POST['id'])){
 			foreach($_POST['id'] as $pid) {
-				$result=$this->order_db->delete(array('id'=>$pid));
+				$result=$this->order_db->delete(array('order_id'=>$pid));
 			}
 			showmessage(L('operation_success'),HTTP_REFERER);
 		}
@@ -233,7 +233,7 @@ class order extends admin {
 	public function order_manage_userinfo(){
 		$show_header = false;		//去掉最上面的线条		
 		$id = $_GET['id'];
-		$info = $this->order_db->get_one(array('id' =>$id));
+		$info = $this->order_db->get_one(array('order_id' =>$id));
 		include $this->admin_tpl('order_manage_userinfo');  //和模板对应上
 		
 	}
@@ -258,7 +258,7 @@ class order extends admin {
 		
 		if($_POST['dosubmit']){
 			$wuliu = $this->express_db->get_one(array('code'=>$_POST['shippercode']));
-			$info = $this->order_db->update(array('shipper_name' =>$wuliu['company'],'shipper_code' =>$wuliu['code'],'logistics_order' =>$_POST['logistics_order'],'fhtime'=>time(),'status'=>'3'),array('id'=>$_POST['id']));
+			$info = $this->order_db->update(array('shipper_name' =>$wuliu['company'],'shipper_code' =>$wuliu['code'],'logistics_order' =>$_POST['logistics_order'],'fhtime'=>time(),'status'=>'3'),array('order_id'=>$_POST['id']));
 			//发送模板消息‘订单发货通知’	start
 			
 			/**
@@ -293,7 +293,7 @@ class order extends admin {
 	public function order_manage_wlxx(){	
 
 			$id = $_GET['id'];
-		    $order =  $this->order_db->get_one(array('id'=>$id));
+		    $order =  $this->order_db->get_one(array('order_id'=>$id));
 		    $KdApi = pc_base::load_app_class('KdApiSearch');
 			$KdApi = new KdApiSearch();
 	

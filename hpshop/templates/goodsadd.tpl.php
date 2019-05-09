@@ -250,13 +250,14 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                 <tr>
                     <th width="125">积分奖励模式</th>
                     <td>
-                        <input type="radio" name="point_mode"  <?php if ($info['point_mode']==0) {?>checked <?php }?> id="fhmet1" value="1"><label for="fhmet1">固定积分（元）</label>
+                        <input type="radio" name="point_mode"  <?php if ($info['point_mode']==0) {?>checked <?php }?> id="fhmet1" value="1"><label for="fhmet1">固定积分</label>
                         <input type="radio" name="point_mode"  <?php if ($info['point_mode']==1) {?>checked <?php }?> id="fhmet2" value="2"><label for="fhmet2">商品百分比（%）</label>
                     </td>
                 </tr>
                 <tr>
                     <th width="125">积分奖励</th>
-                    <td><input type="text" name="point_value" class="input-text" value=""></td>
+                    <td>购买积分： <input type="text" name="point_value" class="input-text" value="">
+                        试用积分： <input type="text" name="point_sy_value" class="input-text" value=""></td>
                 </tr>
 				<tr>
 					<th width="125">商品内容信息</th>  
