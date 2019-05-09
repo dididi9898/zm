@@ -1400,6 +1400,8 @@ class goods_api{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
 		$info['album'] = string2array($info['album']);
+		$info['awardNumber'] = string2array($info['awardNumber']);
+		$info['trialAwardNumber'] = string2array($info['trialAwardNumber']);
 		unset($info['content']);
 		if ( $info['isspec'] == 1) {
 			$where = ' goodsid = '.$gid;
