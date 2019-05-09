@@ -115,12 +115,12 @@ class order extends admin {
 
     function showShop()
     {
-        $neadArg = ["order_id"=>[true,1]];
+        $neadArg = ["id"=>[true,1]];
         $info = checkArgBcak($neadArg);
         list($data, $count) = $this->members_db->moreTableSelect(
             array("zy_order_goods"=>array("*"), "zy_zy_order"=>array("*")),
             array("order_id"),
-            "B1.order_id=".$info["order_id"],"","","0"
+            "id=".$info["id"],"","","0"
         );
         include $this->admin_tpl("order/shopShow");
     }

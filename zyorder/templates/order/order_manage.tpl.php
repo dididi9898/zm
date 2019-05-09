@@ -128,7 +128,7 @@
 			<td align="center"><?php echo $row["mobile"];?></td>
 			<td align="center">
                 <?php echo $row["goods_name"];?>
-                <a href="javascript:void(0);" onclick="view_shop('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
+                <a href="javascript:void(0);" onclick="view_shop('<?php echo $row['id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
             </td>
 			<td align="center"><?php echo self::$statusType[$row["status"]];?></td>
 
@@ -194,7 +194,7 @@ function checkuid() {
 function view_shop(id) {
     window.top.art.dialog({
             id:'view_shop',
-            iframe:'?m=zyorder&c=order&a=showShop&order_id='+id,
+            iframe:'?m=zyorder&c=order&a=showShop&id='+id,
             title:'商品信息',
             width:'700',
             height:'350',
