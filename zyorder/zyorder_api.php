@@ -1,6 +1,7 @@
 <?php
 defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_func('global');
+pc_base::load_app_func('EX');
 pc_base::load_sys_class('form', '', 0);
 pc_base::load_sys_class('format', '', 0);
 
@@ -260,7 +261,7 @@ class zyorder_api{
 		}
 		
 
-		$sql = 'SELECT storeid from phpcms_order WHERE userid = '.$_userid.' GROUP BY storeid';
+		$sql = 'SELECT storeid from phpcms_zy_order WHERE userid = '.$_userid.' GROUP BY storeid';
 		$sqlrs = $this->order_db->query($sql);
 		$sqlres = $this->order_db->fetch_array($sqlrs);
 		$idarr = '';
@@ -293,13 +294,14 @@ class zyorder_api{
         }
 
         $where.=' AND status < 6 ';
-		$order = ' id DESC ';
+		$order = ' order_id DESC ';
 		$page = $pageindex ? $pageindex : '1';
 		$orders = $this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
 		$totalcount = $this->order_db->count($where);
 		foreach ($orders as $k => $v) {
-			$goodsinfo = $this->uordgoodsinfo(0,$v['id']);
+			$goodsinfo = $this->uordgoodsinfo(0,$v['order_id']);
 			$orders[$k]['goodsinfo'] = $goodsinfo;
+			$orders[$k]["id"] = $v["order_id"];
 			$orders[$k]['storename'] = $snamarr[$v['storeid']]['shopname'];
  		}
 
@@ -672,14 +674,24 @@ class zyorder_api{
 		    $url = APP_PATH.'index.php?m=zymember&c=zymember_api&a=zyshop_nickname';
 		    $return = json_decode($this->_crul_post($url,$data),true);
 			if($this->check_uid_status($id,$uid,3)){
-			  $KdApi = pc_base::load_app_class('KdApiSearch');
-			  $KdApi = new KdApiSearch();
-			  $order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$uid));
-			  $logisticResult=$KdApi->getOrderTracesByJson($order['shipper_code'],$order['logistics_order']);
-			
+//			  $KdApi = pc_base::load_app_class('KdApiSearch');
+//			  $KdApi = new KdApiSearch();
+//			  $order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$uid));
+//			  $logisticResult=$KdApi->getOrderTracesByJson($order['shipper_code'],$order['logistics_order']);
+
+              list($order,$count) = $this->order_db->moreTableSelect(
+                  array("zy_zy_order"=>array("*"), "zy_zy_logistics_company"=>array("name,value")),
+                  array("EXid"),
+                  array('order_id'=>$id,'userid'=>$uid)
+              );
+			  $EBINfo = pc_base::load_config('EXinfo');
+              $data = getOrderTracesByJson($EBINfo, $order["value"],$order["logistics_order"]);
 		    }
 		
-			$goods = $this->uordgoodsinfo(0,$order['id']);
+			$goods = $this->uordgoodsinfo(0,$order['order_id']);
+			$order["addtime"] = date("Y-m-d H:i:s", $order["addtime"]);
+			$order["deltime"] = date("Y-m-d H:i:s", $order["deltime"]);
+			$order["overtime"] = date("Y-m-d H:i:s", $order["overtime"]);
 			$order['goodsinfo'] = $goods;
 			$order['totalprice'] = 0;
 			foreach($goods as $good){
@@ -687,7 +699,7 @@ class zyorder_api{
 			}
 			$order['goodsnum'] = count($goods);
 			$order['storename'] = $return['data'][0]['shopname'] ;
-			$order['wuliu'] = $logisticResult;
+			$order['wuliu'] = $data;
 			$this->caozuo_success($order);
 		}else{
 			$this->error_check_uid();
@@ -1056,7 +1068,7 @@ class zyorder_api{
 		if($this->check_uid($orderid,$_userid)){
 		$order = $this->order_db->get_one(array('order_id'=>$orderid));
 
-		if($order['status']>2){
+		if($order['status']>=2){
 		   $result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('order_id'=>$orderid));
 		   if($result){
 		      $this->caozuo_success("退款成功");
@@ -1395,7 +1407,7 @@ class zyorder_api{
 			}
 		}
 
-		$where = ' id in ('.$oid.') and status = 1 and userid = '.$uid;
+		$where = ' order_id in ('.$oid.') and status = 1 and userid = '.$uid;
 		$count = $this->order_db->count($where);
 		if ( $count != count($oids) ) {
 			$result = [
@@ -1414,7 +1426,7 @@ class zyorder_api{
 
 		if($return['code']=='200'){
 			//$where = ' id in ('.$oid.') and userid = '.$uid;
-			$sql = ' SELECT SUM(totalprice) as tprcie from zy_order where '.$where;
+			$sql = ' SELECT SUM(totalprice) as tprcie from zy_zy_order where '.$where;
 			$rs = $this->order_db->query($sql);
 			$res = $this->order_db->fetch_array($rs);
 			$tprice = $res[0]['tprcie'];

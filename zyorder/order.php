@@ -110,7 +110,7 @@ class order extends admin {
 //		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
 //		$pages = $this->order_db->pages;  //分页
 		include $this->admin_tpl('order/order_manage'); //和模板对应上
-//		include $this->admin_tpl('order_manage'); //和模板对应上
+		//include $this->admin_tpl('order_manage'); //和模板对应上
 	}
 
     function showShop()
