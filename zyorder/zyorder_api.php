@@ -117,7 +117,7 @@ class zyorder_api{
 				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 			}
 
-			$count = $this->order_db->count(['id'=>$oid,'userid'=>$uid]);
+			$count = $this->order_db->count(['order_id'=>$oid,'userid'=>$uid]);
 			if ( $count == 0 ) {
 				$result = [
 					'status' => 'error',
@@ -191,7 +191,7 @@ class zyorder_api{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
 
-		$count = $this->order_db->count(['id'=>$oid,'shopid'=>$uid]);
+		$count = $this->order_db->count(['order_id'=>$oid,'shopid'=>$uid]);
 		if ( $count == 0 ) {
 			$result = [
 				'status' => 'error',
@@ -501,7 +501,7 @@ class zyorder_api{
     //订单与用户相关
 	public function check_uid($id,$_userid){	
 		if($_userid!=null){	
-			$order = $this->order_db->get_one(array('id'=>$id));
+			$order = $this->order_db->get_one(array('order_id'=>$id));
 			if($order['userid'] != $_userid){	
 				return false;
 			}
@@ -523,7 +523,7 @@ class zyorder_api{
     //订单与用户，订单状态相关  
 	public function check_uid_status($id,$_userid,$status){	
 		if($_userid!=null){	
-			$order = $this->order_db->get_one(array('id'=>$id));
+			$order = $this->order_db->get_one(array('order_id'=>$id));
 			if($order['status'] != $status||$order['userid']!= $_userid){
 				return false;
 			}
@@ -665,7 +665,7 @@ class zyorder_api{
 			exit($this->empty_userid());
 		}
 		if($this->check_uid($id,$uid)){
-			$order = $this->order_db->get_one(array('id'=>$_GET['id'],'userid'=>$uid));
+			$order = $this->order_db->get_one(array('order_id'=>$_GET['id'],'userid'=>$uid));
 			$data=[
 		      "ids"=>$order['storeid']
 		    ];
@@ -674,7 +674,7 @@ class zyorder_api{
 			if($this->check_uid_status($id,$uid,3)){
 			  $KdApi = pc_base::load_app_class('KdApiSearch');
 			  $KdApi = new KdApiSearch();
-			  $order = $this->order_db->get_one(array('id'=>$id,'userid'=>$uid));
+			  $order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$uid));
 			  $logisticResult=$KdApi->getOrderTracesByJson($order['shipper_code'],$order['logistics_order']);
 			
 		    }
@@ -721,7 +721,7 @@ class zyorder_api{
 			exit($this->empty_userid());
 		}
 		if($this->check_uid($id,$uid)){
-			$order = $this->order_db->get_one(array('id'=>$_GET['id'],'userid'=>$uid));
+			$order = $this->order_db->get_one(array('order_id'=>$_GET['id'],'userid'=>$uid));
 			$data=[
 		      "ids"=>$order['storeid']
 		    ];
@@ -749,7 +749,7 @@ class zyorder_api{
 			$this->empty_userid();
 		}
 		if($this->check_uid_status($id,$_userid,2)){	
-		    $result = $this->order_db->update(array('remind'=>'提醒发货'),array('id'=>$id));
+		    $result = $this->order_db->update(array('remind'=>'提醒发货'),array('order_id'=>$id));
 			if($result){
 			  $this->caozuo_success("操作成功");
 			}
@@ -864,7 +864,7 @@ class zyorder_api{
 			$this->empty_userid();
 		}
 		if($this->check_uid_status($id,$uid,2)||$this->check_uid_status($id,$uid,1)){	
-			$result = $this->order_db->update(array('status'=>6),array('id'=>$id));
+			$result = $this->order_db->update(array('status'=>6),array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("取消成功");
 			}else{
@@ -892,7 +892,7 @@ class zyorder_api{
 			$this->empty_userid();
 		}
 		if($this->check_uid_status($id,$uid,5)){	
-			$result = $this->order_db->delete(array('id'=>$id));
+			$result = $this->order_db->delete(array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("删除成功");
 			}else{
@@ -925,12 +925,12 @@ class zyorder_api{
 		
 		if($return['code']=='200'){
 		  if($this->check_uid_status($id,$_userid,1)){
-		    $order = $this->order_db->get_one(array('id'=>$id));
+		    $order = $this->order_db->get_one(array('order_id'=>$id));
 			if($order['totalprice']!=$totalprice){
 				$this->caozuo_fail("totalprice !=");
 			}
 			$paytime = time();
-			$result =  $this->order_db->update(array('status'=>2,'paytime'=>$paytime),array('id'=>$id));
+			$result =  $this->order_db->update(array('status'=>2,'paytime'=>$paytime),array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("支付成功");
 			}
@@ -956,7 +956,7 @@ class zyorder_api{
 		if($this->check_uid_status($id,$_userid,3)){
 			$KdApi = pc_base::load_app_class('KdApiSearch');
 			$KdApi = new KdApiSearch();
-			$order = $this->order_db->get_one(array('id'=>$id,'userid'=>$_userid));
+			$order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$_userid));
 			$logisticResult=$KdApi->getOrderTracesByJson($order['shipper_code'],$order['logistics_order']);
 			$logisticResult = json_decode($logisticResult);
 			echo  $logisticResult;
@@ -981,7 +981,7 @@ class zyorder_api{
 			$this->empty_userid();
 		}
 		if($this->check_uid_status($id,$_userid,3)){
-			$result = $this->order_db->update(array('status'=>4),array('id'=>$id));
+			$result = $this->order_db->update(array('status'=>4),array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("确认收货");
 			}else{
@@ -1030,7 +1030,7 @@ class zyorder_api{
 				  'addtime'=>time()
 			     ];
 			$evaluateid = $this->evaluate_db->insert($data,true);
-			$result = $this->order_db->update(array('status'=>5),array('id'=>$_POST['id']));
+			$result = $this->order_db->update(array('status'=>5),array('order_id'=>$_POST['id']));
 			if($result){
 			    $this->caozuo_success($result);
 			}else{
@@ -1054,10 +1054,10 @@ class zyorder_api{
 			$this->empty_userid();
 		}
 		if($this->check_uid($orderid,$_userid)){
-		$order = $this->order_db->get_one(array('id'=>$orderid));
+		$order = $this->order_db->get_one(array('order_id'=>$orderid));
 
 		if($order['status']>2){
-		   $result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('id'=>$orderid));
+		   $result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('order_id'=>$orderid));
 		   if($result){
 		      $this->caozuo_success("退款成功");
 		   }else{
@@ -1085,7 +1085,7 @@ class zyorder_api{
 		$storeid = $_POST['storeid'];
 		if($this->check_storeid_status($id,$storeid,2)){
 		  $wuliu = $this->logistics_company_db->get_one(array('value'=>$logistics_company_id)); //获取物流
-		  $result = $this->order_db->update(array('shipper_name' =>$wuliu['name'],'shipper_code' =>$wuliu['value'],'logistics_order' =>$logistics_order,'fhtime'=>time(),'status'=>'3'),array('id'=>$id));
+		  $result = $this->order_db->update(array('shipper_name' =>$wuliu['name'],'shipper_code' =>$wuliu['value'],'logistics_order' =>$logistics_order,'fhtime'=>time(),'status'=>'3'),array('order_id'=>$id));
 		  if($result){
 			  $this->caozuo_success("发货成功");
 		  }else{
@@ -1159,7 +1159,7 @@ class zyorder_api{
 			$this->show_error("no storeid");
 		}
 		if($this->check_storeid_status($id,$storeid,7)){
-		   $result = $this->order_db->update(array('status'=>8,'shstatus'=>1),array('id'=>$id));
+		   $result = $this->order_db->update(array('status'=>8,'shstatus'=>1),array('order_id'=>$id));
 		   if($result){
 		       $this->caozuo_success("退款成功");
 		   }else{
@@ -1179,8 +1179,8 @@ class zyorder_api{
 			exit($this->empty_storeid());
 		}
 		if($this->check_storeid_status($id,$storeid,7)){
-			$order = $this->order_db->get_one(array('id'=>$id));
-		    $result = $this->order_db->update(array('status'=>$order['prestatus'],'refuse_reason'=>$refuse_reason,'shstatus'=>2),array('id'=>$id));
+			$order = $this->order_db->get_one(array('order_id'=>$id));
+		    $result = $this->order_db->update(array('status'=>$order['prestatus'],'refuse_reason'=>$refuse_reason,'shstatus'=>2),array('order_id'=>$id));
 		    if($result){
 		       $this->caozuo_success("退款成功");
 		    }else{
@@ -1293,9 +1293,9 @@ class zyorder_api{
 			$orderid = explode(",", $orderid);
 			$shopcount = count($shopid);
 			for ($i=0; $i < $shopcount; $i++) { 
-				$orderarr[$i] = $this->order_db->get_one(['id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`id`,`storeid`,`status`,`userid`,`lx_mobile`,`lx_name`,`lx_code`,`province`,`city`,`area`,`address`,`totalprice`,`usernote`');
+				$orderarr[$i] = $this->order_db->get_one(['order_id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`order_id`,`storeid`,`status`,`userid`,`lx_mobile`,`lx_name`,`lx_code`,`province`,`city`,`area`,`address`,`totalprice`,`usernote`');
 
-				$orderinfo['dianpu'][$i] = $this->order_db->get_one(['id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`id`,`ordersn`');
+				$orderinfo['dianpu'][$i] = $this->order_db->get_one(['order_id'=>$shopid[$i],'ordersn'=>$orderid[$i]],'`order_id`,`ordersn`');
 
 				if (!$orderarr[$i]) {
 					$result = [
@@ -1307,7 +1307,7 @@ class zyorder_api{
 				}
 				
 				//商品信息
-				$orderinfo['dianpu'][$i]['shopinfo'] = $this->ordergoods_db->select('order_id in ('.$orderarr[$i]['id'].')','`goods_name`,`goods_num`,`goods_img`,`final_price`,`goods_price`,`specid_name`');
+				$orderinfo['dianpu'][$i]['shopinfo'] = $this->ordergoods_db->select('order_id in ('.$orderarr[$i]['order_id'].')','`goods_name`,`goods_num`,`goods_img`,`final_price`,`goods_price`,`specid_name`');
 
 				//地址管理
 				$orderinfo['address']['lx_mobile'] = $orderarr[$i]['lx_mobile'];
