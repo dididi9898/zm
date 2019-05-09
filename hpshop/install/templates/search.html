@@ -1,9 +1,7 @@
-﻿{php $SEO['site_title'] = '分类'}
+﻿{php $SEO['site_title'] = '商品宝贝'}
 {template "hpshop","top-head"}
 
-</style>
-
-<body class="bg-f4f4f4" >
+< body class="bg-f4f4f4" >
 	<div style="width: 100vw; overflow: hidden;">
 		<div id="allcat">
 			<div class="personal-head" style="height: 0.6rem;">
@@ -36,10 +34,11 @@
 			<div class="screen">
 				<ul>
 					<!-- more 灰色箭头 Positive 下箭头  Aspect 上箭头 on 字体及下划线 manner 排版样式-->
-					<li class="fl on"><a href="#"><span>综合</span></a></li>
-					<li class="fl "><a href="#"><span>价格</span></a></li>
+					<li class="fl on"><a href="#"><span>全部</span></a></li>
+					<li class="fl "><a href="#"><span>综合</span></a></li>
 					<li class="fl "><a href="#"><span>销量</span></a></li>
 					<li class="fl "><a href="#"><span>新品</span></a></li>
+					<li class="fl "><a href="#"><span>价格↑↓</span></a></li>
 					<div class="clear"></div>
 				</ul>
 			</div>
@@ -76,7 +75,7 @@
                 $ = layui.jquery,
                 upload = layui.upload,
                 table = layui.table;
-			
+
 				var sercon = '{$_GET[sercon]}';
 
 				var allcat =  new Vue({
@@ -101,7 +100,7 @@
 							  scrollbar: false,
 							  content: $('.fl-search'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
 							});
-							
+
 						},
 						//关闭搜索
 						close:function(){
@@ -113,7 +112,7 @@
 								aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.search},function(data){
 									console.log(data);
 								});
-								
+
 							}else{
 								layer.msg('搜索内容不能为空');
 							}
@@ -122,14 +121,14 @@
 						}
 					}
 				});
-					
-			
+
+
 			aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon},function(data){
 					var sergoods =  new Vue({
 				    		el: '#sergoods',
 							data:data
 					});
-					console.log(data.data);						
+					console.log(data.data);
 				});
         }();
     </script>
