@@ -101,8 +101,8 @@ class order extends admin {
 
 		$order = 'order_id DESC';
         list($info,$count) = $this->members_db->moreTableSelect(
-            array("zy_zy_order"=>array("*"), "zy_order_goods"=>array("*"), "zy_member"=>array("nickname", "mobile")),
-            array("order_id", "userid"),
+            array("zy_zy_order"=>array("*"),"zy_member"=>array("nickname", "mobile")),
+            array( "userid"),
             $where
             , ((string)($page-1)*$this->pagesize).",".$this->pagesize, "B1.order_id DESC","1"
         );
@@ -115,12 +115,12 @@ class order extends admin {
 
     function showShop()
     {
-        $neadArg = ["id"=>[true,1]];
+        $neadArg = ["order_id"=>[true,1]];
         $info = checkArgBcak($neadArg);
         list($data, $count) = $this->members_db->moreTableSelect(
             array("zy_zy_order"=>array("*"), "zy_order_goods"=>array("*")),
             array("order_id"),
-            "id=".$info["id"],"","","0"
+            "B2.order_id=".$info["order_id"],"","","0"
         );
 		//exit(var_dump($data));
         include $this->admin_tpl("order/shopShow");

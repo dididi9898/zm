@@ -18,9 +18,10 @@ include $this->admin_tpl('header', 'admin');
 <div class="pad-10">
     <div class="common-form">
         <div id="div_setting_2" class="contentList">
-
+            <?php foreach($data as $key=>$data) { ?>
             <fieldset>
-                <legend>基本信息</legend>
+                <legend>商品信息</legend>
+
                 <table class="table_form"  style="min-width: 100%;overflow:auto;display: block;">
                     <tbody>
                     <tr >
@@ -56,11 +57,13 @@ include $this->admin_tpl('header', 'admin');
                         <td >购买时间</td>
                         <td colspan="5"><?php echo date("Y-m-d H:i:s",$data["ordersn"])?> </td>
                     </tr>
+
                     </tbody>
                 </table>
+
             </fieldset>
             <div class="bk15"></div>
-
+            <?php } ?>
         </div>
     </div>
 
