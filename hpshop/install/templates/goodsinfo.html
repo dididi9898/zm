@@ -501,6 +501,7 @@
                     </div>
                     <div class="h1"></div>
                     
+                    <template v-if="specid !='' ">
                     <template v-for="(spec_name,index) in specname">
 						<div class="lg-fs">{{ spec_name.name }}</div>
 						<div class="h05"></div>
@@ -511,6 +512,7 @@
 							</template>
 						</div>
 						<hr>
+                    </template>
                     </template>
                     <div class="goods-tcn-num">
                         <span class="lg-fs">数量</span>
@@ -556,6 +558,13 @@
 				</div>
 				<div class="clear"></div>
 			</li>
+
+            <!--<li class="fl" style="background: #ff5722; line-height: 0.4rem; text-align: center; color: #fff;" @click="try">-->
+                <!--加入购物车-->
+            <!--</li>-->
+            <li class="fl" style="background: #ffaf44;line-height: 0.4rem;text-align: center;color: #fff;" @click="trynow">
+                立即试穿
+            </li>
 			<li class="fl" style="background: #ff5722;line-height: 0.4rem;text-align: center;color: #fff;" @click="add">
 				加入购物车
 			</li>
@@ -754,7 +763,23 @@
 														layer.msg('已成功加入购物车');
 													}
 												})
-											}else if(type == "0"){
+											}else if(type == "3"){
+                                                //trynow
+                                                aj.post('index.php?m=hpshop&c=goods_api&a=trynow',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
+                                                    console.log(data);
+                                                    if(data.status == 'error'){
+                                                        if(data.code == "0"){
+                                                            layer.msg(data.message);
+                                                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                                                        }else{
+                                                            layer.msg(data.message);
+                                                        }
+                                                    }else{
+                                                        //layer.msg('请确认订单');
+                                                        setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=trysettlement&met=1'", 1000);
+                                                    }
+                                                })
+                                            }else if(type == "0"){
 												layer.closeAll()
 												layer.msg('请选择结算方式（立刻购买/加入购物车）');
 											}else{
@@ -879,6 +904,22 @@
                                                         layer.msg('已成功加入购物车');
                                                     }
                                                 })
+                                            }else if(type == "3"){
+                                                //trynow
+                                                aj.post('index.php?m=hpshop&c=goods_api&a=trynow',{gid:gid,spec:this.specid,cnum:this.s_shuliang},function(data){
+                                                    console.log(data);
+                                                    if(data.status == 'error'){
+                                                        if(data.code == "0"){
+                                                            layer.msg(data.message);
+                                                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                                                        }else{
+                                                            layer.msg(data.message);
+                                                        }
+                                                    }else{
+                                                        //layer.msg('请确认订单');
+                                                        setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=trysettlement&met=1'", 1000);
+                                                    }
+                                                })
                                             }else if(type == "0"){
                                                 layer.closeAll()
                                                 layer.msg('请选择结算方式（立刻购买/加入购物车）');
@@ -946,6 +987,22 @@
                                 });
 
 						},
+                        // 选择套餐
+                        trynow:function(){
+                            type = '3';
+                            layer.open({
+                                type: 1,
+                                area: ['100%', 'auto'],
+                                offset: 'b',
+                                // closeBtn: 0,
+                                anim: 2,
+                                title: false, //不显示标题
+                                shadeClose: true,
+                                isOutAnim: false,
+                                scrollbar: false,
+                                content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                            });
+                        },
 						Collect:function(event){
 							var _this = this;
 							console.log(_this.collect);

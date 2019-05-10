@@ -132,6 +132,15 @@ class index{
 		include template('hpshop', 'settlement');
 	}
 
+	/**
+	 *试穿订单确认
+	 */
+	public function trysettlement(){
+
+
+		include template('hpshop', 'trysettlement');
+	}
+
 
 	/**
      *购物车

@@ -1003,7 +1003,7 @@ class api{
 				$curl = [
 					'mobile'=>$mobile,
 					'verify_code'=>$verify_code,
-					'clear'=>2,
+					'clear'=>1,
 				];
 				$sms_verify = _crul_post($config['url'],$curl);
 				$sms_verify=json_decode($sms_verify,true);

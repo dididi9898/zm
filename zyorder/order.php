@@ -120,7 +120,7 @@ class order extends admin {
         list($data, $count) = $this->members_db->moreTableSelect(
             array("zy_zy_order"=>array("*"), "zy_order_goods"=>array("*")),
             array("order_id"),
-            "B2.order_id=".$info["order_id"],"","","0"
+            "B2.order_id=".$info["order_id"],"","","1"
         );
 		//exit(var_dump($data));
         include $this->admin_tpl("order/shopShow");
