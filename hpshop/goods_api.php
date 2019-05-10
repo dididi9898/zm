@@ -1263,7 +1263,7 @@ class goods_api{
 		$lx_mobile = $rs['data']['phone']/* $_POST['lx_mobile']*/; //联系电话
 		$lx_name = $rs['data']['name']/*$_POST['lx_name']*/; //联系人
 		$lx_code = '　'/*$_POST['lx_code']*/; //联系邮编
-		$mes = $_POST['note'];//用户留言
+		$mes = $_POST['usernote'];//用户留言
 
 		if ( empty($province) || empty($city) || empty($area) || empty($address) ) {
 			$result = [

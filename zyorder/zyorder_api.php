@@ -429,7 +429,7 @@ class zyorder_api{
 			"lx_name"=>$_POST['lx_name'], //联系人
 			"lx_code"=>$_POST['lx_code'], //联系邮编
 			//"totalprice"=>$totalprice,
-			//"usernote"=>$usernote,
+			"usernote"=>$_POST['usernote'],
 			"addtime"=>$addtime,
 		];
 
@@ -454,7 +454,6 @@ class zyorder_api{
 			$newdata = $data;
 			$newdata['storeid'] = $vs['shopid'];
 			$newdata['ordersn'] = time() + mt_rand(100,999);
-			$newdata['usernote'] = $usernote[$ks];
 			$newdata['totalprice'] = $vs['stprice'];
 			$id = $this->order_db->insert($newdata,true);
 			$idarr[] = [

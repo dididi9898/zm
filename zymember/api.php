@@ -1003,7 +1003,7 @@ class api{
 				$curl = [
 					'mobile'=>$mobile,
 					'verify_code'=>$verify_code,
-					'clear'=>2,
+					'clear'=>1,
 				];
 				$sms_verify = _crul_post($config['url'],$curl);
 				$sms_verify=json_decode($sms_verify,true);
@@ -1093,7 +1093,10 @@ class api{
 
 				//更改数据库密码
 				$newpassword = password($password, $memberinfo['trade_encrypt']);
-				$this->member_db->update(array('trade_password'=>$newpassword['password'],'trade_encrypt'=>$newpassword['encrypt']),array('userid'=>$memberinfo['userid']));
+				if(is_array($newpassword))
+					$this->member_db->update(array('trade_password'=>$newpassword['password'],'trade_encrypt'=>$newpassword['encrypt']),array('userid'=>$memberinfo['userid']));
+				else
+                    $this->member_db->update(array('trade_password'=>$newpassword,'trade_encrypt'=>$memberinfo['trade_encrypt']),array('userid'=>$memberinfo['userid']));
 
 				$result = [
 					'status'=>'success',

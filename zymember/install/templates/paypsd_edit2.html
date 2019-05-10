@@ -77,10 +77,10 @@
 			//提交
 				form.on('submit(submit01)', function (data) {
 					var d = {};
-					data.field.userid = {$_userid};
+					data.field.userid = '{$_userid}';
 					data.field.progress = "2";
-					data.field.mobile = {$_GET[mobile]};
-					data.field.verify_code = {$_GET[verify_code]};
+					data.field.mobile = '{$_GET[mobile]}';
+					data.field.verify_code = '{$_GET[verify_code]}';
 					data.field.forward = "index.php?m=zymember&c=index&a=init";
 					console.log(data.field);
 					
