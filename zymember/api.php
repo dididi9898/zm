@@ -1093,7 +1093,10 @@ class api{
 
 				//更改数据库密码
 				$newpassword = password($password, $memberinfo['trade_encrypt']);
-				$this->member_db->update(array('trade_password'=>$newpassword['password'],'trade_encrypt'=>$newpassword['encrypt']),array('userid'=>$memberinfo['userid']));
+				if(is_array($newpassword))
+					$this->member_db->update(array('trade_password'=>$newpassword['password'],'trade_encrypt'=>$newpassword['encrypt']),array('userid'=>$memberinfo['userid']));
+				else
+                    $this->member_db->update(array('trade_password'=>$newpassword,'trade_encrypt'=>$memberinfo['trade_encrypt']),array('userid'=>$memberinfo['userid']));
 
 				$result = [
 					'status'=>'success',

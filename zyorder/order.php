@@ -9,7 +9,8 @@ class order extends admin {
 	/**
 	*构造函数，初始化
 	*/
-    public static $statusType = ["1"=>"代付款","2"=>"待发货","3"=>"待收货","4"=>"待评价","5"=>"已评价","6"=>"已删除"];
+    public static $statusType = ["1"=>"待付款","2"=>"待发货","3"=>"待收货","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款"];
+    public static $tryStatusType = ["7"=>"待审核","2"=>"待发货","3"=>"待收货","1"=> "待付款","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款"];
     public static $pay_type = ["1"=>"余额","2"=>"支付宝", "3"=>"微信"];
 
 	public function __construct()
@@ -83,7 +84,7 @@ class order extends admin {
         $page = isset($_GET["page"])?intval($_GET["page"]):1;
         $start_addtime = isset($_GET["start_addtime"])?strtotime($_GET["start_addtime"]):"";
         $end_addtime = isset($_GET["end_addtime"])?strtotime($_GET["end_addtime"]):"";
-		$where = '1';
+		$where = '`try_status` = 0';
         if(!empty($status)) $where .= " AND `status` = ".$status." ";
         if(!empty($start_addtime))
             $where .= " AND `add_time` > '$start_addtime' AND "; //优先考虑几天之内的筛选框中内容去查询数据
@@ -195,7 +196,53 @@ class order extends admin {
     //*******************************************************************************************************************
     //*******************************************************************************************************************
     //*******************************************************************************************************************
-	
+	//试穿订单代码
+    public function try_order_list()
+    {
+        $status = isset($_GET["status"])?intval($_GET["status"]):"";
+        $page = isset($_GET["page"])?intval($_GET["page"]):1;
+        $start_addtime = isset($_GET["start_addtime"])?strtotime($_GET["start_addtime"]):"";
+        $end_addtime = isset($_GET["end_addtime"])?strtotime($_GET["end_addtime"]):"";
+        $where = '`try_status` = 1 ';
+        if(!empty($status)) $where .= " AND `status` = ".$status." ";
+        if(!empty($start_addtime))
+            $where .= " AND `add_time` > '$start_addtime' AND "; //优先考虑几天之内的筛选框中内容去查询数据
+        if(!empty($end_addtime))
+            $where .= " AND `add_time` < '$end_addtime' AND ";
+        if($_GET['ordersn']){
+            $where .= " and ordersn ='".$_GET['ordersn']."' ";
+        }
+        if($_GET['pay_type']){
+            //1 .余额
+            //2 .微信
+            //3 .支付宝
+            $where .= " and pay_type ='".$_GET['pay_type']."' ";
+        }
+
+        $order = 'order_id DESC';
+        list($info,$count) = $this->members_db->moreTableSelect(
+            array("zy_zy_order"=>array("*"), "zy_order_goods"=>array("*"), "zy_member"=>array("nickname", "mobile")),
+            array("order_id", "userid"),
+            $where
+            , ((string)($page-1)*$this->pagesize).",".$this->pagesize, "B1.order_id DESC","1"
+        );
+        list($page, $pagenums) = getPage($page, $this->pagesize, $count);
+//		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
+//		$pages = $this->order_db->pages;  //分页
+        include $this->admin_tpl('order/try_order_manage'); //和模板对应上
+        //include $this->admin_tpl('order_manage'); //和模板对应上
+    }
+
+
+
+
+
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
+    //*******************************************************************************************************************
 	/**
 	* 订单管理_删除
 	*/

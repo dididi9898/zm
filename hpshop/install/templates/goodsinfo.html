@@ -519,7 +519,7 @@
                         <div class="goods-tcn-num-add">
                             <span class="jian" v-on:click="jiannum">-</span>
                             <input type="number" v-model="s_shuliang" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
-                            <span class="jia" v-on:click="jianum">+</span>
+                            <span class="jia" v-on:click="jianum" >+</span>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -704,11 +704,13 @@
 												var specids = this.specid.split('-');
 												specids[$(event.target).parent('.goods-tc-opt').data('number')] = $(event.target).data('id');
 												this.specid = specids.join('-');
+												var that = this;
 												$.each(goods.specdata,function(index,val){
-													if(this.specid == val.specid){
-														this.max_sum = val.specstock
+													if(that.specid == val.specid){
+														that.max_sum = val.specstock;
 													}
 												})
+
 												console.log(this.specid);
 												//console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
 											}
