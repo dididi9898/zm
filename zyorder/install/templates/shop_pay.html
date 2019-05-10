@@ -158,8 +158,9 @@
                 table = layui.table;
 				var orderid = '{$_GET[orderid]}';
 				var sn = '{$_GET[sn]}';
+				var userid  = '{$_userid}';
 			console.log(sn,orderid);
-				aj.post('index.php?m=zyorder&c=zyorder_api&a=shop_pay',{shopid:orderid,orderid:sn,userid:'7',type:'1',forward:''},function(data){
+				aj.post('index.php?m=zyorder&c=zyorder_api&a=shop_pay',{shopid:orderid,orderid:sn,userid:userid,type:'1',forward:''},function(data){
 					console.log(data);
 					if(data.status == 'success'){
 						var items = data.data;

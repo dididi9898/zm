@@ -565,7 +565,8 @@ class index{
 	/**
 	* 订单中心_待支付
 	*/
-	public function shop_pay(){	
+	public function shop_pay(){
+        $_userid = param::get_cookie('_userid');
 		include template('zyorder', 'shop_pay');
 	}
 
