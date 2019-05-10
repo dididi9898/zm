@@ -850,6 +850,86 @@ class goods_api{
 		
 	}
 
+	/**
+	 *立即购买前置操作
+	 */
+	public function trynow(){
+		//dump($_POST,true);
+		$_userid = param::get_cookie('_userid');
+		$userid = $_POST['uid'];
+
+		if($_userid){
+			$uid = $_userid;
+		}else{
+			$uid = $userid;
+		}
+
+		if ( !$uid ) {
+			$result = [
+				'status' => 'error',
+				'code' => 0,
+				'message' => '请先登录！',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+		if (!$_POST['gid'] || !isset($_POST['spec']) || !$_POST['cnum']) {
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '访问受限，缺少必要参数',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		$check = checkspec($_POST['gid'],$_POST['spec']);
+		if ( $check['code'] == -2 ) {
+			exit(json_encode($check,JSON_UNESCAPED_UNICODE));
+		}
+
+		if ( $check['data']['stock'] < $_POST['cnum'] ) {
+			$result = [
+				'status' => 'error',
+				'code' => -3,
+				'message' => '购买失败，商品库存不足',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		if ( $check['data']['stock'] < $_POST['cnum'] ) {
+			$result = [
+				'status' => 'error',
+				'code' => -3,
+				'message' => '购买失败，商品库存不足',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		$info = $this->goodscarts_db->get_one(['userid'=>$uid,'ischeck'=>2]);
+
+		if ( count($info) == 0 ) {
+			$data = [];
+			$data['userid'] = $uid;
+			$data['goodsid'] = $_POST['gid'];
+			$data['goodsspecid'] = $_POST['spec'];
+			$data['ischeck'] = 2;
+			$data['cartnum'] = $_POST['cnum'];
+			$this->goodscarts_db->insert($data);
+		}else{
+			$data = [];
+			$data['goodsid'] = $_POST['gid'];
+			$data['goodsspecid'] = $_POST['spec'];
+			$data['cartnum'] = $_POST['cnum'];
+			$this->goodscarts_db->update($data,['userid'=>$uid,'ischeck'=>2]);
+		}
+
+		$result = [
+			'status' => 'success',
+			'code' => 1,
+			'message' => 'OK',
+		];
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+
+	}
 
 	/**
      *购物车结算前置操作
@@ -1171,9 +1251,9 @@ class goods_api{
 
 
 	/**
-     *订单确认订单生成
+     * 试穿订单确认订单生成
      */
-	public function sureMakeOrder(){
+	public function tryMakeOrder(){
 		//dump($_POST,true);
 		$_userid = param::get_cookie('_userid');
 		$userid = $_POST['uid'];
@@ -1337,7 +1417,10 @@ class goods_api{
     		'lx_name' => $lx_name,
     		'lx_code' => $lx_code,
     		'usernote' => $mes,
-    		'shopdata' => $narr  
+    		'shopdata' => $narr,
+			'status'=> 7,
+			'try_status'=>1 ,
+
         );
         $content = http_build_query($data);
         $content_length = strlen($content);
@@ -1368,6 +1451,206 @@ class goods_api{
 		
 		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		
+	}
+
+	/**
+	 *订单确认订单生成
+	 */
+	public function sureMakeOrder(){
+		//dump($_POST,true);
+		$_userid = param::get_cookie('_userid');
+		$userid = $_POST['uid'];
+		$method = $_POST['met'];
+		$cids = $_POST['cids'];
+		$addid = $_POST['address'];
+
+		if($_userid){
+			$uid = $_userid;
+		}else{
+			$uid = $userid;
+		}
+
+		if ( !$uid ) {
+			$result = [
+				'status' => 'error',
+				'code' => 0,
+				'message' => '请先登录！',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+		if ($method == 1) {
+			$info = $this->goodscarts_db->select(['userid'=>$uid,'ischeck'=>2]);
+			if(count($info) == 0){
+				$result = [
+					'status' => 'error',
+					'code' => -1,
+					'message' => '访问受限，参数无效',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+			}
+			$cids = $info[0]['id'];
+		} else {
+			if ( empty($cids) ) {
+				$result = [
+					'status' => 'error',
+					'code' => -2,
+					'message' => '访问受限，缺少参数',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+			}
+			$arr = explode(',', $cids);
+			$where = ' userid = '.$uid.' and id in('.$cids.') and ischeck <> 2 ';
+			$info = $this->goodscarts_db->select($where);
+			if ( count($info) != count($arr) ) {
+				$result = [
+					'status' => 'error',
+					'code' => -1,
+					'message' => '访问受限，参数无效',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+			}
+		}
+
+		if ( empty($addid) ) {
+			$result = [
+				'status' => 'error',
+				'code' => -3,
+				'message' => '访问受限，缺少参数',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		$token_url= APP_PATH.'index.php?m=zyaddr&c=zyaddr_api&a=getaddr';
+		$data = array (
+			'userid' => $uid,
+			'id' => $addid,
+		);
+		$content = http_build_query($data);
+		$content_length = strlen($content);
+		$options = array(
+			'http' => array(
+				'method' => 'POST',
+				'header' =>
+					"Content-type: application/x-www-form-urlencoded\r\n" .
+					"Content-length: $content_length\r\n",
+				'content' => $content
+			)
+		);
+		$token = json_decode(file_get_contents($token_url,false,stream_context_create($options)));
+		$rs =  json_decode(json_encode($token),true);
+
+		$province = $rs['data']['province']/*$_POST['province']*/;  //收货地址省
+		$city = $rs['data']['city']/*$_POST['city']*/;//收货地址市
+		$area = $rs['data']['district']/*$_POST['area']*/;//收货地址区
+		$address = $rs['data']['address']/*$_POST['address']*/; //详细地址
+		$lx_mobile = $rs['data']['phone']/* $_POST['lx_mobile']*/; //联系电话
+		$lx_name = $rs['data']['name']/*$_POST['lx_name']*/; //联系人
+		$lx_code = '　'/*$_POST['lx_code']*/; //联系邮编
+		$mes = $_POST['note'];//用户留言
+
+		if ( empty($province) || empty($city) || empty($area) || empty($address) ) {
+			$result = [
+				'status' => 'error',
+				'code' => -4,
+				'message' => '地址信息不全',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		if ( empty($lx_mobile) || empty($lx_name) || empty($lx_code) ) {
+			$result = [
+				'status' => 'error',
+				'code' => -5,
+				'message' => '联系人信息不全',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+
+		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
+
+		$sqls = 'SELECT b.shopid as id FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
+
+		$page = $_GET['page'] ? $_GET['page'] : '1';
+		$info = $this->get_db->multi_listinfo($sql,$page,88888888);
+
+		$narr = [];
+		$total = 0;
+		// $tnum = 0;
+		foreach ($info as $k => $v) {
+			if(!isset($narr[$v['shopid']])){
+				$narr[$v['shopid']] = [
+					'shopid' => $v['shopid'],
+					'stprice'=>0,
+					'stnum'=>0
+				];
+			}
+
+			if ( $v['goodsspecid'] != 0 ) {
+				$jg = $v['specprice'];
+			} else {
+				$jg = $v['shop_price'];
+			}
+
+			$narr[$v['shopid']]['stprice'] += $jg*$v['cartnum'];
+			$narr[$v['shopid']]['stnum'] += $v['cartnum'];
+			$total += $jg*$v['cartnum'];
+			// $tnum += $v['cartnum'];
+			$narr[$v['shopid']]['cartinfo'][] = [
+				'cartid' => $v['cartid'],
+				'goodsid' => $v['id'],
+				'goodsname' => $v['goods_name'],
+				'goodsimg' => $v['thumb'],
+				'goodsspec' => $v['specid'],
+				'goodsspecs' => $v['specids'],
+				'goodsprice' => $jg,
+				'cartnum' => $v['cartnum'],
+			];
+		}
+
+		$token_url= APP_PATH.'index.php?m=zyorder&c=zyorder_api&a=addorder';
+
+		$data = array (
+			'userid' => $uid,
+			'province' => $province,
+			'city' => $city,
+			'area' => $area,
+			'address' => $address,
+			'lx_mobile' => $lx_mobile,
+			'lx_name' => $lx_name,
+			'lx_code' => $lx_code,
+			'usernote' => $mes,
+			'shopdata' => $narr
+		);
+		$content = http_build_query($data);
+		$content_length = strlen($content);
+		$options = array(
+			'http' => array(
+				'method' => 'POST',
+				'header' =>
+					"Content-type: application/x-www-form-urlencoded\r\n" .
+					"Content-length: $content_length\r\n",
+				'content' => $content
+			)
+		);
+		$token = json_decode(file_get_contents($token_url,false,stream_context_create($options)));
+		$rs =  json_decode(json_encode($token),true);
+
+		if ( $rs['data']['code'] != 1 ) {
+
+		}
+		if ($where) {
+			$this->goodscarts_db->delete($where);
+		}
+		$result = [
+			'status' => 'success',
+			'code' => 1,
+			'message' => 'OK',
+			'data' =>$rs['data']
+		];
+
+		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+
 	}
 
 

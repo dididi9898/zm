@@ -256,10 +256,13 @@ class zyorder_api{
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
 			$where.= ' AND status=4';
+		}else if($_GET['status']==5){
+			$where.= ' AND status=7';
+		}else if($_GET['status']==6){
+			$where.= ' AND (status=8 OR status=9)';
 		}else{
 			$where.= ' AND 1';
 		}
-		
 
 		$sql = 'SELECT storeid from phpcms_zy_order WHERE userid = '.$_userid.' GROUP BY storeid';
 		$sqlrs = $this->order_db->query($sql);
@@ -293,7 +296,7 @@ class zyorder_api{
         	$snamarr[$vs['userid']] = $vs;
         }
 
-        $where.=' AND status < 6 ';
+        $where.=' AND status < 10 ';
 		$order = ' order_id DESC ';
 		$page = $pageindex ? $pageindex : '1';
 		$orders = $this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
@@ -414,6 +417,8 @@ class zyorder_api{
 		// $lx_code = $_POST['lx_code']; //联系邮编
 		// $shopdata = $_POST['shopdata'];  //商品数据
 		//$usernote = $_POST['usernote']; //备注
+		$status = empty($_POST['status']) ? 1 : $_POST['status'];
+		$try_status = empty($_POST['try_status']) ? 0 : $_POST['try_status'];
 		$addtime = time();//生成下单时间
 		$data = [
 			"userid"=>$_userid,
@@ -423,7 +428,8 @@ class zyorder_api{
 			"province"=>$_POST['province'],  //收货地址省 
 			"city"=>$_POST['city'],//收货地址市
 			"area"=>$_POST['area'],//收货地址区
-			"status"=>1,
+			"status"=>$status,
+			"try_status"=>$try_status,
 			"address"=>$_POST['address'], //详细地址
 			"lx_mobile"=>$_POST['lx_mobile'], //联系电话
 			"lx_name"=>$_POST['lx_name'], //联系人
@@ -523,14 +529,14 @@ class zyorder_api{
 	}	
 	
     //订单与用户，订单状态相关  
-	public function check_uid_status($id,$_userid,$status){	
-		if($_userid!=null){	
-			$order = $this->order_db->get_one(array('order_id'=>$id));
-			if($order['status'] != $status||$order['userid']!= $_userid){
+	public function check_uid_status($id,$_userid,$status){
+		if ($_userid != null) {
+			$order = $this->order_db->get_one(array('order_id' => $id));
+			if ($order['status'] != $status || $order['userid'] != $_userid) {
 				return false;
 			}
 			return true;
-		}	
+		}
 	}        
 		 
 	//订单与商户，订单状态相关  
@@ -875,7 +881,7 @@ class zyorder_api{
 		if($uid ==null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$uid,2)||$this->check_uid_status($id,$uid,1)){	
+		if($this->check_uid_status($id,$uid,2)||$this->check_uid_status($id,$uid,1)||$this->check_uid_status($id,$uid,7)){
 			$result = $this->order_db->update(array('status'=>6),array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("取消成功");
@@ -903,7 +909,7 @@ class zyorder_api{
 		if($uid==null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$uid,5)){	
+		if($this->check_uid_status($id,$uid,5)||$this->check_uid_status($id,$uid,6)){
 			$result = $this->order_db->delete(array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("删除成功");

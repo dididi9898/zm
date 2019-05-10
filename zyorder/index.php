@@ -47,10 +47,14 @@ class index{
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
 			$where.= ' AND status=4';
+		}else if($_GET['status']==5){
+			$where.= ' AND status=7';
+		}else if($_GET['status']==6){
+			$where.= ' AND (status=8 OR status=9)';
 		}else{
 			$where.= ' AND 1';
 		}
-		$where.=' AND status<6';
+		$where.=' AND status<10';
 		$order = 'id DESC';
 		$orders=$this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
 		$orderss = $this->order_db->select(1);
