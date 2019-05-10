@@ -1350,6 +1350,7 @@ class zyorder_api{
 				'code'=>200,
 				'message'=>'操作成功',
 				'data'=>$orderinfo,
+                'userid'=>$userid,
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
@@ -1445,6 +1446,7 @@ class zyorder_api{
 					'status' => 'success',
 					'code' => 1,
 					'message' => 'OK',
+                    'userid'=>$uid
 				];
 				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 			} else {

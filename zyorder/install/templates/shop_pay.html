@@ -95,7 +95,7 @@
         <!--商品支付方式-->
         <div class="ware-other">
             <ul class="payment">
-                 <template v-if="parseFloat(amount) > 0">
+
                  <label>
                     <li class="Balance" @click="paylist(1)" >
                         <input type="radio" name="paylist" value="1" class="radioclass"/>
@@ -105,7 +105,6 @@
                         <div class="clear"></div>
                     </li>
                 </label>
-                </template>
                 <label>
                     <li class="WeChat" @click="paylist(2)" >
                         <input type="radio" checked="checked" name="paylist" value="2" class="radioclass" />
@@ -129,7 +128,7 @@
         <div style=" height: 0.8rem"></div>
         <div class="Pay-footer-fixd">
             <div class="fl">合计：<span>￥&nbsp;{{ other.total }}</span></div>
-			<div class="fr"><botton type="botton" @click="submit">确认支付</botton></div>
+			<div class="fr"><botton type="botton" @click="submit()">确认支付</botton></div>
         </div>
     </form>
     
@@ -160,19 +159,20 @@
 				var orderid = '{$_GET[orderid]}';
 				var sn = '{$_GET[sn]}';
 			console.log(sn,orderid);
-				aj.post('index.php?m=zyorder&c=zyorder_api&a=shop_pay',{shopid:orderid,orderid:sn,userid:'1',type:'1',forward:''},function(data){
+				aj.post('index.php?m=zyorder&c=zyorder_api&a=shop_pay',{shopid:orderid,orderid:sn,userid:'7',type:'1',forward:''},function(data){
 					console.log(data);
 					if(data.status == 'success'){
 						var items = data.data;
 						var amount = '';
 						var pay_type = '2';
+                        userid = data.userid;
 						//获取选择地址
 						$.ajax({
 							url:'index.php?m=zymember&c=zymember_api&a=pub_memberinfo',
 							type:'POST', //GET
 							async:false,    //或true,是否同步
 							data:{
-								userid:1,
+								userid:userid,
 								field:'amount'
 							},
 							timeout:5000,    //超时时间
@@ -217,7 +217,8 @@
 													if(data.status == 'success'){
 													    layer.close(index);
 														layer.msg('购买成功');
-														setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=1&status=2'", 1000);
+
+														setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid="+data.userid+"&status=2'", 1000);
 													}else{
 														layer.close(index);
 														layer.msg(data.message);
