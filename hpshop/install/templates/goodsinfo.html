@@ -704,12 +704,14 @@
 												var specids = this.specid.split('-');
 												specids[$(event.target).parent('.goods-tc-opt').data('number')] = $(event.target).data('id');
 												this.specid = specids.join('-');
-												var that = this;
-												$.each(goods.specdata,function(index,val){
-													if(that.specid == val.specid){
-														that.max_sum = val.specstock;
-													}
-												})
+                                                var that = this;
+                                                $.each(goods.specdata,function(index,val){
+                                                    if(that.specid == val.specid){
+                                                        that.max_sum = val.specstock;
+                                                        if(that.s_shuliang>val.specstock)
+                                                            that.s_shuliang=val.specstock;
+                                                    }
+                                                })
 
 												console.log(this.specid);
 												//console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
