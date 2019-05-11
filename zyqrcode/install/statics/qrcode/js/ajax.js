@@ -23,7 +23,7 @@
 
         setTimeout(function () {
             ajaxStatus = true;
-        }, 1000);
+        }, 500);
 
         var index;
         $.ajax({

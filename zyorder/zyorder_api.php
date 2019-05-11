@@ -227,7 +227,7 @@ class zyorder_api{
 	public function order_list(){
 		//用户id和用户名
 		//$_userid = $_GET['userid'];
-		$pageindex = $_GET['pageindex'];
+		$page = $_GET['page'];
 		$pagesize = $_GET['pagesize'];
 
 		$_userid = param::get_cookie('_userid');
@@ -238,8 +238,8 @@ class zyorder_api{
 		}else{
 			$uid = $userid;
 		}
-		if($pageindex == null){
-			$pageindex = 1;
+		if($page == null){
+            $page = 1;
 		}
 		if($pagesize == null){
 			$pagesize = 10;
@@ -298,7 +298,7 @@ class zyorder_api{
 
         $where.=' AND status < 10 ';
 		$order = ' order_id DESC ';
-		$page = $pageindex ? $pageindex : '1';
+		//$page = $pageindex ? $pageindex : '1';
 		$orders = $this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
 		$totalcount = $this->order_db->count($where);
 		foreach ($orders as $k => $v) {
@@ -328,7 +328,7 @@ class zyorder_api{
 			// "totalpage"=>$totalpage,
 			// "totalcount"=>$totalcount
 		];
-		echo json_encode($data);
+ 		echo json_encode($data);
 	}
 	
 	//店铺订单列表
@@ -440,19 +440,21 @@ class zyorder_api{
 		];
 
 		foreach($data as $k => $v){
-			if(/*$v==null*/empty($v) && $k != "usernote"){
-				// $re = ['code'=>0];
-				// echo json_encode($re);
-				// return ;
-				$result = [
-					'status' => 'error',
-					'code' => -1,
-					'message' => '访问受限，缺少参数',
-				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE)); 
-			}
+            if(/*$v==null*/empty($v) && $k != "usernote"){
+                // $re = ['code'=>0];
+                // echo json_encode($re);
+                // return ;
+                if($v == '0' && $k = 'try_status')
+                    continue;
+                $result = [
+                    'status' => 'error',
+                    'code' => -1,
+                    'message' => '访问受限，缺少参数'.$k,
+                ];
+                exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+            }
 
-		}
+        }
 		
 		$idarr = [];
 		foreach ($_POST['shopdata'] as $ks => $vs) {
