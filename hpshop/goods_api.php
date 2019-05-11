@@ -1408,16 +1408,16 @@ class goods_api{
         $token_url= APP_PATH.'index.php?m=zyorder&c=zyorder_api&a=addorder';
         
         $data = array (
-        	'userid' => $uid,
-        	'province' => $province,  
-    		'city' => $city,      
-    		'area' => $area,    
-    		'address' => $address, 
-    		'lx_mobile' => $lx_mobile,
-    		'lx_name' => $lx_name,
-    		'lx_code' => $lx_code,
-    		'usernote' => $mes,
-    		'shopdata' => $narr,
+			'userid' => $uid,
+			'province' => $province,
+			'city' => $city,
+			'area' => $area,
+			'address' => $address,
+			'lx_mobile' => $lx_mobile,
+			'lx_name' => $lx_name,
+			'lx_code' => $lx_code,
+			'usernote' => $mes,
+			'shopdata' => $narr,
 			'status'=> 7,
 			'try_status'=>1 ,
 

@@ -164,16 +164,20 @@
                     <h3>我的优惠券</h3>
                     <ul>
                         <li>
-                            <div class="iconfont icon-ticket"></div>
-                            <p>去领券</p>
+                            <a href="{APP_PATH}index.php?m=zycoupon&c=index&a=show_coupon&mod=1">
+                                <div class="iconfont icon-ticket"></div>
+                                <p>去领券</p>
+                            </a>
                         </li>
                         <li>
-                            <span class="c-f5222d">10个</span>
+                            <span class="c-f5222d">{{coupon_count}}个</span>
                             <p>优惠券数量</p>
                         </li>
                         <li>
-                            <div class="iconfont icon-goodsnewfill"></div>
-                            <p>使用优惠券</p>
+                            <a href="{APP_PATH}index.php?m=zycoupon&c=index&a=show_coupon&mod=2">
+                                <div class="iconfont icon-goodsnewfill"></div>
+                                <p>使用优惠券</p>
+                            </a>
                         </li>
                         <div class="clear"></div>
                     </ul>

@@ -13,9 +13,26 @@ class zymember_api{
 		$this->member_detail_db = pc_base::load_model('member_detail_model');
 		//会员组表
 		$this->member_group_db = pc_base::load_model('member_group_model');
-
+		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
 	}
 
+	/**
+	 * 可使用优惠券数量
+	 * @param $_userid
+	 * @return json
+	 * @internal param 关联表id $_coupon_user_id
+	 */
+	public function coupon_count($_userid){
+
+		//$_userid = empty($_GET['_userid']) ? $_POST['_userid'] : $_GET['_userid'];
+		$member_info = $this->members_db->get_one(array('userid'=>$_userid));
+		if($member_info) {
+			$info = $this->zycoupon_user_db->get_one(array('userid' => $_userid, 'isused' => 0), $data = 'count(*)');
+			return $info['count(*)'];
+		}else{
+			return false;
+		}
+	}
 
 	/**
 	 * 资金模块_用于用户提现
@@ -139,7 +156,9 @@ class zymember_api{
 		//加上域名
 		if($data['headimgurl']=='statics/images/member/nophoto.gif'){
 			$data['headimgurl'] = APP_PATH.'statics/images/member/nophoto.gif';
-		}		
+		}
+		//优惠券数量
+		$data['coupon_count'] = $this->coupon_count($userid);
 		$result = [
 			'status'=>'success',
 			'code'=>200,
