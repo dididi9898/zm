@@ -518,7 +518,7 @@
                         <span class="lg-fs">数量</span>
                         <div class="goods-tcn-num-add">
                             <span class="jian" v-on:click="jiannum">-</span>
-                            <input type="number" v-model="s_shuliang" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
+                            <input type="number" v-model="s_shuliang"   v-on:keyup="check" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
                             <span class="jia" v-on:click="jianum" >+</span>
                         </div>
                         <div class="clear"></div>
@@ -707,9 +707,10 @@
                                                 var that = this;
                                                 $.each(goods.specdata,function(index,val){
                                                     if(that.specid == val.specid){
-                                                        that.max_sum = val.specstock;
-                                                        if(that.s_shuliang>val.specstock)
+                                                        that.max_sum = Number(val.specstock);
+                                                        if(that.s_shuliang>that.max_sum)
                                                             that.s_shuliang=val.specstock;
+
                                                     }
                                                 })
 
@@ -725,6 +726,13 @@
 												this.s_shuliang --;
 											}
 										},
+                                        check:function () {
+                                            if(Number(this.s_shuliang) >Number(this.max_sum))
+                                            {
+                                                layer.msg('库存不足');
+                                                this.s_shuliang = this.max_sum;
+                                            }
+                                        },
 										jianum: function () {
 											if(this.s_shuliang >= this.max_sum){
 												layer.msg('该宝贝不能再多了！');
@@ -849,12 +857,14 @@
                                                 var specids = this.specid.split('-');
                                                 specids[$(event.target).parent('.goods-tc-opt').data('number')] = $(event.target).data('id');
                                                 this.specid = specids.join('-');
+                                                var that = this;
                                                 $.each(goods.specdata,function(index,val){
-                                                    if(this.specid == val.specid){
-                                                        this.max_sum = val.specstock
+                                                    if(that.specid == val.specid) {
+                                                        that.max_sum = Number(val.specstock);
+                                                        if (that.s_shuliang > that.max_sum)
+                                                            that.s_shuliang = val.specstock;
                                                     }
-                                                })
-                                                console.log(this.specid);
+                                                });
                                                 //console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
                                             }
                                         },
@@ -871,6 +881,13 @@
                                                 layer.msg('该宝贝不能再多了！');
                                             }else{
                                                 this.s_shuliang ++;
+                                            }
+                                        },
+                                        check:function () {
+                                            if(Number(this.s_shuliang) >Number(this.max_sum))
+                                            {
+                                                layer.msg('库存不足');
+                                                this.s_shuliang = this.max_sum;
                                             }
                                         },
                                         submit:function(event){
