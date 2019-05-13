@@ -278,7 +278,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                                     <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
                                         <img src="<?php echo $value['url'];?>" height="40" width='60'/>
                                         <input type="text" name="goodsimg_url[]" value=<?php echo $value['url'] ?> style="width:310px;" ondblclick="image_priview(this.value);" class="input-text">
-                                        <input type="text" name="goodsimg_alt[]" value=<?php echo $value['alt'] ?> style="width:160px;" class="input-text" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;">
+                                        <input type="number" name="goodsimg_alt[]" value=<?php echo $value['alt'] ?> style="width:160px;" class="input-text" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;">
                                         <a href="javascript:remove_div('image<?php echo $num;?>')">移除</a>
                                     </li>
 
@@ -303,7 +303,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                                     <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
                                         <img src="<?php echo $value['url'];?>" height="40" width='60'/>
                                         <input type="text" name="goodsimg_infos_url[]" value=<?php echo $value['url'] ?> style="width:310px;" ondblclick="image_priview(this.value);" class="input-text">
-                                        <input type="text" name="goodsimg_infos_alt[]" value=<?php echo $value['alt'] ?> style="width:160px;" class="input-text" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;">
+                                        <input type="number" name="goodsimg_infos_alt[]" value=<?php echo $value['alt'] ?> style="width:160px;" class="input-text" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;">
                                         <a href="javascript:remove_div('image<?php echo $num;?>')">移除</a>
                                     </li>
 
