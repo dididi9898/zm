@@ -155,7 +155,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 				</tr>
 
 				<tr>
-					<th>商品主图</th>  
+					<th>商品缩略图</th>
 					<td>
 						<div style="width: 161px; text-align: center;">
 							<div class='upload-pic img-wrap'><input type='hidden' name='thumb' id='thumb' required="" value=''>
@@ -171,14 +171,23 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 				</tr>
 
 				<tr>
-			      <th width="80">商品相册</th>
-			      <td><input name="goodsimg" type="hidden" value="1">
-					<fieldset class="blue pad-10">
-			        <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张</div></center><div id="goodsimg" class="picList"></div>
-					</fieldset>
-					<div class="bk10"></div>
-					<script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
-			    </tr>
+                    <th width="80">商品轮播图</th>
+                    <td><input name="goodsimg" type="hidden" value="1">
+                        <fieldset class="blue pad-10">
+                            <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张、双击输入框查看大图</div></center><div id="goodsimg" class="picList"></div>
+                        </fieldset>
+                        <div class="bk10"></div>
+                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+                </tr>
+                <tr>
+                    <th width="80">商品详情图</th>
+                    <td><input name="goodsimg_infos" type="hidden" value="1">
+                        <fieldset class="blue pad-10">
+                            <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张、双击输入框查看大图</div></center><div id="goodsimg_infos" class="picList"></div>
+                        </fieldset>
+                        <div class="bk10"></div>
+                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg_infos',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+                </tr>
 			   
                 <tr>
 					<th>上架</th>  

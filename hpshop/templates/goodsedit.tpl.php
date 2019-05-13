@@ -253,7 +253,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 
 
 				<tr>
-					<th>商品主图</th>
+					<th>商品缩略图</th>
 					<td>
 						<div style="width: 161px; text-align: center;">
 							<div class='upload-pic img-wrap'><input type='hidden' name='thumb' id='thumb' value='<?php echo $info['thumb'];?>'>
@@ -269,29 +269,23 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 				</tr>
 
 				<tr>
-			      <th width="80">商品相册</th>
+			      <th width="80">商品轮播图</th>
 			      <td><input name="goodsimg" type="hidden" value="1">
 					<fieldset class="blue pad-10">
-					<legend>图片列表</legend>	
-					<?php 
-						if(empty($alinfo)){	
-							
-					?>	
-			        <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张</div></center><div id="goodsimg" class="picList"></div>
-			        <?php 
-						}else{
-							foreach($alinfo as $ks=>$vs){
-					?>
-			        
-			        <div id='image_caseimg_<?php echo $ks;?>' style='padding:1px'>
-			        	<img src="<?php echo $vs['url'];?>" height="40" />
-			        	<input type='text' name='goodsimg_url[]' value='<?php echo $vs['url'];?>' style='width:310px;' ondblclick='image_priview(this.value);' class='input-text'> 
-			        	<input type='text' name='goodsimg_alt[]' value='<?php echo $vs['alt'];?>' style='width:160px;' class='input-text'> <a href="javascript:remove_div('image_caseimg_<?php echo $ks;?>')">移除</a>
-			        </div>
-			        <?php 
-						}
-					}
-					?>
+					<legend>图片列表</legend>
+			        <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张</div>双击输入框查看大图</center><div id="goodsimg" class="picList">
+                                <?php foreach($alinfo as $key=>$value){  ?>
+                                    <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
+                                        <img src="<?php echo $value['url'];?>" height="40" width='60'/>
+                                        <input type="text" name="goodsimg_url[]" value=<?php echo $value['url'] ?> style="width:310px;" ondblclick="image_priview(this.value);" class="input-text">
+                                        <input type="number" name="goodsimg_alt[]" value=<?php echo $value['alt'] ?> style="width:160px;" class="input-text" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;">
+                                        <a href="javascript:remove_div('image<?php echo $num;?>')">移除</a>
+                                    </li>
+
+                                <?php }?>
+
+                            </div>
+
 			        <div id="goodsimg" class="picList"></div>
 
 					</fieldset>
@@ -299,7 +293,27 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 					<script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','6','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
 
 			    </tr>
+                <tr>
+                    <th width="80">商品详情图</th>
+                    <td><input name="goodsimg_infos" type="hidden" value="1">
+                        <fieldset class="blue pad-10">
+                            <legend>图片列表</legend>
+                            <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张、双击输入框查看大图</div></center><div id="goodsimg_infos" class="picList">
+                                <?php foreach($blinfo as $key=>$value){  ?>
+                                    <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
+                                        <img src="<?php echo $value['url'];?>" height="40" width='60'/>
+                                        <input type="text" name="goodsimg_infos_url[]" value=<?php echo $value['url'] ?> style="width:310px;" ondblclick="image_priview(this.value);" class="input-text">
+                                        <input type="number" name="goodsimg_infos_alt[]" value=<?php echo $value['alt'] ?> style="width:160px;" class="input-text" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;">
+                                        <a href="javascript:remove_div('image<?php echo $num;?>')">移除</a>
+                                    </li>
 
+                                <?php }?>
+
+                            </div>
+                        </fieldset>
+                        <div class="bk10"></div>
+                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg_infos',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+                </tr>
                 <tr>
 					<th>上架</th>  
 					<td>
