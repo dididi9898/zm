@@ -330,7 +330,36 @@ class goods_api{
 
 		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 	}	
-	
+	public function clearHistory()
+    {
+        $_userid = param::get_cookie('_userid');
+        $userid = $_POST['uid'];
+
+        if($_userid){
+            $uid = $_userid;
+        }else{
+            $uid = $userid;
+        }
+
+        if ( !$uid ) {
+            $result = [
+                'status' => 'error',
+                'code' => 0,
+                'message' => '请先登录！',
+            ];
+            exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+        }
+
+        $info = $this->goods_sh_db->update(['searchHistory'=>''] ,['userid'=>$uid]);
+        $hisarr = string2array($info['searchHistory']);
+        $result = [
+            'status' => 'success',
+            'code' => 1,
+            'message' => 'OK',
+        ];
+
+        exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+    }
 
 	/**
      *商品上下架状态

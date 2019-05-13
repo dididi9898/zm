@@ -21,7 +21,10 @@
 						</div>
 						<div class="fl-tj" style="position: relative;">
 							<div class="h1 clear"></div>
-							<div class="lg-fs c-afafaf">搜索历史</div>
+							<template  v-model="history" v-for="x,y in history.hiscon">
+								<p @click="showHistory(x)" class="lg-fs c-afafaf">{{ x }}</p>
+							</template>
+							<div  class="lg-fs c-afafaf" @click="clearHistory">清除搜索记录</div>
 							<div class="lg-fs c-afafaf" style="position: absolute;bottom: 0.5rem;width: 95%;text-align: center;z-index: 200" @click="close">关闭搜索</div>
 						</div>
 					</div>
@@ -81,11 +84,14 @@
 				var allcat =  new Vue({
 					el: '#allcat',
 					data:{
-						search: sercon
+						search: sercon,
+						history:'',
 					},
 					methods:{
 						//打开搜索
+
 						open:function(){
+                            var that = this;
 							$(".layui-container.search-fl").show();
 							$('.fl-tj').height($(window).height()-$('.search-fl .personal-head').height())
 							layer.open({
@@ -100,6 +106,9 @@
 							  scrollbar: false,
 							  content: $('.fl-search'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
 							});
+							aj.post('index.php?m=hpshop&c=goods_api&a=goods_sh',{}, function(data){
+                                that.history = data.data;
+							})
 
 						},
 						//关闭搜索
@@ -118,6 +127,15 @@
 							}
 							//console.log(this.search);
 							window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+this.search;
+						},
+                        showHistory:function(data){
+							this.search = data;
+						},
+                        clearHistory:function(){
+                            this.history = '';
+                            aj.post('index.php?m=hpshop&c=goods_api&a=clearHistory',{},function(data){
+                                console.log(data);
+                            });
 						}
 					}
 				});
