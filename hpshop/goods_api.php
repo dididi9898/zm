@@ -1712,6 +1712,7 @@ class goods_api{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
 		$info['album'] = string2array($info['album']);
+		$info['goodsimg_infos'] = string2array($info['goodsimg_infos']);
 		$info['awardNumber'] = string2array($info['awardNumber']);
 		$info['trialAwardNumber'] = string2array($info['trialAwardNumber']);
 		unset($info['content']);
