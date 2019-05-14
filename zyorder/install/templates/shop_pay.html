@@ -193,7 +193,12 @@
 						console.log(items);
 						var order = new Vue({
 							el: '#order',
-							data: items,
+							data: {
+                                address: items.address,
+                                other:items.other,
+                                amount:amount,
+                                dianpu:items.dianpu
+                            },
 							methods:{
 								paylist:function(i){
 									if(i == '1'){

@@ -733,14 +733,11 @@
                                             }
                                         },
 										jianum: function () {
-                                            var that = this;
-                                            $.each(goods.specdata,function(index,val){
-                                                if(that.specid == val.specid){
-                                                    that.max_sum = val.specstock;
-                                                    if(that.s_shuliang>val.specstock)
-                                                        that.s_shuliang=val.specstock;
-                                                }
-                                            })
+                                            if(this.s_shuliang >= this.max_sum){
+                                                layer.msg('该宝贝不能再多了！');
+                                            }else{
+                                                this.s_shuliang ++;
+                                            }
 										},
 										submit:function(event){
 											console.log('型号'+this.specid,'商品ID'+gid,'数量'+this.s_shuliang,'支付类型'+type);
@@ -864,7 +861,7 @@
                                                     if(that.specid == val.specid) {
                                                         that.max_sum = Number(val.specstock);
                                                         if (that.s_shuliang > that.max_sum)
-                                                            that.s_shuliang = val.specstock;
+                                                            that.s_shuliang = that.max_sum;
                                                     }
                                                 });
                                                 //console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
