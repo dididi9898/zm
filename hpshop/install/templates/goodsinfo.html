@@ -272,12 +272,6 @@
 			<a class="goods-nav-on">
 				<span>商品</span>
 			</a>
-			<a >
-				<span>详情</span>
-			</a>
-			<a >
-				<span>评价</span>
-			</a>
 		</nav>
 		<div class="fr head-icon">
 			<a href="{APP_PATH}">
@@ -292,9 +286,6 @@
         	<div class="goods-img">
 				<div class="swiper-container">
 	        		<div class="swiper-wrapper">
-	        			<div class="swiper-slide">
-	        				<img :src="thumb">
-	        			</div>
 	        			<div class="swiper-slide" v-for="thumbs in album">
 	        				<img :src="thumbs.url">
 	        			</div>
@@ -365,7 +356,9 @@
             <div class="goods-img-wall">
                 <h3>商品详情</h3>
                 <div>
-                	
+                    <div class="swiper-slide" v-for="thumbs in goodsimg_infos">
+                        <img :src="thumbs.url">
+                    </div>
                 </div>
             </div>
             <!-- 商品评价-隐藏 -->
@@ -518,7 +511,7 @@
                         <span class="lg-fs">数量</span>
                         <div class="goods-tcn-num-add">
                             <span class="jian" v-on:click="jiannum">-</span>
-                            <input type="number" v-model="s_shuliang" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
+                            <input type="number" v-model="s_shuliang"   v-on:keyup="check" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'>
                             <span class="jia" v-on:click="jianum" >+</span>
                         </div>
                         <div class="clear"></div>
@@ -708,10 +701,15 @@
                                                 $.each(goods.specdata,function(index,val){
                                                     if(that.specid == val.specid){
                                                         that.max_sum = Number(val.specstock);
+
                                                         console.log('---'+val.specstock);
                                                         console.log('+++'+that.s_shuliang);
+                                              
+
                                                         if(that.s_shuliang>that.max_sum)
-                                                            that.s_shuliang=that.max_sum;
+                                                            that.s_shuliang=val.specstock;
+
+
                                                     }
                                                 })
 
@@ -727,6 +725,13 @@
 												this.s_shuliang --;
 											}
 										},
+                                        check:function () {
+                                            if(Number(this.s_shuliang) >Number(this.max_sum))
+                                            {
+                                                layer.msg('库存不足');
+                                                this.s_shuliang = this.max_sum;
+                                            }
+                                        },
 										jianum: function () {
                                             var that = this;
                                             $.each(goods.specdata,function(index,val){
@@ -854,12 +859,14 @@
                                                 var specids = this.specid.split('-');
                                                 specids[$(event.target).parent('.goods-tc-opt').data('number')] = $(event.target).data('id');
                                                 this.specid = specids.join('-');
+                                                var that = this;
                                                 $.each(goods.specdata,function(index,val){
-                                                    if(this.specid == val.specid){
-                                                        this.max_sum = val.specstock
+                                                    if(that.specid == val.specid) {
+                                                        that.max_sum = Number(val.specstock);
+                                                        if (that.s_shuliang > that.max_sum)
+                                                            that.s_shuliang = val.specstock;
                                                     }
-                                                })
-                                                console.log(this.specid);
+                                                });
                                                 //console.log($(event.target).html(),$(event.target).data('id'),$(event.target).parent('.goods-tc-opt').data('number'));
                                             }
                                         },
@@ -876,6 +883,13 @@
                                                 layer.msg('该宝贝不能再多了！');
                                             }else{
                                                 this.s_shuliang ++;
+                                            }
+                                        },
+                                        check:function () {
+                                            if(Number(this.s_shuliang) >Number(this.max_sum))
+                                            {
+                                                layer.msg('库存不足');
+                                                this.s_shuliang = this.max_sum;
                                             }
                                         },
                                         submit:function(event){

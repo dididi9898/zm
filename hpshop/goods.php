@@ -99,26 +99,38 @@ class goods extends admin {
 
 		if($_POST['dosubmit']){
 			// dump($_POST,true);
-			if($_POST['goodsimg_url']){
-				$goodsimg=[];
-				$count=count($_POST['goodsimg_url']);
-				for ($i=0; $i <$count ; $i++) { 
-					$goodsimg[]=[
-						'url'=>$_POST['goodsimg_url'][$i],
-						'alt'=>$_POST['goodsimg_alt'][$i],
-					];
-				}
-			}
+            if($_POST['goodsimg_url']){
+                $count=count($_POST['goodsimg_url']);
+                $count1 = count($_POST['goodsimg_infos_url']);
+                for ($i=0; $i <$count ; $i++) {
+                    $goodsimg[] = [
+                        'url'=>$_POST['goodsimg_url'][$i],
+                        'alt'=>$_POST['goodsimg_alt'][$i],
+                    ];
+                    $volume[$i] = $_POST['goodsimg_alt'][$i];
+                }
+                array_multisort($volume, SORT_ASC, $goodsimg);
+                for ($i=0; $i <$count1 ; $i++) {
+                    $goodsimg_infos[] = [
+                        'url'=>$_POST['goodsimg_infos_url'][$i],
+                        'alt'=>$_POST['goodsimg_infos_alt'][$i],
+                    ];
+                    $volume1[$i] = $_POST['goodsimg_infos_alt'][$i];
+                }
+                array_multisort($volume1, SORT_ASC, $goodsimg_infos);
+            }
 			
 			$awardNumber = json_encode($_POST["awardNumber"]);
 			$trialAwardNumber = json_encode($_POST["trialAwardNumber"]);
 			$goodsimg = array2string($goodsimg);
+            $goodsimg_infos = array2string($goodsimg_infos);
         	$data=[
         		'shopid' => 1,
         		'goods_name'=>$_POST['gname'],
         		'summary'=>$_POST['summary'],
         		'thumb'=>$_POST['thumb'],
         		'album'=>$goodsimg,
+        		'goodsimg_infos'=>$goodsimg_infos,
         		'content'=>$_POST['content'],
         		'on_sale'=>$_POST['status'],
         		'market_price'=>$_POST['mprice'],
@@ -265,24 +277,36 @@ class goods extends admin {
 
 		if($_POST['dosubmit']){
 			$id=$_POST['id'];
-			if($_POST['goodsimg_url']){
-				$goodsimg=[];
-				$count=count($_POST['goodsimg_url']);
-				for ($i=0; $i <$count ; $i++) { 
-					$goodsimg[]=[
-						'url'=>$_POST['goodsimg_url'][$i],
-						'alt'=>$_POST['goodsimg_alt'][$i],
-					];
-				}
-			}
+            if($_POST['goodsimg_url']){
+                $count=count($_POST['goodsimg_url']);
+                $count1 = count($_POST['goodsimg_infos_url']);
+                for ($i=0; $i <$count ; $i++) {
+                    $goodsimg[] = [
+                        'url'=>$_POST['goodsimg_url'][$i],
+                        'alt'=>$_POST['goodsimg_alt'][$i],
+                    ];
+                    $volume[$i] = $_POST['goodsimg_alt'][$i];
+                }
+                array_multisort($volume, SORT_ASC, $goodsimg);
+                for ($i=0; $i <$count1 ; $i++) {
+                    $goodsimg_infos[] = [
+                        'url'=>$_POST['goodsimg_infos_url'][$i],
+                        'alt'=>$_POST['goodsimg_infos_alt'][$i],
+                    ];
+                    $volume1[$i] = $_POST['goodsimg_infos_alt'][$i];
+                }
+                array_multisort($volume1, SORT_ASC, $goodsimg_infos);
+            }
             $awardNumber = json_encode($_POST["awardNumber"]);
             $trialAwardNumber = json_encode($_POST["trialAwardNumber"]);
 			$goodsimg = array2string($goodsimg);
+            $goodsimg_infos = array2string($goodsimg_infos);
         	$data=[
         		'goods_name'=>$_POST['gname'],
         		'summary'=>$_POST['summary'],
         		'thumb'=>$_POST['thumb'],
         		'album'=>$goodsimg,
+        		'goodsimg_infos'=>$goodsimg_infos,
         		'content'=>$_POST['content'],
         		'on_sale'=>$_POST['status'],
         		'market_price'=>$_POST['mprice'],
@@ -389,6 +413,7 @@ class goods extends admin {
 
 
 			$alinfo = string2array($info['album']);					
+			$blinfo = string2array($info['goodsimg_infos']);
 			$cinfo = $this->goodscat_db->select('1','id,cate_name,pid','',$order = 'sort ASC,id ASC');
 			$cinfo = catetree($cinfo);
 			$binfo = $this->brand_db->select('1','id,brandname','',$order = 'sort ASC, id DESC');
