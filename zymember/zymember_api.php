@@ -114,19 +114,19 @@ class zymember_api{
 	 */
 	public function pub_memberinfo($userid=NULL,$field)
 	{
-		if($_POST['userid']){
+	    $userid = param::get_cookie('_userid');
+		if($_POST['field']){
 			$field = $_POST['field'] ? $_POST['field'] : '';
-			$userid = $_POST['userid'];
 		}else{
 			$field = $_GET['field'] ? $_GET['field'] : '';
-			$userid = $_GET['userid'];
 		}
 		//==================	操作失败-验证 START
 		if(!$userid){
 			$result = [
 				'status'=>'error',
 				'code'=>-1,
-				'message'=>'请输入用户id',
+				'message'=>'请登录',
+                'forward'=> APP_PATH.'index.php?m=member&c=index&a=login',
 				
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));

@@ -103,6 +103,15 @@ class index extends foreground {
 		include template('zymember', 'personal_data');
 	}
 
+    /**
+     * 设置界面
+     */
+    public function personal_config()
+    {
+        $_userid = $this->_userid;
+        include template('zymember', 'personal_config');
+    }
+
 	/**
 	 * 帐号与安全
 	 */
