@@ -19,5 +19,14 @@ class index{
 		include template('zycoupon','show_coupon');
 	}
 
+	/*
+	 * 显示信息
+	 * */
+	public function select_coupon()
+	{
+		$_userid = $this->_userid;
+		include template('zycoupon','select_coupon');
+	}
+
 }
 ?>

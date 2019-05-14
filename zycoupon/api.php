@@ -272,4 +272,87 @@ class api
         return $info;
     }
 
+    /**
+     * 订单页可用优惠券数量
+     * @param _userid
+     * @return json
+     * @internal param 关联表id $_coupon_user_id
+     */
+    public function order_coupon_count(){
+        $_userid = empty($_GET['_userid']) ? $_POST['_userid'] : $_GET['_userid'];
+        $_catid = empty($_GET['_catid']) ? $_POST['_catid'] : $_GET['_catid'];
+        $_total = empty($_GET['_total']) ? $_POST['_total'] : $_GET['_total'];
+
+
+        $member_info = $this->member_db->get_one(array('userid'=>$_userid));
+        if($member_info) {
+
+            $where='`status`=1 AND userid='.$_userid;
+            if($_catid){
+                $where.=' AND (limittype=0 OR limittype='.$_catid. ')';
+            }
+            if($_total){
+                $where.=' AND (type=0 OR (type!=0 AND full<'.$_total. '))';
+            }
+            $sql='SELECT count(*) AS num FROM zy_zycoupon_user u LEFT JOIN zy_zycoupon c ON u.coupon =c.id WHERE '.$where;
+            $info = $this->zycoupon_user_db->spcSql($sql,1,1);
+            if($info) {
+                $json['status'] = 'success';
+                $json['code'] = '200';
+                $json['message'] = '有可用优惠券';
+                $json['data'] = $info;
+            }else{
+                $json['status'] = 'error';
+                $json['code'] = '-200';
+                $json['message'] = '无可用优惠券';
+            }
+        }else{
+            $json['status'] = 'error';
+            $json['code'] = '-1';
+            $json['message'] = '用户不存在';
+        }
+        exit(json_encode($json,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * 订单页可用优惠券详情
+     * @param _userid
+     * @return json
+     * @internal param 关联表id $_coupon_user_id
+     */
+    public function order_coupon_info(){
+        $_userid = empty($_GET['_userid']) ? $_POST['_userid'] : $_GET['_userid'];
+        $_catid = empty($_GET['_catid']) ? $_POST['_catid'] : $_GET['_catid'];
+        $_total = empty($_GET['_total']) ? $_POST['_total'] : $_GET['_total'];
+
+
+        $member_info = $this->member_db->get_one(array('userid'=>$_userid));
+        if($member_info) {
+
+            $where='`status`=1 AND userid='.$_userid;
+            if($_catid){
+                $where.=' AND (limittype=0 OR limittype='.$_catid. ')';
+            }
+            if($_total){
+                $where.=' AND (type=0 OR (type!=0 AND full<'.$_total. '))';
+            }
+            $sql='SELECT * FROM zy_zycoupon_user u LEFT JOIN zy_zycoupon c ON u.coupon =c.id WHERE '.$where;
+            $info = $this->zycoupon_user_db->spcSql($sql,1,1);
+            if($info) {
+                $json['status'] = 'success';
+                $json['code'] = '200';
+                $json['message'] = '有可用优惠券';
+                $json['data'] = $info;
+            }else{
+                $json['status'] = 'error';
+                $json['code'] = '-200';
+                $json['message'] = '无可用优惠券';
+            }
+        }else{
+            $json['status'] = 'error';
+            $json['code'] = '-1';
+            $json['message'] = '用户不存在';
+        }
+        exit(json_encode($json,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+    }
 }
