@@ -305,7 +305,7 @@
         				<span>库存：{{ stock }}件</span>
         			</div>
         			<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-        				<span>销量：0件</span>
+        				<span>销量：{{salesnum}}件</span>
         			</div>
         			<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
         				<span>运费：包邮</span>
@@ -701,8 +701,14 @@
                                                 $.each(goods.specdata,function(index,val){
                                                     if(that.specid == val.specid){
                                                         that.max_sum = Number(val.specstock);
+
+                                                        console.log('---'+val.specstock);
+                                                        console.log('+++'+that.s_shuliang);
+                                              
+
                                                         if(that.s_shuliang>that.max_sum)
                                                             that.s_shuliang=val.specstock;
+
 
                                                     }
                                                 })
@@ -727,11 +733,14 @@
                                             }
                                         },
 										jianum: function () {
-											if(this.s_shuliang >= this.max_sum){
-												layer.msg('该宝贝不能再多了！');
-											}else{
-												this.s_shuliang ++;
-											}
+                                            var that = this;
+                                            $.each(goods.specdata,function(index,val){
+                                                if(that.specid == val.specid){
+                                                    that.max_sum = val.specstock;
+                                                    if(that.s_shuliang>val.specstock)
+                                                        that.s_shuliang=val.specstock;
+                                                }
+                                            })
 										},
 										submit:function(event){
 											console.log('型号'+this.specid,'商品ID'+gid,'数量'+this.s_shuliang,'支付类型'+type);
@@ -792,7 +801,7 @@
 												layer.msg('空，购买失败');
 											}
 										}
-										
+
 									},
 									mounted(){
 											//console.log(this.specname);

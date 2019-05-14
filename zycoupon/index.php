@@ -6,7 +6,7 @@ pc_base::load_sys_class('format', '', 0);
 class index{
 	function __construct() {
 		$this->get_db = pc_base::load_model('get_model');
-		$this->qrcode_db = pc_base::load_model('zyqrcode_model');
+		$this->_userid = param::get_cookie('_userid');
 	}
 
 
@@ -15,8 +15,17 @@ class index{
 	 * */
 	public function show_coupon()
 	{
+		$_userid = $this->_userid;
+		include template('zycoupon','show_coupon');
+	}
 
-		include template('zyqrcode','index');
+	/*
+	 * 显示信息
+	 * */
+	public function select_coupon()
+	{
+		$_userid = $this->_userid;
+		include template('zycoupon','select_coupon');
 	}
 
 }

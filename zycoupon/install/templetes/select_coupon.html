@@ -1,0 +1,158 @@
+﻿<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>红包</title>
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_gdxu2g2gt8n.css">
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
+</head>
+<style type="text/css">
+.hb_radio{
+    margin-top: 0.2rem;
+    float: right;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    text-align: center;
+    background-image: url(statics/images/check.png);
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+/*    background-position: -24px 0;*/
+}
+.hb_radio input{
+    opacity: 0;
+    cursor: pointer;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+}
+.hb_radio.on{
+    background-image: url(statics/images/checker.png);
+}
+.hb-list{
+    padding: 0 0.248rem;
+}
+.hb-con{
+    background-color: #fff;
+    padding: 0.248rem;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 8px 32px rgba(105,123,140,.06);
+    box-shadow: 0 8px 32px rgba(105,123,140,.06);
+}
+.hb-con .text1{
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+.hb-con .text1 h3{
+    font-weight: bold;
+    font-size: 0.6rem;
+}
+.hb-con .text1 p{
+    font-size: 0.35rem;
+    color: #888;
+}
+.hb-con .text2{
+    float: left;
+    width: calc(100% - 25% - 25px);
+    padding: 0 5px;
+}
+.hb-con .text2 h3{
+    font-size: 0.45rem;
+    line-height: 0.7rem;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.hb-con .text2 p{
+    font-size: 12px;
+    color: #666;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.hb-con .hb_radio{
+    margin-top: 0.5rem;
+}
+</style>
+<body style="background: #f1f1f1">
+    <!--head_food-->
+    <div class='per-head'>
+        <div class='per-head-left'>
+            <a href='javascript:history.go(-1);'>
+                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
+            </a>
+        </div>
+        <a class='per-head-hd'>选择优惠券</a>
+        <div class='per-head-right'>
+        </div>
+        <div class='clear'></div>
+    </div>
+
+    <div class="bt10"></div>
+    <div class="lh1 pl1 pr1 bg-fff md-fs">
+        不使用红包
+        <span class="hb_radio on">
+            <input name="nonuse" type="radio" id="nonuse" />
+        </span>
+        <div class="clear"></div>
+    </div>
+    <div class="bt10"></div>
+    <div class="hb-list">
+        <div class="hb-con">
+            <div class="text1">
+                <h3 class="lh1 c-f5222d">￥7</h3>
+                <p>满35元可用</p>
+            </div>
+            <div class="text2">
+                <h3>品质联盟专享红包</h3>
+                <p>
+                    限2019-05-13至2019-05-13使用
+                    <br>限收货手机号为123 1234 4567
+                </p>
+            </div>
+            <span class="hb_radio">
+                <input name="nonuse" type="radio" />
+            </span>
+            <div class="clear"></div>
+        </div>
+        <div class="bt10"></div>
+
+        <div class="hb-con">
+            <div class="text1">
+                <h3 class="lh1 c-f5222d">￥7</h3>
+                <p>满35元可用</p>
+            </div>
+            <div class="text2">
+                <h3>品质联盟专享红包</h3>
+                <p>
+                    限2019-05-13至2019-05-13使用
+                    <br>限收货手机号为123 1234 4567
+                </p>
+            </div>
+            <span class="hb_radio">
+                <input name="nonuse" type="radio" />
+            </span>
+            <div class="clear"></div>
+        </div>
+        <div class="bt10"></div>
+    </div>
+
+    <!--head_food_end-->
+    <script>
+        $(".hb_radio").on("click",function(){
+            $(".hb_radio").removeClass("on");
+            $(this).toggleClass("on");
+
+
+        })
+    </script>
+</body>
+</html>

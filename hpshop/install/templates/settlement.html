@@ -87,6 +87,13 @@
 
         <!--商品其他-->
         <div class="ware-other">
+			<div class="freight">
+
+				<div class="fl tit">优惠券</div>
+				<a href="{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon"><div class="fr con" id="coupon"><i class="layui-icon layui-icon-right"></i></div></a>
+				<div class="clear"></div>
+
+			</div>
             <div class="freight">
                 <div class="fl tit">运费</div>
                 <div class="fr con">￥<span>0.00</span></div>
@@ -182,7 +189,8 @@
 							})
 							//console.log(orderid,sn);
 							if(sn.length == orderid.length && sn.length > 0 && orderid.length > 0 ){
-								orderid = orderid.join(',');
+								orderid = orderid.j
+								oin(',');
 								sn = sn.join(',');
 								//console.log(orderid,sn);
 								//layer.msg('下单成功，选择支付方式');
@@ -270,7 +278,42 @@
 							}
 						});
 					}
-					
+
+						if(met){
+							//获取选择可用优惠券数量
+							var catid;
+							console.log(data.data.shops);
+							for(var i in data.data.shops){
+								catid =data.data.shops[i].catid;
+								console.log(catid);
+							}
+
+							$.ajax({
+								url:'index.php?m=zycoupon&c=api&a=order_coupon_count',
+								type:'POST', //GET
+								async:true,    //或true,是否同步
+								data:{
+									_userid:data.data.uid,
+									_catid:catid,
+									_total:data.data.totalprice,
+								},
+								timeout:5000,    //超时时间
+								dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+								success:function(data){
+									//console.log(data);
+									if(data.status == 'success'){
+										coupon_num = data.data[0].num;
+										$("#coupon").prepend('<span style="color: red;font-size: small">'+coupon_num+'个可用优惠券</span>');
+									}else{
+										if(data.code==-200){
+											$("#coupon").prepend('<span style="color: grey;font-size: small">'+data.message+'</span>');
+										}else{
+											layer.msg(data.message);
+										}
+									}
+								}
+							});
+						}
 					}else{
 						layer.msg(data.message);
 						if(data.code == 0){

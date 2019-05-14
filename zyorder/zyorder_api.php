@@ -1444,18 +1444,45 @@ class zyorder_api{
 			   'describe'=>'余额支付',
 			   'module'=>'zyorder'
 			];
+			//减少余额
 			$url = APP_PATH."index.php?m=zymember&c=zymember_api&a=pub_reduceamount&userid=$uid&amount=$tprice&describe=余额支付&module=zyorder";
 			$return = json_decode($this->_crul_get($url,$data),true);
 
 			if ( $return['code']=='200' ) {
-				$result =  $this->order_db->update(array('status'=>2),$where);
-				$result = [
-					'status' => 'success',
-					'code' => 1,
-					'message' => 'OK',
-                    'userid'=>$uid
+//				$result =  $this->order_db->update(array('status'=>2),$where);
+//				$result = [
+//					'status' => 'success',
+//					'code' => 1,
+//					'message' => 'OK',
+//                    'userid'=>$uid
+//				];
+				$data=[
+					'userid'=>$uid,
+					'oid'=>$oid,
 				];
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				//更新积分 分销佣金
+				$url = APP_PATH."index.php?m=zypints&c=api&a=api_update_points";
+				$return = json_decode($this->_crul_post($url,$data),true);
+
+				if( $return['code']=='200' ) {
+					$result =  $this->order_db->update(array('status'=>2),$where);
+					$result = [
+						'status' => 'success',
+						'code' => 1,
+						'message' => 'OK',
+						'userid'=>$uid
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+				else {
+					$result = [
+						'status' => 'error',
+						'code' => -6,
+						'message' => $return['message'],
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+
 			} else {
 				$result = [
 					'status' => 'error',

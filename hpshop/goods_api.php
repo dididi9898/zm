@@ -58,7 +58,7 @@ class goods_api{
 		}
 
 		$where = 'a.id = b.goodsid and b.pos_id = '.$rid;
-        $sql ='SELECT a.id,a.goods_name,a.thumb,a.summary,a.market_price,a.shop_price FROM phpcms_goods a,phpcms_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
+        $sql ='SELECT a.id,a.goods_name,a.thumb,a.summary,a.market_price,a.shop_price,a.salesnum FROM phpcms_goods a,phpcms_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 
@@ -1056,7 +1056,7 @@ class goods_api{
 		}
 
 
-		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
+		$sql = 'SELECT b.id, b.shopid, b.thumb, b.goods_name, b.shop_price, b.stock,b.catid, a.id as cartid, a.goodsspecid, a.cartnum, c.specprice, c.specstock, c.specid, c.specids FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = b.shopid and c.goodsid = b.id';
 
 		$sqls = 'SELECT b.shopid as id FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
 
@@ -1102,6 +1102,7 @@ class goods_api{
         	if(!isset($narr[$v['shopid']])){
         		$narr[$v['shopid']] = [
 	        		'shopid' => $v['shopid'],
+	        		'catid' => $v['catid'],
 	        		'shopname' => $snamarr[$v['shopid']]['shopname'],
 	        		'stprice'=>0,
 	        		'stnum'=>0
@@ -1437,16 +1438,16 @@ class goods_api{
         $token_url= APP_PATH.'index.php?m=zyorder&c=zyorder_api&a=addorder';
         
         $data = array (
-        	'userid' => $uid,
-        	'province' => $province,  
-    		'city' => $city,      
-    		'area' => $area,    
-    		'address' => $address, 
-    		'lx_mobile' => $lx_mobile,
-    		'lx_name' => $lx_name,
-    		'lx_code' => $lx_code,
-    		'usernote' => $mes,
-    		'shopdata' => $narr,
+			'userid' => $uid,
+			'province' => $province,
+			'city' => $city,
+			'area' => $area,
+			'address' => $address,
+			'lx_mobile' => $lx_mobile,
+			'lx_name' => $lx_name,
+			'lx_code' => $lx_code,
+			'usernote' => $mes,
+			'shopdata' => $narr,
 			'status'=> 7,
 			'try_status'=>1 ,
 
