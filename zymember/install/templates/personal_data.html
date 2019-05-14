@@ -127,21 +127,23 @@
     {template "zymember","footer"}
 
     <script>
+
         $(function () {
-            var userid = {$_userid};
-            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,username,nickname,sex,mobile,wechat_name' }, function (data) {
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', {'field': 'headimgurl,username,nickname,sex,mobile,wechat_name' }, function (data) {
                 console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);
+                    setTimeout("javascript:location.href='" + data.forward + "'", 1000);
                 } else {
                     var info = new Vue({
                         el: '#info',
                         data: data.data
                     });
-                };
-            });
-        });
+                }
 
+
+            });
+        })
         //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
         ;
         ! function () {

@@ -17,9 +17,12 @@
             </a> -->
         </div>
         <a class='per-head-hd'>我的资料</a>
+
         <div class='per-head-right'>
+            <a href="{APP_PATH}index.php?m=zymember&c=index&a=personal_config">
+                <img src="{IMG_PATH}timg.png" alt="" class='tb-dw'>
+            </a>
         </div>
-        <div class='clear'></div>
     </div>
     <!--head_food_end-->
     
@@ -189,20 +192,21 @@
     {template "zymember","bottom-footer"}
     {template "zymember","footer"}
     <script>
-        $(function () {
-            var userid = {$_userid};
-            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', { 'userid': userid, 'field': 'headimgurl,nickname,userid,point,new_point,used_point,mobile' }, function (data) {
-                //console.log(data.data);
+        $(function (){
+            aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', {  'field': 'headimgurl,nickname,userid,point,new_point,used_point,mobile' }, function (data) {
+                console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);
+                    setTimeout("javascript:location.href='" + data.forward + "'", 1000);
                 } else {
                     var info = new Vue({
                         el: '.info',
                         data: data.data
-                    })
-                }
+                    });
+                };
             });
-        })
+
+        });
 
             //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
         ;
