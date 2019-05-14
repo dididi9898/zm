@@ -707,11 +707,11 @@
                                                 var that = this;
                                                 $.each(goods.specdata,function(index,val){
                                                     if(that.specid == val.specid){
-                                                        that.max_sum = val.specstock;
+                                                        that.max_sum = Number(val.specstock);
                                                         console.log('---'+val.specstock);
                                                         console.log('+++'+that.s_shuliang);
-                                                        if(that.s_shuliang>val.specstock)
-                                                            that.s_shuliang=val.specstock;
+                                                        if(that.s_shuliang>that.max_sum)
+                                                            that.s_shuliang=that.max_sum;
                                                     }
                                                 })
 
