@@ -164,6 +164,7 @@ class zymember_api{
 		//未提现佣金
 		$zyfxmoney = $this->zyfxmoney_db->get_one(['userid'=>$userid]);
 		$data['WTXmoney']= $zyfxmoney['WTXmoney'];
+
 		$result = [
 			'status'=>'success',
 			'code'=>200,
