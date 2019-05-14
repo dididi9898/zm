@@ -2,6 +2,7 @@
 defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_func('global');
 
+
 class api{
 	function __construct() {
 
@@ -55,7 +56,7 @@ class api{
 	*/
 	public function logout()
 	{
-		$userid = $_POST['userid'];	//帐号（暂定为手机号）
+		$userid = param::get_cookie('_userid');	//帐号（暂定为手机号）
 		$type = $_POST['type'] ? $_POST['type'] : 1;	//类型：1web端、2APP端
 		$forward = $_POST['forward'] ? urldecode($_POST['forward']) : APP_PATH.'index.php?m=member&c=index&a=login';	//接下来该跳转的页面链接
 		

@@ -157,6 +157,8 @@
 			//监听提交
 			form.on('submit(submit)', function(data){
 				data.field.met = met;
+				console.log(met);
+				console.log(carts);
 				if(carts){
 					data.field.cids = carts;					
 				}else{
