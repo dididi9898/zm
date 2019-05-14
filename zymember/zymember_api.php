@@ -14,6 +14,8 @@ class zymember_api{
 		//会员组表
 		$this->member_group_db = pc_base::load_model('member_group_model');
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
+		//分销金额
+		$this->zyfxmoney_db=pc_base::load_model("zyfxmoney_model");
 	}
 
 	/**
@@ -159,6 +161,9 @@ class zymember_api{
 		}
 		//优惠券数量
 		$data['coupon_count'] = $this->coupon_count($userid);
+		//未提现佣金
+		$zyfxmoney = $this->zyfxmoney_db->get_one(['userid'=>$userid]);
+		$data['WTXmoney']= $zyfxmoney['WTXmoney'];
 		$result = [
 			'status'=>'success',
 			'code'=>200,

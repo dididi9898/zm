@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>选择优惠卷</title>
+    <title>红包</title>
     <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
     <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
     <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_gdxu2g2gt8n.css">
@@ -11,6 +11,77 @@
     <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
 </head>
+<style type="text/css">
+.hb_radio{
+    margin-top: 0.2rem;
+    float: right;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    text-align: center;
+    background-image: url(statics/images/check.png);
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+/*    background-position: -24px 0;*/
+}
+.hb_radio input{
+    opacity: 0;
+    cursor: pointer;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+}
+.hb_radio.on{
+    background-image: url(statics/images/checker.png);
+}
+.hb-list{
+    padding: 0 0.248rem;
+}
+.hb-con{
+    background-color: #fff;
+    padding: 0.248rem;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 8px 32px rgba(105,123,140,.06);
+    box-shadow: 0 8px 32px rgba(105,123,140,.06);
+}
+.hb-con .text1{
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+.hb-con .text1 h3{
+    font-weight: bold;
+    font-size: 0.6rem;
+}
+.hb-con .text1 p{
+    font-size: 0.35rem;
+    color: #888;
+}
+.hb-con .text2{
+    float: left;
+    width: calc(100% - 25% - 25px);
+    padding: 0 5px;
+}
+.hb-con .text2 h3{
+    font-size: 0.45rem;
+    line-height: 0.7rem;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.hb-con .text2 p{
+    font-size: 12px;
+    color: #666;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.hb-con .hb_radio{
+    margin-top: 0.5rem;
+}
+</style>
 <body style="background: #f1f1f1">
     <!--head_food-->
     <div class='per-head'>
@@ -19,217 +90,69 @@
                 <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
             </a>
         </div>
-        <a class='per-head-hd'>选择优惠卷</a>
+        <a class='per-head-hd'>选择优惠券</a>
         <div class='per-head-right'>
-            <!--<img src='{APP_PATH}statics/zm/images/gd-b.png' class='tb-dw'>-->
         </div>
         <div class='clear'></div>
     </div>
-    <div class="yhj-nav">
-    	<ul>
-    		<li style="width: 100%" class="select"><a>不使用优惠券</a></li>
-    		<div class="clear"></div>
-    	</ul>
-    </div>
-    <div class="bt20"></div>
-    <div class="yhj-list">
-	    <div id="qlx_coupon" class="pl1 pr1 list {if $_GET['mod']==1} dis-b{/if} ">
-			<template v-for="k in data">
-	    	<div class="bg-fff pl1 pr1">
-	    		<div class="bt20"></div>
-	    		<div class="yhj">
-	    			<div class="fl">
-	    				<h3>{{k.couponname}}</h3>
-	    				<div class="bt25"></div>
-	    				<p>{{k.begintime}}～{{k.endtime}}</p>
-	    			</div>
-	    			<div class="fr">
-	    				<h3>￥<span>{{k.int}}</span>.{{k.float}}</h3>
-	    				<div class="bt5"></div>
-						<template>
-							<p  v-if="k.full == 0">无门槛</p>
-							<p 	v-else>满{{k.full}}元可用</p>
-						</template>
-	    			</div>
-	    			<div class="clear"></div>
-	    		</div>
-	    		<div class="yhj-line"></div>
-	    		<div class="yhj-text">
-	    			<div class="fl">{{ k.limittypename }}</div>
-	    			<div class="fr"><button  @click="take(k.couponname,k.id)">去领取</button></div>
-	    			<div class="clear"></div>
-	    		</div>
-	    		<div class="bt20"></div>
-	    	</div>
-	    	<div class="bt10"></div>
-			</template>
-	    </div>
-	    <div id="qsy_coupon" class="pl1 pr1 list {if $_GET['mod']==2} dis-b{/if}">
-			<template v-for="k in data">
-	    	<div class="bg-fff pl1 pr1">
-	    		<div class="bt20"></div>
-	    		<div class="yhj">
-	    			<div class="fl">
-	    				<h3>{{k.couponname}}</h3>
-	    				<div class="bt25"></div>
-	    				<p>{{k.begintime}}-{{k.endtime}}</p>
-	    			</div>
-	    			<div class="fr">
-						<h3>￥<span>{{k.int}}</span>.{{k.float}}</h3>
-						<div class="bt5"></div>
-						<template>
-							<p  v-if="k.full == 0">无门槛</p>
-							<p 	v-else>满{{k.full}}元可用</p>
-						</template>
-	    			</div>
-	    			<div class="clear"></div>
-	    		</div>
-	    		<div class="yhj-line"></div>
-	    		<div class="yhj-text">
-					<div class="fl">{{ k.limittypename }}</div>
-					<!--@click="use(k.id)"-->
-	    			<div class="fr"><button class="get" @click="use_url(1)">去使用</button></div>
-	    			<div class="clear"></div>
-	    		</div>
-	    		<div class="bt20"></div>
-	    	</div>
-	    	<div class="bt10"></div>
-			</template>
 
-	    </div>
+    <div class="bt10"></div>
+    <div class="lh1 pl1 pr1 bg-fff md-fs">
+        不使用红包
+        <span class="hb_radio on">
+            <input name="nonuse" type="radio" id="nonuse" />
+        </span>
+        <div class="clear"></div>
+    </div>
+    <div class="bt10"></div>
+    <div class="hb-list">
+        <div class="hb-con">
+            <div class="text1">
+                <h3 class="lh1 c-f5222d">￥7</h3>
+                <p>满35元可用</p>
+            </div>
+            <div class="text2">
+                <h3>品质联盟专享红包</h3>
+                <p>
+                    限2019-05-13至2019-05-13使用
+                    <br>限收货手机号为123 1234 4567
+                </p>
+            </div>
+            <span class="hb_radio">
+                <input name="nonuse" type="radio" />
+            </span>
+            <div class="clear"></div>
+        </div>
+        <div class="bt10"></div>
+
+        <div class="hb-con">
+            <div class="text1">
+                <h3 class="lh1 c-f5222d">￥7</h3>
+                <p>满35元可用</p>
+            </div>
+            <div class="text2">
+                <h3>品质联盟专享红包</h3>
+                <p>
+                    限2019-05-13至2019-05-13使用
+                    <br>限收货手机号为123 1234 4567
+                </p>
+            </div>
+            <span class="hb_radio">
+                <input name="nonuse" type="radio" />
+            </span>
+            <div class="clear"></div>
+        </div>
+        <div class="bt10"></div>
     </div>
 
-	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
-	<script type="text/javascript" src="{APP_PATH}statics/public/js/leftTime.min.js"></script>
-	<script src="{APP_PATH}statics/zm/js/ajax.js"></script>
-	<script src="{APP_PATH}statics/public/layui-v2.4.5/layui/layui.all.js"></script>
-	<script src="{APP_PATH}statics/public/swiper-4.4.6/dist/js/swiper.min.js"></script>
-	<script>
-		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
-		;
-		! function () {
-
-			var layer = layui.layer,
-					form = layui.form,
-					$ = layui.jquery,
-					upload = layui.upload,
-					table = layui.table;
-
-			var userid = '{$_userid}';
-			//兑换
-			aj.post('index.php?m=zycoupon&c=api&a=api_coupon_info', { '_userid': userid}, function (data) {
-				//console.log(data.data);
-				if (data.status == 'error') {
-					if(data.code== -1){
-						layer.msg(data.message);
-						setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
-					} else if(data.code==-200){
-						$('#qlx_coupon').append('<p style="text-align: center;font-size: small;padding-top: 0.5rem;color: grey">没有可领取的优惠券</p>');
-					}else {
-						layer.msg(data.message);
-					}
-				} else {
-					for (var i in data.data){
-						var a=''+data.data[i].minus;
-						var b = a.split(".");
-						data.data[i].int=b[0];
-						data.data[i].float=b[1];
-						console.log(data.data[i]);
-					}
-					var qlx_coupon = new Vue({
-						el: '#qlx_coupon',
-						data: data,
-						methods:{
-							take: function (reccept,id) {
-								// `this` 在方法里指向当前 Vue 实例
-								layer.confirm('您确定领取'+ reccept +'？', {
-									title: '提示',
-									btnAlign: 'c',
-									btn: ['确定','取消'] //按钮
-								}, function(){
-									layer.msg('兑换成功');
-									aj.post('index.php?m=zycoupon&c=api&a=api_coupon_take', { '_userid': userid,'_couponid':id}, function (data) {
-										//console.log(data.data);
-										if (data.status == 'error') {
-											layer.msg(data.message);
-										} else {
-											layer.msg(data.message);
-											console.log(data);
-											setTimeout("javascript:location.href='{APP_PATH}index.php?m=zycoupon&c=index&a=show_coupon&mod=1'", 1000);
-										}
-									});
-								}, function(){
-									//layer.msg('取消兑换');
-								});
-							}
-						}
-					})
-				}
-			});
-			//已兑换礼物列表
-			aj.post('index.php?m=zycoupon&c=api&a=api_coupon_user', { '_userid': userid}, function (data) {
-				//console.log(data.data);
-				if (data.status == 'error') {
-					if(data.code==-200){
-						//setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
-						$('#qsy_coupon').append('<p style="text-align: center;font-size: small;padding-top: 0.5rem;color: grey">没有可用的优惠券</p>');
-					}else{
-						layer.msg(data.message);
-					}
-				} else {
-					for (var i in data.data){
-						var a=''+data.data[i].minus;
-						var b = a.split(".");
-						data.data[i].int=b[0];
-						data.data[i].float=b[1];
-						console.log(data.data[i]);
-					}
-					var qsy_coupon = new Vue({
-						el: '#qsy_coupon',
-						data: data,
-						methods:{
-							use: function (reccept) {
-								// `this` 在方法里指向当前 Vue 实例
-								layer.confirm('您确定使用'+ reccept +'？', {
-									title: '提示',
-									btnAlign: 'c',
-									btn: ['确定','取消'] //按钮
-								}, function(){
-									layer.msg('使用成功');
-									aj.post('index.php?m=zycoupon&c=api&a=api_coupon_use', { '_userid': userid,'_coupon_user_id':reccept}, function (data) {
-										//console.log(data.data);
-										if (data.status == 'error') {
-											layer.msg(data.message);
-										} else {
-											layer.msg(data.message);
-											console.log(data);
-											setTimeout("javascript:location.href='{APP_PATH}index.php?m=zycoupon&c=index&a=show_coupon&mod=2'", 1000);
-										}
-									});
-								}, function(){
-									//layer.msg('取消兑换');
-								});
-							},
-							use_url: function (id) {
-								console.log(id);
-								setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=search'", 0);
-							}
-						}
-					})
-				}
-			});
-
-		}();
-	</script>
     <!--head_food_end-->
     <script>
-    	$(".yhj-nav li").click(function(){
-    		var index = $(".yhj-nav li").index(this)
-    		$(".yhj-nav .on").removeClass("on")
-    		$(".yhj-list .list.dis-b").removeClass("dis-b")
-    		$(".yhj-nav li").eq(index).addClass("on")
-    		$(".yhj-list .list").eq(index).addClass("dis-b")
-    	})
+        $(".hb_radio").on("click",function(){
+            $(".hb_radio").removeClass("on");
+            $(this).toggleClass("on");
+
+            
+        })
     </script>
 </body>
 </html>
