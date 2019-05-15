@@ -16,6 +16,8 @@ class zymember_api{
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
 		//分销金额
 		$this->zyfxmoney_db=pc_base::load_model("zyfxmoney_model");
+
+		$this->_userid=param::get_cookie('_userid');
 	}
 
 	/**
@@ -114,7 +116,7 @@ class zymember_api{
 	 */
 	public function pub_memberinfo($userid=NULL,$field)
 	{
-	    $userid = param::get_cookie('_userid');
+	    $userid = empty($_POST['userid']) ? param::get_cookie('_userid') : $_POST['userid'];
 		if($_POST['field']){
 			$field = $_POST['field'] ? $_POST['field'] : '';
 		}else{
@@ -164,6 +166,7 @@ class zymember_api{
 		//未提现佣金
 		$zyfxmoney = $this->zyfxmoney_db->get_one(['userid'=>$userid]);
 		$data['WTXmoney']= $zyfxmoney['WTXmoney'];
+
 		$result = [
 			'status'=>'success',
 			'code'=>200,

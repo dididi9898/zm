@@ -48,7 +48,7 @@ class api
     public function update_fx($userid,$goodsPrice,$ratio,$index=3){
 //        $userid=$_POST['userid'];
 //        $goodsPrice=$_POST['goodsPrice'];
-//        $ratio=json_decode(str_replace('\\', '', $_POST['ratio']),true);
+          $ratio=json_decode(str_replace('\\', '', $ratio),true);
 //        $index=$_POST['index'];
         $info=false;
         $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
@@ -78,9 +78,9 @@ class api
     public function update_fxgoods($userid,$goodsPrice,$ratio,$ordergoodsid,$index=3){
 //        $userid=$_POST['userid'];
 //        $goodsPrice=$_POST['goodsPrice'];
-//        $ratio=json_decode(str_replace('\\', '', $_POST['ratio']),true);
 //        $index=$_POST['index'];
 //        $ordergoodsid=$_POST['ordergoodsid'];
+        $ratio=json_decode(str_replace('\\', '', $ratio),true);
 
         $info=false;
         $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
@@ -113,6 +113,8 @@ class api
 //        $ratio=json_decode(str_replace('\\', '', $_POST['ratio']),true);
 //        $index=$_POST['index'];
 //        $oid=$_POST['oid'];
+        $ratio=json_decode(str_replace('\\', '', $ratio),true);
+
 
         $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
         $orderInfo= $this->order_db->get_one(array('order_id'=>$oid));
@@ -150,7 +152,7 @@ class api
         }
         $member_info = $this->member_db->get_one(array('userid'=>$_userid));
         $oid = empty($_POST['oid']) ? 0 : $_POST['oid'];
-        $points=0;
+        $points=array();
         if($member_info){
             $where ="order_id=".$oid;
             $goodsinfo = $this->ordergoods_db->select($where,("`id`,`goods_id`,`final_price`"));
@@ -197,14 +199,13 @@ class api
             }
             $data['point']=$member_info['point']+$total_points;
             $data['new_point']=$total_points;
-            //$info= $this->member_db->update($data,array('userid'=>$_userid));
-            //$info=$awardNumber;
+            $bool= $this->member_db->update($data,array('userid'=>$_userid));
             if($bool){
                 //returnjsoninfo('200','操作成功',$info);
                 $json['status']='success';
                 $json['code']='200';
                 $json['message']='操作成功';
-                //$json['data']=$data;
+                $json['data']=$data;
             }else{
                 //returnjsoninfo('-200','数据为空');
                 $json['status']='error';
@@ -212,7 +213,7 @@ class api
                 $json['message']='数据为空';
             }
         }else{
-            exit(returnjsoninfo('0','登陆超时'));
+            returnjsoninfo('0','登陆超时');
         }
 
         exit(json_encode($json,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
@@ -228,7 +229,7 @@ class api
         if($_POST['userid']){
             $_userid=$_POST['userid'];
         }else{
-            $_userid=_userid;
+            $_userid=$this->_userid;
         }
         if($_userid){
             $where ="status=1";
@@ -246,7 +247,7 @@ class api
                 $json['message']='数据为空';
             }
         }else{
-            exit(returnjsoninfo('0','登陆超时'));
+            returnjsoninfo('0','登陆超时');
         }
         exit(json_encode($json,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
     }
@@ -262,12 +263,12 @@ class api
         if($_POST['userid']){
             $_userid=$_POST['userid'];
         }else{
-            $_userid=_userid;
+            $_userid=$this->_userid;
         }
         if($_userid&&$_userid!=''){
             $_giftid = empty($_POST['_giftid']) ? 0 : $_POST['_giftid'];
             if(!$_giftid){
-                exit(returnjsoninfo('-1','参数不完整'));
+                returnjsoninfo('-1','参数不完整');
             }
             $member_info = $this->member_db->get_one(array('userid'=>$_userid));
             if($member_info){
@@ -323,7 +324,7 @@ class api
         if($_POST['userid']){
             $_userid=$_POST['userid'];
         }else{
-            $_userid=_userid;
+            $_userid=$this->_userid;
         }
 
         if($_userid&&$_userid!=''&&$_userid!=null){
