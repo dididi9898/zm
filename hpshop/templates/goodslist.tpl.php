@@ -19,7 +19,6 @@
 a:hover{ text-decoration: none; }
 </style>
 
-<div class="pad_10">
 <div class="table-list">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="hpshop" name="m">
@@ -100,7 +99,12 @@ if(is_array($infos)){
 	<td align="center">
         <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="edit('<?php echo $info['id']?>')"><?php echo L('编辑')?></a>
     	<a href="javascript:confirmurl('?m=hpshop&c=goods&a=goodsdel&id=<?php echo $info['id']?>', '<?php echo L('确定删除此商品')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
-        <a href="javascript:confirmurl('?m=hpshop&c=goods&a=goodsdisagree&id=<?php echo $info['id']?>', '<?php echo L('确定驳回该商品吗')?>')" class="btn btn-success btn-sm"><?php echo L('违规下架')?></a>
+        <?php if($info["on_sale"] == 1){?>
+            <a href="javascript:confirmurl('?m=hpshop&c=goods&a=goodsdisagree&id=<?php echo $info['id']?>', '<?php echo L('确定下架该商品吗')?>')" class="btn btn-success btn-sm"><?php echo L('下架')?></a>
+
+        <?php } elseif($info["on_sale"] == 2) {?>
+            <a href="?m=hpshop&c=goods&a=goodsup&id=<?php echo $info['id']?>" class="btn btn-success btn-sm"><?php echo L('上架')?></a>
+        <?php }?>
 	</td>
 	</tr>
 <?php 

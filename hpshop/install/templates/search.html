@@ -1,6 +1,11 @@
 ﻿{php $SEO['site_title'] = '商品宝贝'}
 {template "hpshop","top-head"}
 
+<style>
+	.layui-flow-more{
+		clear:both;
+	}
+</style>
 < body class="bg-f4f4f4" >
 	<div style="width: 100vw; overflow: hidden;">
 		<div id="allcat">
@@ -47,19 +52,7 @@
 				</ul>
 			</div>
 			<ul class="index-wares-ul" id="sergoods">
-				<li class="index-wares-li fl" v-for="(sergoods,index) in data">
-					<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ sergoods.id +''" >
-						<div class="wares-img">
-							<img :src="sergoods.thumb">
-						</div>
-						<div class="wares-word">
-							<p class="wares-keyword">{{ sergoods.goods_name }}</p>
-							<div class="Price"><i>￥</i><span class="Front Price">{{ sergoods.shop_price }}</span><span class="prime">{{ sergoods.market_price }}</span></div>
-						</div>
-					</a>
-					<!--弹出购物车 <div class="add-card"><i class="icon iconfont icon-cart"><span>1</span></i></div>-->
-				</li>
-				<div class="clear"></div>
+
 			</ul>
 		</div>
     </div>
@@ -142,13 +135,46 @@
 				});
 
 
-			aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon},function(data){
-					var sergoods =  new Vue({
-				    		el: '#sergoods',
-							data:data
-					});
-					console.log(data.data);
-				});
+//			aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon},function(data){
+//					var sergoods =  new Vue({
+//				    		el: '#sergoods',
+//							data:data
+//					});
+//					console.log(data.data);
+//				});
+            var $ = layui.jquery,
+                layer = layui.layer,
+                form = layui.form,
+                flow = layui.flow;
+
+            var status = '{$_GET[status]}';
+            flow.load({
+                elem: '#sergoods' //指定列表容器
+                ,mb:'10'
+                ,isAuto:true
+                ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                    var lis = [];
+                    console.log(page);
+                    //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+                    aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon , 'page':page},function(data){
+                        console.log(data.data);
+                        if(data.code==207){
+                            layer.msg('登录超时');
+                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'",1000);
+                        }
+                        layui.each(data.data, function(index, item){
+                            //订单状态
+                            var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span></div></div>  </a></li>';
+                            lis.push('<div class="order-div">'+goodsInfo+'</div>');
+
+                        });
+                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                        next(lis.join(''), page < data.page.totalpage);
+                    });
+
+                }
+            });
         }();
     </script>
 </body>

@@ -32,8 +32,13 @@ class Fx
     public function getTeamID($_userid, $num, $data, $grade = "")
     {
         $grade = $grade == ""?$this->grade: $grade;
-        $info = $this->zyfxmember->get_one($_userid, "userid, childID");
-        $childID = array_pop($info);
+        list($info, $count) = $this->zyfxmember->moreTableSelect(
+            array("zy_zyfxmember"=>array("*"),"zy_member"=>array("nickname", "mobile")),
+            array("userid"),
+            'B1.`userid`='.$_userid["userid"]
+            , '', "","0"
+        );
+        $childID = $info["childID"];
         $data[$num][] = $info;
         if($num == ($grade == 0? $this->grade:$grade))
             return $data;
