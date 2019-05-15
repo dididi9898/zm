@@ -48,7 +48,7 @@ class api
     public function update_fx($userid,$goodsPrice,$ratio,$index=3){
 //        $userid=$_POST['userid'];
 //        $goodsPrice=$_POST['goodsPrice'];
-          $ratio=json_decode(str_replace('\\', '', $ratio),true);
+          //$ratio=json_decode(str_replace('\\', '', $ratio),true);
 //        $index=$_POST['index'];
         $info=false;
         $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
@@ -80,7 +80,7 @@ class api
 //        $goodsPrice=$_POST['goodsPrice'];
 //        $index=$_POST['index'];
 //        $ordergoodsid=$_POST['ordergoodsid'];
-        $ratio=json_decode(str_replace('\\', '', $ratio),true);
+        //$ratio=json_decode(str_replace('\\', '', $ratio),true);
 
         $info=false;
         $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
@@ -113,7 +113,7 @@ class api
 //        $ratio=json_decode(str_replace('\\', '', $_POST['ratio']),true);
 //        $index=$_POST['index'];
 //        $oid=$_POST['oid'];
-        $ratio=json_decode(str_replace('\\', '', $ratio),true);
+        //$ratio=json_decode(str_replace('\\', '', $ratio),true);
 
 
         $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
@@ -148,7 +148,7 @@ class api
         if($_POST['userid']){
             $_userid=$_POST['userid'];
         }else{
-            $_userid=_userid;
+            $_userid=$this->_userid;
         }
         $member_info = $this->member_db->get_one(array('userid'=>$_userid));
         $oid = empty($_POST['oid']) ? 0 : $_POST['oid'];
@@ -167,8 +167,8 @@ class api
                 $goodsinfo[$key]['awardNumber']=$goodinfo['awardNumber'];
                 $goodsinfo[$key]['trialAwardNumber']=$goodinfo['trialAwardNumber'];
 
-                $awardNumber[$key]=json_decode($goodsinfo[$key]['awardNumber']);
-                $trialAwardNumber[$key]=json_decode($goodsinfo[$key]['trialAwardNumber']);
+                $awardNumber[$key]=json_decode($goodsinfo[$key]['awardNumber'],true);
+                $trialAwardNumber[$key]=json_decode($goodsinfo[$key]['trialAwardNumber'].true);
 
 
                 if($goodsinfo[$key]['istry']==0){//购买
@@ -178,8 +178,11 @@ class api
                         $points[$key]=$goodsinfo[$key]['point_value'];
                     }
                     $bool= $this->update_fx($_userid,$value['final_price'],$awardNumber[$key]);
-                    $bool= $this->update_fxgoods($_userid,$value['final_price'],$awardNumber[$key],$goodsinfo['id']);
+                    if(!$bool) returnjsoninfo('-1','操作失败');
+                    $bool= $this->update_fxgoods($_userid,$value['final_price'],$awardNumber[$key],$value['id']);
+                    if(!$bool) returnjsoninfo('-2','操作失败');
                     $bool= $this->update_fxorder($_userid,$value['final_price'],$awardNumber[$key],$oid);
+                    if(!$bool) returnjsoninfo('-3','操作失败');
 
                 }else{//试穿
                     if($goodsinfo[$key]['point_mode']==1){//百分比
@@ -187,9 +190,12 @@ class api
                     }else{//国定
                         $points[$key]=$goodsinfo[$key]['point_value'];
                     }
-                    $bool=$this->update_fx($_userid,$value['final_price'],$trialAwardNumber[$key]);
-                    $bool=$this->update_fxgoods($_userid,$value['final_price'],$trialAwardNumber[$key],$goodsinfo['id']);
-                    $bool=$this->update_fxorder($_userid,$value['final_price'],$trialAwardNumber[$key],$oid);
+                    $bool= $this->update_fx($_userid,$value['final_price'],$awardNumber[$key]);
+                    if(!$bool) returnjsoninfo('-1','操作失败');
+                    $bool= $this->update_fxgoods($_userid,$value['final_price'],$awardNumber[$key],$value['id']);
+                    if(!$bool) returnjsoninfo('-2','操作失败');
+                    $bool= $this->update_fxorder($_userid,$value['final_price'],$awardNumber[$key],$oid);
+                    if(!$bool) returnjsoninfo('-3','操作失败');
                 }
 
             }
