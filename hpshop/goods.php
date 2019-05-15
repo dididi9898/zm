@@ -566,20 +566,20 @@ class goods extends admin {
 
 
 	/**
-	* 驳回商品通过
+	* 下架商品
 	*/
 	public function goodsdisagree(){
 		//操作单个
 		$id=intval($_GET['id']);
 		if($id){
-			$result=$this->goods_db->update(array('isok'=>3),array('id'=>$id));
+			$result=$this->goods_db->update(array('on_sale'=>2),array('id'=>$id));
 			showmessage(L('operation_success'),HTTP_REFERER);
 		}
 
 		//批量操作；
 		if(is_array($_POST['id'])){
 			foreach($_POST['id'] as $ids) {
-				$result=$this->goods_db->update(array('isok'=>3),array('id'=>$ids));
+				$result=$this->goods_db->update(array('on_sale'=>2),array('id'=>$ids));
 			}
 			showmessage(L('operation_success'),HTTP_REFERER);
 		}
@@ -590,7 +590,30 @@ class goods extends admin {
 		}
 	}
 
+    /**
+     * 商品上架
+     */
+    public function goodsup(){
+        //操作单个
+        $id=intval($_GET['id']);
+        if($id){
+            $result=$this->goods_db->update(array('on_sale'=>1),array('id'=>$id));
+            showmessage(L('operation_success'),HTTP_REFERER);
+        }
 
+        //批量操作；
+        if(is_array($_POST['id'])){
+            foreach($_POST['id'] as $ids) {
+                $result=$this->goods_db->update(array('on_sale'=>1),array('id'=>$ids));
+            }
+            showmessage(L('operation_success'),HTTP_REFERER);
+        }
+
+        //都没有选择什么
+        if( empty($_POST['id'])){
+            showmessage('请选择要操作的记录',HTTP_REFERER);
+        }
+    }
 
 
 
