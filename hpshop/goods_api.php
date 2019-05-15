@@ -1102,7 +1102,6 @@ class goods_api{
         	if(!isset($narr[$v['shopid']])){
         		$narr[$v['shopid']] = [
 	        		'shopid' => $v['shopid'],
-	        		'catid' => $v['catid'],
 	        		'shopname' => $snamarr[$v['shopid']]['shopname'],
 	        		'stprice'=>0,
 	        		'stnum'=>0
@@ -1121,6 +1120,7 @@ class goods_api{
         	$narr[$v['shopid']]['cartinfo'][] = [
         		'cartid' => $v['cartid'],
         		'goodsid' => $v['id'],
+        		'catid' => $v['catid'],
         		'goodsname' => $v['goods_name'],
         		'goodsimg' => $v['thumb'],
         		'goodsspec' => $v['specid'],
