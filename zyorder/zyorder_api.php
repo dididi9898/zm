@@ -1461,7 +1461,7 @@ class zyorder_api{
 					'oid'=>$oid,
 				];
 				//更新积分 分销佣金
-				$url = APP_PATH."index.php?m=zypints&c=api&a=api_update_points";
+				$url = APP_PATH."index.php?m=zypoints&c=api&a=api_update_points";
 				$return = json_decode($this->_crul_post($url,$data),true);
 
 				if( $return['code']=='200' ) {
