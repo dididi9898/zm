@@ -15,7 +15,8 @@ class zyorder_api{
 		$this->evaluate_db = pc_base::load_model('zy_evaluate_model');
 		//订单商品表
 		$this->ordergoods_db = pc_base::load_model('zy_order_goods_model');
-		
+        $this->goods_db = pc_base::load_model('goods_model');
+        $this->goods_specs_db = pc_base::load_model('goods_specs_model');
 	}
     /**
      * CURL方式的GET传值
@@ -1436,7 +1437,7 @@ class zyorder_api{
 			//$where = ' id in ('.$oid.') and userid = '.$uid;
 			$sql = ' SELECT SUM(totalprice) as tprcie from zy_zy_order where '.$where;
 			$rs = $this->order_db->query($sql);
-			$res = $this->order_db->fetch_array($rs);
+			$res = $this->order_db->fetch_array($rs);//zy_order表
 			$tprice = $res[0]['tprcie'];
 			$data=[
 			   'userid'=>$uid,
@@ -1445,6 +1446,24 @@ class zyorder_api{
 			   'module'=>'zyorder'
 			];
 			//减少余额
+            $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$oid), "id,goods_id, is_count, specid, goods_num");
+            foreach($goodsInfo as $k=>$v)
+            {
+                $this->ordergoods_db->update(array("is_count"=>1), array("id"=>$v["id"]));
+                if($v["specid"] && $v["is_count"] == 0)
+                    $specidGoods[] = $v;
+                elseif($v["is_count"] == 0)
+                    $notSpecidGoods[] = $v;
+            }
+            foreach($specidGoods as $k=>$v)
+            {
+                $this->goods_specs_db->update(array("specstock"=>"-=".$v["goods_num"], "salenum"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+            }
+            foreach($notSpecidGoods as $k=>$v)
+            {
+                $this->goods_db->update(array("stock"=>"-=".$v["goods_num"], "salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+            }
+
 			$url = APP_PATH."index.php?m=zymember&c=zymember_api&a=pub_reduceamount&userid=$uid&amount=$tprice&describe=余额支付&module=zyorder";
 			$return = json_decode($this->_crul_get($url,$data),true);
 

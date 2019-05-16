@@ -30,8 +30,8 @@ include $this->admin_tpl('header', 'admin');
                             <?php foreach($value as $k=>$v){ ?>
                                 <?php if($num != 1){$num++; echo "</tr>";}?>
                                 <td width="120"><?php echo $v["userid"]; ?></td>
-                                <td>待补充</td>
-                                <td>待补充</td>
+                                <td><?php echo $v["nickname"]; ?></td>
+                                <td><?php echo $v["mobile"]; ?></td>
                                 </tr>
                             <?php }?>
                     <?php if($value == null) echo "<td>无</td><td>无</td><td>无</td></tr>";?>

@@ -105,7 +105,7 @@
 			<th width="35" align="center"><input type="checkbox" value="" id="check_box" onclick="selectall('id[]');"></th>
             <th align="center"><strong>id</strong></th>
             <th align="center"><strong>订单编号</strong></th>
-            <th align="center"><strong>购买者</strong></th>
+            <th align="center"><strong>试穿者</strong></th>
             <th align="center"><strong>联系方式</strong></th>
             <th align="center"><strong>商品名称</strong></th>
             <th align="center"><strong>当前状态</strong></th>
@@ -114,6 +114,7 @@
             <th align="center"><strong>完成时间</strong></th>
             <th align="center"><strong>快递单号</strong></th>
             <th align="center"><strong>地址详情</strong></th>
+            <th align="center"><strong>备注</strong></th>
             <th align="center"><strong>操作</strong></th>
 		</tr>
 	</thead>
@@ -127,8 +128,8 @@
 			<td align="center"><?php echo $row["nickname"];?></td>
 			<td align="center"><?php echo $row["mobile"];?></td>
 			<td align="center">
-                <?php echo $row["goods_name"];?>
-                <a href="javascript:void(0);" onclick="view_shop('<?php echo $row['id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
+                查看商品
+                <a href="javascript:void(0);" onclick="view_shop('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
             </td>
 			<td align="center"><?php echo self::$tryStatusType[$row["status"]];?></td>
 
@@ -136,9 +137,11 @@
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["deltime"])?></td>
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["overtime"])?></td>
             <td align="center"><?php echo $row["logistics_order"];?></td>
+
 			<td align="center">
                 <?php echo $row['province'].$row["city"]?>
                 <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
+            <td align="center"><?php echo $row["usernote"];?></td>
             <td align="center">
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
@@ -196,7 +199,7 @@ function checkuid() {
 function view_shop(id) {
     window.top.art.dialog({
             id:'view_shop',
-            iframe:'?m=zyorder&c=order&a=showShop&id='+id,
+            iframe:'?m=zyorder&c=order&a=showShop&order_id='+id,
             title:'商品信息',
             width:'700',
             height:'350',

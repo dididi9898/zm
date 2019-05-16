@@ -114,6 +114,7 @@
             <th align="center"><strong>完成时间</strong></th>
             <th align="center"><strong>快递单号</strong></th>
             <th align="center"><strong>地址详情</strong></th>
+            <th align="center"><strong>备注</strong></th>
             <th align="center"><strong>操作</strong></th>
 		</tr>
 	</thead>
@@ -136,9 +137,12 @@
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["deltime"])?></td>
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["overtime"])?></td>
             <td align="center"><?php echo $row["logistics_order"];?></td>
+
 			<td align="center">
                 <?php echo $row['province'].$row["city"]?>
-                <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
+                <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
+            </td>
+            <td align="center"><?php echo $row["usernote"];?></td>
             <td align="center">
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
