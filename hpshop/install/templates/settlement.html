@@ -189,8 +189,7 @@
 							})
 							//console.log(orderid,sn);
 							if(sn.length == orderid.length && sn.length > 0 && orderid.length > 0 ){
-								orderid = orderid.j
-								oin(',');
+								orderid = orderid.join(',');
 								sn = sn.join(',');
 								//console.log(orderid,sn);
 								//layer.msg('下单成功，选择支付方式');
@@ -198,7 +197,7 @@
 								setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+orderid+'&sn='+sn}, 10);
 							}
 						}else{
-							layer.msg(data.message);
+							layer.msg(datacc.message);
 						}
 					})
 					/*layer.alert(JSON.stringify(data.field), {

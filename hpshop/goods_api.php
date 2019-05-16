@@ -1602,12 +1602,23 @@ class goods_api{
 		$sqls = 'SELECT b.shopid as id FROM phpcms_goodscarts a INNER JOIN phpcms_goods b ON a.goodsid = b.id and a.userid = '.$uid.' and a.id in('.$cids.') LEFT OUTER JOIN phpcms_goods_specs c ON a.goodsspecid = c.specid and c.shopid = '.$uid.' group by b.shopid ';
 
 		$page = $_GET['page'] ? $_GET['page'] : '1';
-		$info = $this->get_db->multi_listinfo($sql,$page,88888888);
+		$infos = $this->get_db->multi_listinfo($sql,$page,88888888);
 
 		$narr = [];
 		$total = 0;
 		// $tnum = 0;
-		foreach ($info as $k => $v) {
+		foreach ($infos as $k => $v) {
+
+		    if($v["stock"]-$v["cartnum"]< 0)
+            {
+                $result = [
+                    'status' => 'error',
+                    'code' => 0,
+                    'message' => $v["goods_name"]."的库存不足",
+                ];
+                exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+            }
+
 			if(!isset($narr[$v['shopid']])){
 				$narr[$v['shopid']] = [
 					'shopid' => $v['shopid'],
@@ -1719,7 +1730,7 @@ class goods_api{
 		unset($info['content']);
 		if ( $info['isspec'] == 1) {
 			$where = ' goodsid = '.$gid;
-			$sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status','',$order = ' id ASC ');
+			$sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status,salenum','',$order = ' id ASC ');
 			$info['specdata'] = $sinfo;
 		}
 		$result = [
