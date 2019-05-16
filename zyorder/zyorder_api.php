@@ -420,6 +420,7 @@ class zyorder_api{
 		//$usernote = $_POST['usernote']; //备注
 		$status = empty($_POST['status']) ? 1 : $_POST['status'];
 		$try_status = empty($_POST['try_status']) ? 0 : $_POST['try_status'];
+		$coupon_user_id = empty($_POST['coupon_user_id']) ? 0 : $_POST['coupon_user_id'];
 		$addtime = time();//生成下单时间
 		$data = [
 			"userid"=>$_userid,
@@ -464,6 +465,7 @@ class zyorder_api{
 			$newdata['storeid'] = $vs['shopid'];
 			$newdata['ordersn'] = time() + mt_rand(100,999);
 			$newdata['totalprice'] = $vs['stprice'];
+			$newdata['couponid'] = $coupon_user_id;
 			$id = $this->order_db->insert($newdata,true);
 			$idarr[] = [
 				'oid' => $id,

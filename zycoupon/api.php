@@ -355,7 +355,7 @@ class api
                 if ($_total) {
                     $w = '';
                     foreach ($_catid as $k => $value) {
-                        $w .= ' OR (type!=0  AND limittype=' . $_catid[$k] . ' AND full<' . $_total[$k] . ')';
+                        $w.=' OR (type!=0  AND limittype=0 AND full<'.$_total[$k]. ')  OR (type!=0  AND limittype='.$_catid[$k].' AND full<'.$_total[$k]. ')';
                     }
                     $where .= ' AND (type=0 ' . $w . ')';
                 }
@@ -413,7 +413,7 @@ class api
             if($_total){
                 $w='';
                 foreach($_catid as $k=> $value){
-                    $w.=' OR (type!=0  AND limittype='.$_catid[$k].' AND full<'.$_total[$k]. ')';
+                    $w.=' OR (type!=0  AND limittype=0 AND full<'.$_total[$k]. ')  OR (type!=0  AND limittype='.$_catid[$k].' AND full<'.$_total[$k]. ')';
                 }
                 $where.=' AND (type=0 '.$w.')';
             }
