@@ -14,6 +14,7 @@ class zymember_api{
 		//会员组表
 		$this->member_group_db = pc_base::load_model('member_group_model');
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
+		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		//分销金额
 		$this->zyfxmoney_db=pc_base::load_model("zyfxmoney_model");
 
@@ -31,7 +32,11 @@ class zymember_api{
 		//$_userid = empty($_GET['_userid']) ? $_POST['_userid'] : $_GET['_userid'];
 		$member_info = $this->members_db->get_one(array('userid'=>$_userid));
 		if($member_info) {
-			$info = $this->zycoupon_user_db->get_one(array('userid' => $_userid, 'isused' => 0), $data = 'count(*)');
+			$where='isused=0 AND isselect=0 AND userid='.$_userid;
+			$where.=' AND ((vaild_type=2 AND UNIX_TIMESTAMP(NOW())<(gettime+days*24*3600)) OR (vaild_type=1 AND begintime<UNIX_TIMESTAMP(NOW()) AND endtime>UNIX_TIMESTAMP(NOW()) AND `status`=1)) ';
+			$sql="SELECT count(*) FROM zy_zycoupon c JOIN zy_zycoupon_user u ON c.id=u.coupon WHERE ".$where;
+			$info = $this->zycoupon_db->spcSql($sql,1,0);
+			//$info = $this->zycoupon_user_db->get_one(array('userid' => $_userid, 'isused' => 0), $data = 'count(*)');
 			return $info['count(*)'];
 		}else{
 			return false;
