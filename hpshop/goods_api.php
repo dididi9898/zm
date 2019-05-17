@@ -1925,10 +1925,19 @@ class goods_api{
 	 */
 	public function coupon_use($_coupon_user_id)
 	{
+		if($_coupon_user_id==0){
+			return false;
+		}
+		$coupon_user_info = $this->zycoupon_user_db->get_one("id=".$_coupon_user_id." AND isused=0");
 		$data['isused']=1;
 		$data['isselect']=0;
 		$info = $this->zycoupon_user_db->update($data,'id='.$_coupon_user_id);
-		if($info)
+
+		$coupon_info = $this->zycoupon_db->get_one("id=".$coupon_user_info['coupon']." AND takenum-usednum>0");
+		$coupon_info['usednum']+=1;
+		$info2 = $this->zycoupon_db->update($coupon_info,'id='.$coupon_user_info['coupon']);
+
+		if($info&&$info2)
 			return true;
 		else
 			return false;

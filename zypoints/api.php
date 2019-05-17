@@ -39,6 +39,19 @@ class api
     /**
      * 更新用户佣金
      * @param userid：用户ID
+     * @return json
+     */
+    public function have_father($userid){
+        $info=true;
+        $memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
+        if ($memberInfo["pid"] == 0)//如果没有pid的话break;
+            $info=false;
+        return $info;
+    }
+
+    /**
+     * 更新用户佣金
+     * @param userid：用户ID
      * @param goodsPrice：商品总价格
      * @param ratio：分销比率 array
      * @param index：分销等级
@@ -157,6 +170,7 @@ class api
             $where ="order_id=".$oid;
             $goodsinfo = $this->ordergoods_db->select($where,("`id`,`goods_id`,`final_price`"));
 
+            $bool=$this->have_father($_userid);
             foreach($goodsinfo as $key=> $value){
                 $goodinfo = $this->goods_db->get_one(array('id'=>$value['goods_id']),("`istry`,`point_mode`,`point_value`,point_sy_value,awardNumber,trialAwardNumber"));
                 $goodsinfo[$key]['istry']=$goodinfo['istry'];
@@ -177,25 +191,29 @@ class api
                     }else{//国定
                         $points[$key]=$goodsinfo[$key]['point_value'];
                     }
-                    $bool= $this->update_fx($_userid,$value['final_price'],$awardNumber[$key]);
-                    if(!$bool) returnjsoninfo('-1','操作失败');
-                    $bool= $this->update_fxgoods($_userid,$value['final_price'],$awardNumber[$key],$value['id']);
-                    if(!$bool) returnjsoninfo('-2','操作失败');
-                    $bool= $this->update_fxorder($_userid,$value['final_price'],$awardNumber[$key],$oid);
-                    if(!$bool) returnjsoninfo('-3','操作失败');
-
+                    if($bool) {
+//                    exit(print_r($awardNumber[$key]));
+                        $bool = $this->update_fx($_userid, $value['final_price'], $awardNumber[$key]);
+                        if (!$bool) returnjsoninfo('-1', '操作失败', '111');
+                        $bool = $this->update_fxgoods($_userid, $value['final_price'], $awardNumber[$key], $value['id']);
+                        if (!$bool) returnjsoninfo('-2', '操作失败');
+                        $bool = $this->update_fxorder($_userid, $value['final_price'], $awardNumber[$key], $oid);
+                        if (!$bool) returnjsoninfo('-3', '操作失败');
+                    }
                 }else{//试穿
                     if($goodsinfo[$key]['point_mode']==1){//百分比
                         $points[$key]=$goodsinfo[$key]['point_value']/100*$value['final_price'];
                     }else{//国定
                         $points[$key]=$goodsinfo[$key]['point_value'];
                     }
-                    $bool= $this->update_fx($_userid,$value['final_price'],$awardNumber[$key]);
-                    if(!$bool) returnjsoninfo('-1','操作失败');
-                    $bool= $this->update_fxgoods($_userid,$value['final_price'],$awardNumber[$key],$value['id']);
-                    if(!$bool) returnjsoninfo('-2','操作失败');
-                    $bool= $this->update_fxorder($_userid,$value['final_price'],$awardNumber[$key],$oid);
-                    if(!$bool) returnjsoninfo('-3','操作失败');
+                    if($bool) {
+                        $bool = $this->update_fx($_userid, $value['final_price'], $awardNumber[$key]);
+                        if (!$bool) returnjsoninfo('-1', '操作失败', '222');
+                        $bool = $this->update_fxgoods($_userid, $value['final_price'], $awardNumber[$key], $value['id']);
+                        if (!$bool) returnjsoninfo('-2', '操作失败');
+                        $bool = $this->update_fxorder($_userid, $value['final_price'], $awardNumber[$key], $oid);
+                        if (!$bool) returnjsoninfo('-3', '操作失败');
+                    }
                 }
 
             }
