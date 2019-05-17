@@ -199,7 +199,7 @@ class goods_api{
 	public function sergoods(){
 		$_userid = param::get_cookie('_userid');
 		$userid = $_POST['uid'];
-
+        $type = $_POST['type'];
 		if($_userid){
 			$uid = $_userid;
 		}else{
@@ -238,33 +238,26 @@ class goods_api{
 			}
 		}
 
-		$order =' id desc ';
-		if( isset($_GET['order']) ){
-			switch ($_GET['order']) {
-				case '1':
-					$order =' salesnum desc ';
-					break;
-				case '2':
-					$order =' salesnum asc ';
-					break;
-				case '3':
-					$order =' shop_price desc ';
-					break;
-				case '4':
-					$order =' shop_price asc ';
-					break;
-				case '5':
-					$order =' addtime desc ';
-					break;
-				case '6':
-					$order =' addtime asc ';
-					break;					
-				
-				default:
-					
-					break;
+
+
+        switch ($type) {
+            case '2':
+                $order =' salesnum DEsc ';
+                break;
+            case '3':
+                $order =' addtime desc ';
+                break;
+            case '4':
+                $order =' shop_price asc ';
+                break;
+            case '5':
+                $order =' shop_price Desc ';
+                break;
+            default:
+                $order =' id desc ';
+                break;
 			}
-		}
+
 		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_POST['page'] ? $_POST['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
@@ -1576,7 +1569,7 @@ class goods_api{
 		$lx_mobile = $rs['data']['phone']/* $_POST['lx_mobile']*/; //联系电话
 		$lx_name = $rs['data']['name']/*$_POST['lx_name']*/; //联系人
 		$lx_code = '　'/*$_POST['lx_code']*/; //联系邮编
-		$mes = $_POST['note'];//用户留言
+		$mes = $_POST['usernote'];//用户留言
 
 		if ( empty($province) || empty($city) || empty($area) || empty($address) ) {
 			$result = [

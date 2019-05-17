@@ -478,6 +478,20 @@ class zyorder_api{
 			$sql = substr($sql,0,strlen($sql)-1);
 			$this->ordergoods_db->query($sql);
 		}
+        $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$id), "id,goods_id, is_count, specid, goods_num");
+        foreach($goodsInfo as $k=>$v)
+        {
+            $this->ordergoods_db->update(array("is_count"=>1), array("id"=>$v["id"]));
+            if($v["specid"] && $v["is_count"] == 0)
+                $specidGoods[] = $v;
+            elseif($v["is_count"] == 0)
+                $notSpecidGoods[] = $v;
+        }
+        foreach($specidGoods as $k=>$v)
+            $this->goods_specs_db->update(array("specstock"=>"-=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+
+        foreach($notSpecidGoods as $k=>$v)
+            $this->goods_db->update(array("stock"=>"-=".$v["goods_num"]), array("id"=>$v["goods_id"]));
 
 		$result = [
 			'status' => 'success',
@@ -885,7 +899,21 @@ class zyorder_api{
 		}
 		if($this->check_uid_status($id,$uid,2)||$this->check_uid_status($id,$uid,1)||$this->check_uid_status($id,$uid,7)){
 			$result = $this->order_db->update(array('status'=>6),array('order_id'=>$id));
-			if($result){
+            $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$id), "id,goods_id, is_count, specid, goods_num");
+            foreach($goodsInfo as $k=>$v)
+            {
+                if($v["specid"] && $v["is_count"] == 1)
+                    $specidGoods[] = $v;
+                elseif($v["is_count"] == 1)
+                    $notSpecidGoods[] = $v;
+            }
+            foreach($specidGoods as $k=>$v)
+                $this->goods_specs_db->update(array("specstock"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+
+            foreach($notSpecidGoods as $k=>$v)
+                $this->goods_db->update(array("stock"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+
+            if($result){
 				$this->caozuo_success("取消成功");
 			}else{
 				$this->caozuo_fail();
@@ -1457,11 +1485,12 @@ class zyorder_api{
             }
             foreach($specidGoods as $k=>$v)
             {
-                $this->goods_specs_db->update(array("specstock"=>"-=".$v["goods_num"], "salenum"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+                $this->goods_specs_db->update(array("salenum"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+                $this->goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
             }
             foreach($notSpecidGoods as $k=>$v)
             {
-                $this->goods_db->update(array("stock"=>"-=".$v["goods_num"], "salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                $this->goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
             }
 
 			$url = APP_PATH."index.php?m=zymember&c=zymember_api&a=pub_reduceamount&userid=$uid&amount=$tprice&describe=余额支付&module=zyorder";
