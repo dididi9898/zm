@@ -721,7 +721,7 @@ class zyorder_api{
 			}
 			$order['goodsnum'] = count($goods);
 			$order['storename'] = $return['data'][0]['shopname'] ;
-			$order['wuliu'] = $data;
+			$order['wuliu'] = json_decode($data,true);
 			$this->caozuo_success($order);
 		}else{
 			$this->error_check_uid();
@@ -1525,7 +1525,7 @@ class zyorder_api{
 				else {
 					$result = [
 						'status' => 'error',
-						'code' => -6,
+						'code' => $return['code'],
 						'message' => $return['message'],
 					];
 					exit(json_encode($result,JSON_UNESCAPED_UNICODE));

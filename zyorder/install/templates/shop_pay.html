@@ -213,41 +213,51 @@
 									}
 								},
 								submit:function(){
-									
-									if(this.pay_type == '1'){
-										layer.prompt(function(value, index, elem){
-											var oids = orderid.split(',');
-											if(oids.length > 0){
-												aj.post('index.php?m=zyorder&c=zyorder_api&a=prepay_for_balance',{oids:oids,paycode:value},function(data){
-													console.log(data);
-													if(data.status == 'success'){
-													    layer.close(index);
-														layer.msg('购买成功');
+                                    if(this.pay_type == '1'){
+                                        aj.post('index.php?m=zymember&c=zymember_api&a=zyorder_check_pay_password', { }, function (data) {
+                                            if(data.status == 'error')
+                                            {
+                                                layer.msg("请先设置交易密码");
+                                                setTimeout("javascript:location.href='index.php?m=zymember&c=index&a=paypsd_edit'", 1000);
+                                            }
+                                            else {
+                                                layer.prompt(function (value, index, elem) {
+                                                    var oids = orderid.split(',');
+                                                    if (oids.length > 0) {
+                                                        aj.post('index.php?m=zyorder&c=zyorder_api&a=prepay_for_balance', {
+                                                            oids: oids,
+                                                            paycode: value
+                                                        }, function (data) {
+                                                            console.log(data);
+                                                            if (data.status == 'success') {
+                                                                layer.close(index);
+                                                                layer.msg('购买成功');
 
-														setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid="+data.userid+"&status=2'", 1000);
-													}else{
-														layer.close(index);
-														layer.msg(data.message);
-														if(data.code == '-3'){
-															setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=security'", 1000);
-														}else if(data.code == '0'){
-															setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
-														}
-													}
+                                                                setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=" + data.userid + "&status=2'", 1000);
+                                                            } else {
+                                                                layer.close(index);
+                                                                layer.msg(data.message);
+                                                                if (data.code == '-3') {
+                                                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=security'", 1000);
+                                                                } else if (data.code == '0') {
+                                                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+                                                                }
+                                                            }
 
-												})
-												
-											}
-										});
-										//console.log('余额支付');
-									}else if(this.pay_type == '2'){
-										layer.msg('微信支付待开放');
-										console.log('微信支付');
-									}else if(this.pay_type == '3'){
-										layer.msg('支付宝支付待开放');
-										console.log('支付宝支付');
-									}
-									
+                                                        })
+
+                                                    }
+                                                });
+                                            }
+                                        })
+                                                //console.log('余额支付');
+                                            }else if(this.pay_type == '2'){
+                                                layer.msg('微信支付待开放');
+                                                console.log('微信支付');
+                                            }else if(this.pay_type == '3'){
+                                                layer.msg('支付宝支付待开放');
+                                                console.log('支付宝支付');
+                                            }
 								}
 							}
 						});
