@@ -3,7 +3,7 @@
 
 <body class="bg-f4f4f4">
     <div class="personal-head">
-        <a onClick="javascript :history.back(-1);">
+        <a onclick="set_none()">
             <div class="fl head-icon">
                 <i class="layui-icon layui-icon-left"></i>
             </div>
@@ -87,10 +87,10 @@
 
         <!--商品其他-->
         <div class="ware-other">
-			<div class="freight">
+			<div class="freight coupon">
 
 				<div class="fl tit">优惠券</div>
-				<a href="{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon"><div class="fr con" id="coupon"><i class="layui-icon layui-icon-right"></i></div></a>
+				<a href=""><div class="fr con" id="coupon"><i class="layui-icon layui-icon-right"></i></div></a>
 				<div class="clear"></div>
 
 			</div>
@@ -114,7 +114,11 @@
 
 
         <div class="Pay-footer-fixd">
-            <div class="fl">合计：<span>￥&nbsp;{{ d.data.totalprice }}</span></div>
+            <div class="fl">合计：<span>￥&nbsp;{{ d.data.finalprice }}</span>
+				{{#  if(d.data.finalprice != d.data.totalprice){ }}
+				<span style="color: grey;font-size: small;text-decoration:line-through">￥&nbsp;{{ d.data.totalprice }}</span>
+				{{#  } }}
+			</div>
             <div class="fr"><botton lay-submit lay-filter="submit">提交订单</botton></div>
         </div>
     </form>
@@ -151,6 +155,7 @@
 			var carts = '{$_GET[carts]}';
 			var address;
 			var addressid = '{$_GET[address]}';
+			var cu_id=0;
 			//表单
 			if(met == 1){
 				aj_data(met,'');
@@ -164,6 +169,7 @@
 			//监听提交
 			form.on('submit(submit)', function(data){
 				data.field.met = met;
+				data.field._coupon_user_id = cu_id;
 				if(carts){
 					data.field.cids = carts;					
 				}else{
@@ -280,29 +286,40 @@
 
 						if(met){
 							//获取选择可用优惠券数量
-							var catid;
-							console.log(data.data.shops);
-							for(var i in data.data.shops){
-								catid =data.data.shops[i].catid;
-								console.log(catid);
+							var catid=new Array();
+							var total=new Array();
+							var userid=data.data.uid
+							console.log(data.data.shops[0].cartinfo);
+							for(var i in data.data.shops[0].cartinfo){
+								catid[i] =data.data.shops[0].cartinfo[i].catid;
+								total[i] =data.data.shops[0].cartinfo[i].goodsprice*data.data.shops[0].cartinfo[i].cartnum;
 							}
+							console.log(catid+'---'+total);
 
 							$.ajax({
 								url:'index.php?m=zycoupon&c=api&a=order_coupon_count',
 								type:'POST', //GET
 								async:true,    //或true,是否同步
 								data:{
-									_userid:data.data.uid,
+									_userid:userid,
 									_catid:catid,
-									_total:data.data.totalprice,
+									_total:total,
 								},
 								timeout:5000,    //超时时间
 								dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
 								success:function(data){
-									//console.log(data);
+									console.log(data.data[0]);
 									if(data.status == 'success'){
-										coupon_num = data.data[0].num;
-										$("#coupon").prepend('<span style="color: red;font-size: small">'+coupon_num+'个可用优惠券</span>');
+										if(data.code == 200) {
+											coupon_num = data.data[0].num;
+											$("#coupon").prepend('<span style="color: red;font-size: small">' + coupon_num + '个可用优惠券</span>');
+											$("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total);
+										}else {
+											cut_num=data.data[0].minus;
+											cu_id=data.data[0].id;
+											$("#coupon").prepend('<span style="color: red;font-size: small">-￥' + cut_num + '</span>');
+											$("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total+ '&id=' + cu_id);
+										}
 									}else{
 										if(data.code==-200){
 											$("#coupon").prepend('<span style="color: grey;font-size: small">'+data.message+'</span>');
@@ -320,17 +337,42 @@
 						}
 					}
 				})
-				
 			}
 			
 			$('#view').on('click','.choose-address',function(){
 				//console.log('选择地址');
 				javascript:location.href='{APP_PATH}index.php?m=zyaddr&c=index&a=init&met='+met+'&carts='+carts;
-				
-			})
-			
+
+			});
+
+
 		}();
-	})
+	});
+	//取消优惠券选择
+	function set_none() { // 声明一个函数
+		$.ajax({
+			url:'index.php?m=zycoupon&c=api&a=api_coupon_select',
+			type:'POST', //GET
+			async:false,    //或true,是否同步
+			data:{
+				_coupon_user_id:0
+			},
+			timeout:5000,    //超时时间
+			dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+			success:function(data){
+				if(data.status == 'success'){
+					setTimeout("javascript :history.back(-1)", 0);
+				}else{
+					if(data.code==-1){
+						layer.msg(data.message);
+						setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+					}else {
+						layer.msg(data.message);
+					}
+				}
+			}
+		});
+	}
     </script>   
 </body>
 </html>

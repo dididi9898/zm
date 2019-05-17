@@ -38,7 +38,8 @@ class goods_api{
 		//商品搜索历史表
 		$this->goods_sh_db = pc_base::load_model('goods_sh_model');
 
-		
+		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
+		$this->zyshoptype_db = pc_base::load_model('goodscat_model');
 	}
 
 
@@ -1124,6 +1125,14 @@ class goods_api{
 
         }
 
+		$coupon_info=$this->coupon_select($uid);
+		$coupon_minus=$coupon_info['minus'];
+		$total_pay=$total-$coupon_minus;
+		if($total_pay<0){
+			$total_pay=0;
+		}
+
+
         $result = [
 			'status' => 'success',
 			'code' => 1,
@@ -1131,6 +1140,7 @@ class goods_api{
 			'data' => [
 				'shops' => array_values($narr),
 				'uid' => $uid,
+				'finalprice' => $total_pay,
 				'totalprice' => $total,
 				'totalnum' => $tnum
 			],
@@ -1485,6 +1495,7 @@ class goods_api{
 		$userid = $_POST['uid'];
 		$method = $_POST['met'];
 		$cids = $_POST['cids'];
+		$_coupon_user_id = $_POST['_coupon_user_id'];
 		$addid = $_POST['address'];
 
 		if($_userid){
@@ -1600,6 +1611,11 @@ class goods_api{
 		$narr = [];
 		$total = 0;
 		// $tnum = 0;
+
+		//优惠券减少金额查询
+		$coupon_info=$this->coupon_select($uid);
+		$coupon_minus=$coupon_info['minus'];
+
 		foreach ($infos as $k => $v) {
 
 		    if($v["stock"]-$v["cartnum"]< 0)
@@ -1626,9 +1642,16 @@ class goods_api{
 				$jg = $v['shop_price'];
 			}
 
-			$narr[$v['shopid']]['stprice'] += $jg*$v['cartnum'];
-			$narr[$v['shopid']]['stnum'] += $v['cartnum'];
 			$total += $jg*$v['cartnum'];
+
+			$total_pay=$total-$coupon_minus;
+			if($total_pay<0){
+				$total_pay=0;
+			}
+			//**********************************************************************************************************
+			$narr[$v['shopid']]['stprice'] = $total_pay;
+			$narr[$v['shopid']]['stnum'] += $v['cartnum'];
+			//$total += $jg*$v['cartnum'];
 			// $tnum += $v['cartnum'];
 			$narr[$v['shopid']]['cartinfo'][] = [
 				'cartid' => $v['cartid'],
@@ -1654,7 +1677,8 @@ class goods_api{
 			'lx_name' => $lx_name,
 			'lx_code' => $lx_code,
 			'usernote' => $mes,
-			'shopdata' => $narr
+			'shopdata' => $narr,
+			'coupon_user_id' => $_coupon_user_id,
 		);
 		$content = http_build_query($data);
 		$content_length = strlen($content);
@@ -1676,6 +1700,8 @@ class goods_api{
 		if ($where) {
 			$this->goodscarts_db->delete($where);
 		}
+		//使用优惠券
+		$this->coupon_use($_coupon_user_id);
 		$result = [
 			'status' => 'success',
 			'code' => 1,
@@ -1863,10 +1889,52 @@ class goods_api{
 
 		
 
-	}	
+	}
 
 
+	/**
+	 * 选择优惠券
+	 * @param $_userid 用户ID
+	 * @param _coupon_user_id 优惠券用户关联表ID
+	 * @return json
+	 * @internal param 关联表id $_coupon_user_id
+	 */
+	public function coupon_select($_userid)
+	{
+		$where=' userid='.$_userid.' AND u.isselect=1';
+		$sql='SELECT *  FROM zy_zycoupon c  JOIN zy_zycoupon_user u ON u.coupon =c.id WHERE ' . $where;
+		$select_info = $this->zycoupon_user_db->spcSql($sql, 1, 1);
+		if($select_info)
+			return $select_info[0];
+		else
+			return 0;
+	}
+	/**
+	 * 选择优惠券
+	 * @param $_userid 用户ID
+	 * @param _coupon_user_id 优惠券用户关联表ID
+	 * @return json
+	 * @internal param 关联表id $_coupon_user_id
+	 */
+	public function coupon_use($_coupon_user_id)
+	{
+		if($_coupon_user_id==0){
+			return false;
+		}
+		$coupon_user_info = $this->zycoupon_user_db->get_one("id=".$_coupon_user_id." AND isused=0");
+		$data['isused']=1;
+		$data['isselect']=0;
+		$info = $this->zycoupon_user_db->update($data,'id='.$_coupon_user_id);
 
+		$coupon_info = $this->zycoupon_db->get_one("id=".$coupon_user_info['coupon']." AND takenum-usednum>0");
+		$coupon_info['usednum']+=1;
+		$info2 = $this->zycoupon_db->update($coupon_info,'id='.$coupon_user_info['coupon']);
+
+		if($info&&$info2)
+			return true;
+		else
+			return false;
+	}
 
 
 

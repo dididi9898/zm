@@ -17,6 +17,9 @@ class zyorder_api{
 		$this->ordergoods_db = pc_base::load_model('zy_order_goods_model');
         $this->goods_db = pc_base::load_model('goods_model');
         $this->goods_specs_db = pc_base::load_model('goods_specs_model');
+
+		//分销用户表
+		$this->zyfxmember_db = pc_base::load_model("zyfxmember_model");
 	}
     /**
      * CURL方式的GET传值
@@ -234,10 +237,10 @@ class zyorder_api{
 		$_userid = param::get_cookie('_userid');
 		$userid = $_GET['userid'];//用户id，APP端必须传
 		//非APP端直接用$_userid
-		if($_userid){
-			$uid = $_userid;
-		}else{
+		if($userid){
 			$uid = $userid;
+		}else{
+			$uid = $_userid;
 		}
 		if($page == null){
             $page = 1;
@@ -331,6 +334,96 @@ class zyorder_api{
 		];
  		echo json_encode($data);
 	}
+
+	/**
+	 * 获取分销订单列表（店铺用户通用）
+	 */
+	public function fx_order_list(){
+		$_userid = param::get_cookie('_userid');
+		$userid = $_GET['userid'];//用户id，APP端必须传
+		//非APP端直接用$_userid
+		if($userid){
+			$uid = $userid;
+		}else{
+			$uid = $_userid;
+		}
+		if($uid==null){
+			$this->empty_userid();
+		}
+		$where = ' userid = '.$uid;
+		$where.= ' AND ((try_status=0 and (`status` in (2,3,4,5))) OR ( try_status=1 and (`status` in (4,5))))';
+
+		$sql = 'SELECT * from phpcms_zy_order WHERE '.$where.'order by addtime desc';
+		$sqlrs = $this->order_db->query($sql);
+		$sqlres = $this->order_db->fetch_array($sqlrs);
+
+		if(!$sqlres){
+			$data = [
+				"status"=> 'error',
+				"code"=>-1,
+				"message"=>'该用户还没有下过单',
+			];
+			exit(json_encode($data));
+		}else{
+			foreach($sqlres as $k=>$v){
+				$sqlres[$k]['addtime']= date("Y-m-d", $v['addtime']);
+				$sqlres[$k]['fx_money']=$this->show_fx_money($_userid,$userid,$v['fx_money']);
+			}
+		}
+
+		$data = [
+			"status"=> 'success',
+			"code"=>1,
+			"message"=>'操作成功',
+			"data"=>$sqlres,
+		];
+		echo json_encode($data);
+	}
+
+	/**
+	 * 获取分销订单列表（店铺用户通用）
+	 */
+	public function fx_food_list(){
+		$_userid = param::get_cookie('_userid');
+		$userid = $_GET['userid'];//用户id，APP端必须传
+		//非APP端直接用$_userid
+		if($userid){
+			$uid = $userid;
+		}else{
+			$uid = $_userid;
+		}
+		if($uid==null){
+			$this->empty_userid();
+		}
+		$where = ' userid = '.$uid;
+		$where.= ' AND ((try_status=0 and (`status` in (2,3,4,5))) OR ( try_status=1 and (`status` in (4,5))))';
+
+		$sql = 'SELECT * from phpcms_zy_order WHERE '.$where.'order by addtime desc';
+		$sqlrs = $this->order_db->query($sql);
+		$sqlres = $this->order_db->fetch_array($sqlrs);
+
+		if(!$sqlres){
+			$data = [
+				"status"=> 'error',
+				"code"=>-1,
+				"message"=>'该用户还没有下过单',
+			];
+			exit(json_encode($data));
+		}else{
+			foreach($sqlres as $k=>$v){
+				$sqlres[$k]['addtime']= date("Y-m-d", $v['addtime']);
+				$sqlres[$k]['fx_money']=$this->show_fx_money($_userid,$userid,$v['fx_money']);
+			}
+		}
+
+		$data = [
+			"status"=> 'success',
+			"code"=>1,
+			"message"=>'操作成功',
+			"data"=>$sqlres,
+		];
+		echo json_encode($data);
+	}
 	
 	//店铺订单列表
 	public function order_list_shop(){
@@ -420,6 +513,7 @@ class zyorder_api{
 		//$usernote = $_POST['usernote']; //备注
 		$status = empty($_POST['status']) ? 1 : $_POST['status'];
 		$try_status = empty($_POST['try_status']) ? 0 : $_POST['try_status'];
+		$coupon_user_id = empty($_POST['coupon_user_id']) ? 0 : $_POST['coupon_user_id'];
 		$addtime = time();//生成下单时间
 		$data = [
 			"userid"=>$_userid,
@@ -464,6 +558,7 @@ class zyorder_api{
 			$newdata['storeid'] = $vs['shopid'];
 			$newdata['ordersn'] = time() + mt_rand(100,999);
 			$newdata['totalprice'] = $vs['stprice'];
+			$newdata['couponid'] = $coupon_user_id;
 			$id = $this->order_db->insert($newdata,true);
 			$idarr[] = [
 				'oid' => $id,
@@ -563,6 +658,28 @@ class zyorder_api{
 			     return false;
 			}
 			return true;
+		}
+	}
+
+	//订单与商户，订单状态相关
+	//$_userid 主用户
+	//$userid 下级用户
+	//$fx_money 分销金钱
+	public function show_fx_money($_userid,$userid,$fx_money){
+		$memberInfo= $this->zyfxmember_db->get_one(array('userid'=>$userid));
+		$fx_money=json_decode($fx_money,true);
+
+		if(!$_userid||!$userid||!$fx_money){
+			return 0;
+		}
+
+		for($i=1; $i<= 3; $i++) {
+			if ($memberInfo["pid"] == 0)//如果没有pid的话break;
+				break;
+			if($memberInfo["pid"]== $_userid){
+				return $fx_money[$i];
+			}
+			$memberInfo = $this->zyfxmember_db->get_one(array('userid' => $memberInfo["pid"]));
 		}
 	}
 
