@@ -159,7 +159,7 @@
         </div>
     </div>
 
-    {template "zymember","bottom-footer"}
+
     {template "zymember","footer"}
 
     <script>
@@ -193,14 +193,22 @@
 			
         }();
 		function modify_phone() {
-            layer.confirm('你是否记得原支付密码？', {
-                btn: ['记得', '不记得'] //按钮
-            }, function () {
-				javascript: location.href = 'index.php?m=zymember&c=index&a=paypsd_edit_jd';
-            }, function () {
-                javascript: location.href = 'index.php?m=zymember&c=index&a=paypsd_edit';
+		    aj.post('index.php?m=zymember&c=zymember_api&a=zyorder_check_pay_password', { }, function (data) {
+		        if(data.status == 'error')
+                {
+                    javascript: location.href = 'index.php?m=zymember&c=index&a=paypsd_edit';
+                }
+                else {
+                    layer.confirm('你是否记得原支付密码？', {
+                        btn: ['记得', '不记得'] //按钮
+                    }, function () {
+                        javascript: location.href = 'index.php?m=zymember&c=index&a=paypsd_edit_jd';
+                    }, function () {
+                        javascript: location.href = 'index.php?m=zymember&c=index&a=paypsd_edit';
+                    })
+                }
             });
-        };
+        }
     </script>
 </body>
 </html>
