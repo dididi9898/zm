@@ -1,6 +1,108 @@
 ﻿{template "zyorder","top-head"}
 
-
+<style type="text/css">
+	.wl-list{
+		padding: 0 0.248rem 0 1.25rem;
+	}
+	.wl-list li{
+		position: relative;
+		padding-bottom: 10px;
+	}
+	.wl-list li:after{
+		content: '';
+		position: absolute;
+		left: -0.5rem;
+		top: 0;
+		width: 2px;
+		height: 100%;
+		background-color: #f1f1f1;
+		z-index: 1;
+	}
+	.wl-list li:last-of-type:after{
+		height: 0.2rem;
+	}
+	.wl-list li h3:after{
+		content: '';
+		position: absolute;
+		left: -0.5rem;
+		top: 0.2rem;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background-color:#ddd;
+		margin-left: -4px;
+		z-index:2;
+	}
+	.wl-list li h3{
+		font-size: 0.4rem;
+		line-height: 0.65rem;
+		color: #666;
+		margin-bottom: 3px;
+	}
+	.wl-list li p{
+		font-weight: bold;
+		color: #999;
+		line-height: 0.5rem;
+	}
+	/*样式二*/
+	.wl-list2{
+		padding: 0 0.1rem;
+	}
+	.wl-list2 li,.order-information{
+		position: relative;
+	}
+	.wl-list2 li:after{
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0.2rem;
+		width: 1px;
+		height: 100%;
+		background-color: #eee;
+		z-index: 1;
+	}
+	.wl-list2 li:first-of-type:after{
+		top: 0.12rem;
+	}
+	.wl-list2 li h3{
+		position: relative;
+		line-height: 0.35rem;
+		color: #999;
+		padding-left: 0.35rem;
+		font-size: 0.1rem;
+	}
+	.wl-list2 li h3:after{
+		content: '';
+		position: absolute;
+		left: 0.2rem;
+		top: 0.12rem;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		margin-left: -5px;
+		background-color: #ddd;
+		z-index: 2;
+	}
+	.wl-list2 li p{
+		position: relative;
+		line-height: 0.35rem;
+		color: #666;
+		padding-left: 0.35rem;
+		font-size: 0.14rem;
+	}
+	.order-information:after{
+		content:'';
+		position: absolute;
+		left:0.1rem;
+		top:0;
+		height: 100%;
+		width: 2px;
+		background-color: #ff6a00;
+	}
+	.order-information p{
+		border-style: none;
+	}
+</style>
 <body class="bg-f4f4f4">
 	<div class="personal-head" style=" position: relative;">
 		<a onclick="javascript :history.back(-1);">
@@ -43,22 +145,22 @@
 			</div>
 		</div>
 
-		<a :href="'index.php?m=zyorder&c=index&a=order_wlxx&id='+logistics_order">
-			<div class="details-express">
-				<div class="information">
-					<p class="p1">
-						订单已经签收
-					</p>
-					<p class="p2">
-						2018-02-28 08:30:50
-					</p>
-				</div>
-				<div class="icon-div">
-					<i class="layui-icon layui-icon-right"></i>
-				</div>
-				<div class="clear"></div>
-			</div>
-		</a>
+		<!--<a :href="'index.php?m=zyorder&c=index&a=order_wlxx&id='+logistics_order">-->
+			<!--<div class="details-express">-->
+				<!--<div class="information">-->
+					<!--<p class="p1">-->
+						<!--订单已经签收-->
+					<!--</p>-->
+					<!--<p class="p2">-->
+						<!--2018-02-28 08:30:50-->
+					<!--</p>-->
+				<!--</div>-->
+				<!--<div class="icon-div">-->
+					<!--<i class="layui-icon layui-icon-right"></i>-->
+				<!--</div>-->
+				<!--<div class="clear"></div>-->
+			<!--</div>-->
+		<!--</a>-->
 
 		<div class="details-address">
 			<div class="details-address-div">
@@ -120,10 +222,40 @@
             <li class="xqli2">{{addtime}}</li>
             <li class="xqli">发货时间：</li>
             <li class="xqli2">{{deltime}}</li>
+			<li class="xqli">快递公司：</li>
+            <li class="xqli2">{{name}}</li>
+			<li class="xqli">快递编号：</li>
+            <li class="xqli2">{{logistics_order}}</li>
         </ul>
         <div class="clear"></div>
     </div>
-
+	<div style="background-color: white">
+		<div class="order-information">
+			<p>物流详情<p>
+		</div>
+		<ul class="wl-list2">
+			<li v-for="x,y in recerseSum">
+				<h3>{{ x.AcceptTime }}</h3>
+				<p>{{ x.AcceptStation}}</p>
+			</li>
+		</ul>
+	</div>
+	<!--<div class="order_info2" style="background:#fff;">-->
+		<!--<div class="order-information">-->
+			<!--<p>物流详情<p>-->
+		<!--</div>-->
+		<!--<table class="xqli" style="width: 100%">-->
+			<!--<tr>-->
+				<!--<th style="width: 30%">时间</th>-->
+				<!--<th style="width: 70%">物流信息</th>-->
+			<!--</tr>-->
+			<!--<tr v-for="x,y in EXInfo.Traces">-->
+				<!--<td >{{ x.AcceptTime }}</td>-->
+				<!--<td style="font-size: 10px">{{ x.AcceptStation}}</td>-->
+			<!--</tr>-->
+		<!--</table>-->
+		<!--<div class="clear"></div>-->
+	<!--</div>-->
     {template "hpshop","footer"}
     
     <script>
@@ -137,11 +269,24 @@
 			if(id){
 				aj.get('index.php?m=zyorder&c=zyorder_api&a=order_info',{id:id},function(data){
 					if(data.status =='success'){
-						console.log(data.data);
+						console.log(data);
 						var order_info = new Vue({
 							el: '.order_info',
 							data: data.data,
 							methods:{
+							}
+						});
+						var wl_list2 = new Vue({
+							el:'.wl-list2',
+							data: {
+								EXInfo:data.data.wuliu.Traces,
+							},
+                            methods:{
+                            },
+                            computed:{
+							    recerseSum(){
+							        return this.EXInfo.reverse();
+								}
 							}
 						});
                         var order_info1 = new Vue({
