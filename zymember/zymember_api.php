@@ -378,7 +378,27 @@ class zymember_api{
 		//==================	操作成功-更新数据 END
 
 	}
+    public function zyorder_check_pay_password()
+    {
+        $memberinfo = $this->members_db->get_one(['userid'=>$this->_userid]);
+        if(!$memberinfo['trade_password']) {
+            $result = [
+                'status'=>'error',
+                'code'=>-3,
+                'message'=>'未设置交易密码',
+            ];
 
+        }
+        else
+        {
+            $result = [
+                'status'=>'success',
+                'code'=>3,
+                'message'=>'以设置',
+            ];
+        }
+        exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+    }
 
 	/**
 	 * 订单模块_验证支付密码是否正确
