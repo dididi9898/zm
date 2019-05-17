@@ -384,6 +384,9 @@ class zyorder_api{
 	 * 获取分销订单列表（店铺用户通用）
 	 */
 	public function fx_food_list(){
+		$page = $_GET['page'];
+		$pagesize = $_GET['pagesize'];
+
 		$_userid = param::get_cookie('_userid');
 		$userid = $_GET['userid'];//用户id，APP端必须传
 		//非APP端直接用$_userid
@@ -392,39 +395,86 @@ class zyorder_api{
 		}else{
 			$uid = $_userid;
 		}
+		if($page == null){
+			$page = 1;
+		}
+		if($pagesize == null){
+			$pagesize = 10;
+		}
 		if($uid==null){
 			$this->empty_userid();
 		}
-		$where = ' userid = '.$uid;
-		$where.= ' AND ((try_status=0 and (`status` in (2,3,4,5))) OR ( try_status=1 and (`status` in (4,5))))';
 
-		$sql = 'SELECT * from phpcms_zy_order WHERE '.$where.'order by addtime desc';
-		$sqlrs = $this->order_db->query($sql);
-		$sqlres = $this->order_db->fetch_array($sqlrs);
+		$children=$this->find_children($uid);
 
-		if(!$sqlres){
+		if(is_array($children)){
+			$childrenid='(';
+			$is_first=true;
+			for($i=1; $i<= 3; $i++) {
+				for($j=0; $j< count($children[$i-1]); $j++) {
+					if($is_first) {
+						$childrenid .= $children[$i-1][$j];
+						$is_first=false;
+					}
+					else {
+						$childrenid .= ',' . $children[$i-1][$j];
+					}
+				}
+			}
+			$childrenid.=')';
+		}else{
 			$data = [
-				"status"=> 'error',
-				"code"=>-1,
-				"message"=>'该用户还没有下过单',
+				"status"=> 'success',
+				"code"=>-200,
+				"message"=>'没有下级成员',
 			];
 			exit(json_encode($data));
-		}else{
-			foreach($sqlres as $k=>$v){
-				$sqlres[$k]['addtime']= date("Y-m-d", $v['addtime']);
-				$sqlres[$k]['fx_money']=$this->show_fx_money($_userid,$userid,$v['fx_money']);
+		}
+
+		$where = ' userid in '.$childrenid;
+		$infos = $this->order_db->select($where,'order_id,userid,addtime','','addtime DESC'); //读取数据库里的字段
+		if($infos) {
+			$orders_id='(';
+			$is_first=true;
+			foreach ($infos as $item) {
+				if ($is_first) {
+					$orders_id .= $item['order_id'];
+					$is_first = false;
+				} else {
+					$orders_id .= ',' . $item['order_id'];
+				}
+			}
+			$orders_id.=')';
+			$where = ' B1.order_id in '.$orders_id;
+			$order = ' addtime DESC ';
+			$data =
+			list($info, $totalcount) = $this->ordergoods_db->moreTableSelect(array("zy_zy_order"=>array("order_id","userid","addtime"),"zy_order_goods"=>array("goods_name","goods_fxmoney","specid_name"), "zy_member"=>ARRAY("username","nickname","mobile")),array("order_id","userid"),$where,((string)($page-1)*$pagesize).",".$pagesize
+				,$order,1); //读取数据库里的字段
+			//$info = $this->ordergoods_db->listinfo($where,$order,$page,$pagesize,'','','','','goods_name'); //读取数据库里的字段
+			//$totalcount = $this->ordergoods_db->count($where);
+			$totalpage = ceil($totalcount/$pagesize);
+			foreach($info as $k=> $v) {
+				$info[$k]['goods_fxmoney'] = $this->show_fx_money($uid, $v['userid'], $v['goods_fxmoney']);
+				$info[$k]['addtime']=date("Y-m-d H:i:s", $v['addtime']);;
 			}
 		}
+
 
 		$data = [
 			"status"=> 'success',
 			"code"=>1,
 			"message"=>'操作成功',
-			"data"=>$sqlres,
+			"data"=>$info,
+			'page' => [
+				'pagesize'=>$pagesize,
+				'totalpage'=>$totalpage,
+				'totalnum' => $totalcount
+			]
 		];
 		echo json_encode($data);
 	}
-	
+
+
 	//店铺订单列表
 	public function order_list_shop(){
 		$_storeid = $_GET['storeid'];
@@ -647,7 +697,7 @@ class zyorder_api{
 		}
 	}
 
-	//订单与商户，订单状态相关
+	//解析各级分销金额json
 	//$_userid 主用户
 	//$userid 下级用户
 	//$fx_money 分销金钱
@@ -669,6 +719,34 @@ class zyorder_api{
 		}
 	}
 
+	//查找所有下级
+	//$_userid 主用户
+	public function find_children($_userid){
+		$_userid= empty($_POST['_userid'])? $_userid : $_POST['_userid'];
+		if(!$_userid){
+			return 0;
+		}
+		$data=[
+			"userid"=>$_userid,
+		];
+		$url = APP_PATH.'index.php?m=zyfx&c=frontApi&a=getTeamInfo';	//yyy
+		$return = json_decode($this->_crul_post($url,$data),true);
+
+		$id[][]=null;
+		if ( $return['code']=='1' ) {
+			$infos=$return['data'];
+
+			for($i=1; $i<= 3; $i++) {
+				for($j=0; $j< count($infos[$i]); $j++) {
+					$id[$i-1][$j] = $infos[$i][$j]['ID'];
+				}
+			}
+			//exit(print_r($id));
+			return $id;
+		}else{
+			return 0;
+		}
+	}
 	
 	
 	/********************************************** /
