@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>会员中心</title>
+    <script src="{APP_PATH}statics/comment/js/auto-size.js"></script>
+    <script src="{APP_PATH}statics/comment/jquery/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="{APP_PATH}statics/comment/layui-v2.4.5/layui/css/layui.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/comment/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/comment/icon/iconfont.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/comment/swiper-4.4.6/dist/css/swiper.min.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/comment/css/style.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/comment/css/w-style.css">
+</head>
+
+
+<body class="bg-f4f4f4">
+    <style>
+        .layui-rate { padding: 0 !important; margin-top: -0.06rem; }
+        span.layui-inline { margin-top: -0.06rem; }
+        .layui-upload-list img { width: 1rem; }
+    </style>
+
+    <script src="{APP_PATH}statics/comment/js/head.js"></script>
+    <div id="comment">
+        <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;border-bottom:1px solid #f1f1f1;">
+            <div style="float:left;width:0.3rem;padding-top:0.05rem;padding-left:0.1rem;">
+                <img src="images/csshop.jpg">
+            </div>
+            <span style="float:left;padding-left:0.1rem;font-size:0.13rem;">
+            描述相符
+            <div id="test3"></div>
+        </span>
+        </div>
+        <form class="layui-form" action="">
+            <textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="resize: none;border:0px;"></textarea>
+            <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;height: 0.3rem;">
+                <div style="float:left;width:0.3rem;padding-top:0.05rem;padding-left:0.1rem;">
+                    <input type="checkbox" name="" title="匿名" lay-skin="primary" checked>
+                </div>
+            </div>
+            <ul style="background:#fff;border-top:1px solid #f1f1f1;padding:10px 0;">
+                <li>
+                    <div class="layui-form-item primary-item" style="margin-bottom:0;">
+                        <label class="layui-form-label primary-label-1">图片展示<span class="layui-badge-dot"></span></label>
+                        <div class="layui-input-block text-left">
+                            <button type="button" class="layui-btn layui-btn-sm" id="graphs" style="margin-top: 0.035rem;">多图片上传</button>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <style>
+                        .layui-col-xs3 .layui-upload-img { width: 100%; height: 100%; object-fit: cover; }
+                    </style>
+                    <div class="layui-upload pl05 pr05">
+                        <div class="layui-upload-list" id="demo2"><div class="layui-row layui-col-space10"></div><div class="clear"></div></div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+
+
+    <script src="{APP_PATH}statics/comment/layui-v2.4.5/layui/layui.all.js"></script>
+    <script src="{APP_PATH}statics/comment/swiper-4.4.6/dist/js/swiper.min.js"></script>
+    <script>
+        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+        ;
+        ! function () {
+            var layer = layui.layer,
+                form = layui.form;
+
+        }();
+        $(function () {
+            layui.use(['rate'], function () {
+                var rate = layui.rate;
+                rate.render({
+                    elem: '#test3',
+                    value: 0 //初始值
+
+                    ,
+                    text: true,
+                    setText: function (value) { //自定义文本的回调
+                        var arrs = {
+                            '1': '极差',
+                            '2': '差',
+                            '3': '中等',
+                            '4': '好',
+                            '5': '极好'
+                        };
+                        this.span.text(arrs[value] || ("请评价"));
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        ; !function () {
+            var layer = layui.layer
+                , form = layui.form
+                , $ = layui.jquery
+                , upload = layui.upload
+                , table = layui.table;
+                //多图片上传
+                upload.render({
+                    elem: '#graphs'
+                    , url: '/upload/'
+                    , multiple: true
+                    , choose: function (obj) {
+                        //将每次选择的文件追加到文件队列
+                        var files = obj.pushFile();
+                        //预读本地文件示例，不支持ie8
+                        obj.preview(function (index, file, result) {
+                            $('#demo2>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 " style="position: relative;"><span class="iconfont icon-roundclosefill del" style="position: absolute;top: 0;right: 0;width: 16px;height: 16px;color: #ff0000;z-index: 999999;background: #fff;border-radius: 50px;" ></span> <img src="' + result + '" alt="' + file.name + '" class="layui-upload-img"></div>')
+                        });
+                    }
+                    , done: function (res) {
+                        //上传完毕
+
+                    }
+                });
+            $('#demo2').on('click', '.del', function () {
+                $(this).parent().remove();
+            });
+
+
+
+        }();
+    </script>
+    <script>
+        var order_id = {"$_GET['order_id']"};
+        ; !function () {
+            aj.get("{APP_PATH}index.php?m=zyorder&c=index&a=order_list", {userid:1,page:1,pagesize:10}, function(data){
+                console.log(data);
+                var comment = new Vue({
+                    el:'#comment',
+                    data:data,
+                });
+            })
+
+        }();
+    </script>
+
+    <script src="{APP_PATH}statics/comment/js/order.js"></script>
+</body>
+
+</html>

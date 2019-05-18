@@ -8,6 +8,7 @@ class index{
 	function __construct() {
 		$this->get_db = pc_base::load_model('get_model');
 		$this->order_db = pc_base::load_model('zy_order_model');
+        $this->ordergoods_db = pc_base::load_model('zy_order_goods_model');
 		$this->logistics_db = pc_base::load_model('zy_logistics_model');
 		$this->evaluate_set_db = pc_base::load_model('zy_evaluate_set_model');
 		$this->evaluate_db = pc_base::load_model('zy_evaluate_model');
@@ -433,26 +434,27 @@ class index{
 		}
 	}
     //确认收货
-	public function order_qrsh(){
-		$_userid = $_POST['userid'];
-		$id = $_POST['id'];
-		if($_userid == null){
-			exit($this->show_error("no userid"));
-		}
-		if($id == null){
-			exit($this->show_error("no id"));
-		}
-		if($this->check_uid_status($id,$_userid,3)){
-			$result = $this->order_db->update(array('status'=>4),array('order_id'=>$id));
-			exit($this->show_success($result));
-		}else{
-			exit($this->show_error(""));
-		}
-	}
-
+	public function order_qrsh()
+    {
+        $_userid = $_POST['userid'];
+        $id = $_POST['id'];
+        if ($_userid == null) {
+            exit($this->show_error("no userid"));
+        }
+        if ($id == null) {
+            exit($this->show_error("no id"));
+        }
+        if ($this->check_uid_status($id, $_userid, 3)) {
+            $result = $this->order_db->update(array('status' => 4), array('order_id' => $id));
+            exit($this->show_success($result));
+        } else {
+            exit($this->show_error(""));
+        }
+    }
 	//评价
 	public function evaluate(){
-		include template('zyorder', 'evaluate');
+
+		include template('zyorder', 'comment');
 		/*$_userid = $_POST['userid'];
 		$id = $_POST['id'];
 		$content = $_POST['content'];
