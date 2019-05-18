@@ -265,7 +265,7 @@
         ! function () {
             var layer = layui.layer,
                 form = layui.form;
-			var id = '{$_GET[orderid]}';
+			var id = '{$_GET[order_id]}';
 			if(id){
 				aj.get('index.php?m=zyorder&c=zyorder_api&a=order_info',{id:id},function(data){
 					if(data.status =='success'){
