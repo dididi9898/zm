@@ -216,16 +216,16 @@
             <p>订单信息<p>
         </div>
         <ul>
-            <li class="xqli">订单编号：</li>
+            <li class="xqli"><p>订单编号：</p></li>
             <li class="xqli2">{{ ordersn }}</li>
-            <li class="xqli">创建时间：</li>
-            <li class="xqli2">{{addtime}}</li>
-            <li class="xqli">发货时间：</li>
-            <li class="xqli2">{{deltime}}</li>
-			<li class="xqli">快递公司：</li>
-            <li class="xqli2">{{name}}</li>
-			<li class="xqli">快递编号：</li>
-            <li class="xqli2">{{logistics_order}}</li>
+			<li class="xqli"><p>创建时间：</p></li>
+            <li class="xqli2">{{ addtime }}</li>
+			<li class="xqli"><p>发货时间：</p></li>
+            <li class="xqli2">{{ deltime }}</li>
+			<li class="xqli"><p>快递公司：</p></li>
+            <li class="xqli2">{{ name }}</li>
+			<li class="xqli"><p>快递编号：</p></li>
+            <li class="xqli2">{{ logistics_order }}</li>
         </ul>
         <div class="clear"></div>
     </div>
@@ -236,7 +236,7 @@
 		<ul class="wl-list2">
 			<li v-for="x,y in recerseSum">
 				<h3>{{ x.AcceptTime }}</h3>
-				<p>{{ x.AcceptStation}}</p>
+				<p>{{ x.AcceptStation }}</p>
 			</li>
 		</ul>
 	</div>
@@ -279,13 +279,16 @@
 						var wl_list2 = new Vue({
 							el:'.wl-list2',
 							data: {
-								EXInfo:data.data.wuliu.Traces,
+								EXInfo:data.data.wuliu,
 							},
                             methods:{
                             },
                             computed:{
 							    recerseSum(){
-							        return this.EXInfo.reverse();
+							        if(this.EXInfo != null)
+							        	return this.EXInfo.Traces.reverse();
+							        else
+							            return null;
 								}
 							}
 						});

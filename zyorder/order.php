@@ -149,7 +149,7 @@ class order extends admin {
         {
             $neadArg = ["ordersn"=>[true,0]];
             $info = checkArgBcak($neadArg);
-            $data = $this->logistics_company_db->select("1", "*");
+            $data = $this->logistics_company_db->select("isShow=1", "*");
             include $this->admin_tpl("order/addOrderEx");
         }
     }
@@ -370,8 +370,58 @@ class order extends admin {
 		$info=$this->logistics_company_db->listinfo($where,$order,$page); //读取数据库里的字段 第四个参数 为每页多少条信息
 		$pages = $this->logistics_company_db->pages;  //分页
 
-		include $this->admin_tpl('order_logistics');  //和模板对应上
+		include $this->admin_tpl('EX/excompany');  //和模板对应上
+//		include $this->admin_tpl('order_logistics');  //和模板对应上
 	}
+    function edit()
+    {
+        if(isset($_POST["dosubmit"]))
+        {
+            $neadArg = ["name"=>[true, 0], "value"=>[true, 0], "isShow"=>[true, 0], "EXid"=>[true, 1]];
+            $info = checkArgBcak($neadArg, "POST");
+            $where["EXid"] = array_pop($info);
+            $this->logistics_company_db->update($info, $where);
+            showmessage(L('operation_success'), '', '5', 'edit');
+        }
+        else
+        {
+            $neadArg = ["EXid"=>[true, 1]];
+            $info = checkArgBcak($neadArg);
+            $data = $this->logistics_company_db->get_one($info);
+            include $this->admin_tpl("EX/editexcompany");
+        }
+    }
+    function add()
+    {
+        if(isset($_POST["dosubmit"]))
+        {
+            $neadArg = ["name"=>[true, 0], "value"=>[true, 0], "isShow"=>[true, 0]];
+            $info = checkArgBcak($neadArg, "POST");
+            $this->logistics_company_db->insert($info);
+            showmessage(L('operation_success'), '', '5', 'add');
+        }
+        else
+        {
+            include $this->admin_tpl("EX/addexcompany");
+        }
+    }
+    function editAjax()
+    {
+        $neadArg = ["value"=>[true,0]];
+        $info = checkArgBcak($neadArg);
+        $data = $this->logistics_company_db->get_one($info);
+        if($data == null)
+            exit('1');
+        else
+            exit('0');
+    }
+    function drop()
+    {
+        $neadArg = ["EXid"=>[true,1]];
+        $info = checkArgBcak($neadArg);
+        $this->logistics_company_db->delete($info);
+        showmessage(L('operation_success'), 'index.php?m=zyorder&c=order&a=logistics_company', '5', '');
+    }
 /**
 	* 物流管理_删除
 	*/
