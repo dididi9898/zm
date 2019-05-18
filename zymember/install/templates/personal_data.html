@@ -31,7 +31,7 @@
                     <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
                         <ul>
                             <hr>
-                            <li>
+                            <li onclick="modify_headpic()" >
                                 <div class="layui-form-item lg-item">
                                     <label class="layui-form-label primary-label-1">头像</label>
                                     <div class="layui-input-block text-right">
@@ -39,7 +39,7 @@
                                             <!--  d-ib 点文字触发 -->
                                             <!-- d-b 点区域块触发 -->
                                             <span>
-                                                <b class="img radius-o "><img :src="headimgurl"></b>
+                                                <b class="img radius-o "><img :src="headimgurl"></b><i class="fa fa-angle-right pl1 lg-fs"></i>
 
                                         </span>
                                         </a>
@@ -127,7 +127,19 @@
     {template "zymember","footer"}
 
     <script>
+        ;
+        ! function () {
+            var layer = layui.layer,
+                    form = layui.form,
+                    $ = layui.jquery,
+                    upload = layui.upload,
+                    table = layui.table;
 
+            $('.no-way').on('click', function () {
+                layer.msg('该栏目正在开发中...');
+            });
+
+        }();
         $(function () {
             aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', {'field': 'headimgurl,username,nickname,sex,mobile,wechat_name' }, function (data) {
                 console.log(data.data);
@@ -145,19 +157,7 @@
             });
         })
         //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
-        ;
-        ! function () {
-            var layer = layui.layer,
-                form = layui.form,
-                $ = layui.jquery,
-                upload = layui.upload,
-                table = layui.table;
 
-            $('.no-way').on('click', function () {
-                layer.msg('该栏目正在开发中...');
-            });
-
-        }();
         function modify_nickname() {
             layer.prompt({ title: '输入新昵称', formType: 3 }, function (name, index) {
                 var d = {};
@@ -183,6 +183,9 @@
             }, function () {
                 javascript: location.href = 'index.php?m=zymember&c=index&a=update_mobile';
             });
+        };
+        function modify_headpic() {
+            setTimeout("javascript:location.href='index.php?m=zymember&c=index&a=headpic_upload'", 1000);
         };
         function modify_sex() {
             var d = {};
