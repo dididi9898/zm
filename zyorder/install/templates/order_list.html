@@ -290,14 +290,14 @@
 				$('#order_list').on('click','.evaluate',function(){
 					var id = $(this).data('id');
 					console.log(id);
-					setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=evaluate&orderid='+id}, 10);
+					setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=evaluate&order_id='+id}, 10);
 				})
 
 				//查看订单
 				$('#order_list').on('click','.check',function(){
 					var id = $(this).data('id');
 					console.log(id);
-					setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_info_ym&orderid='+id}, 10);
+					setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_info_ym&order_id='+id}, 10);
 				})
 
 			}();
