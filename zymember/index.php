@@ -103,6 +103,15 @@ class index extends foreground {
 		include template('zymember', 'personal_data');
 	}
 
+	/**
+	 * 头像上传
+	 */
+	public function headpic_upload()
+	{
+		$_userid = $this->_userid;
+		include template('zymember', 'headpic_upload');
+	}
+
     /**
      * 设置界面
      */
