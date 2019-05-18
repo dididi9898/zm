@@ -20,6 +20,8 @@ class zyorder_api{
 
 		//分销用户表
 		$this->zyfxmember_db = pc_base::load_model("zyfxmember_model");
+		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
+		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
 	}
     /**
      * CURL方式的GET传值
@@ -1090,6 +1092,8 @@ class zyorder_api{
 		}
 		if($this->check_uid_status($id,$uid,2)||$this->check_uid_status($id,$uid,1)||$this->check_uid_status($id,$uid,7)){
 			$result = $this->order_db->update(array('status'=>6),array('order_id'=>$id));
+			$order_info = $this->order_db->get_one(array('order_id'=>$id));
+			$this->coupon_cancel($order_info['couponid']);
             $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$id), "id,goods_id, is_count, specid, goods_num");
             foreach($goodsInfo as $k=>$v)
             {
@@ -1747,10 +1751,35 @@ class zyorder_api{
 		}
 
 	}
-	
-	
-	
-	
+
+
+
+	/**
+	 * 选择优惠券
+	 * @param $_userid 用户ID
+	 * @param _coupon_user_id 优惠券用户关联表ID
+	 * @return json
+	 * @internal param 关联表id $_coupon_user_id
+	 */
+	public function coupon_cancel($_coupon_user_id)
+	{
+		if($_coupon_user_id==0){
+			return false;
+		}
+		$coupon_user_info = $this->zycoupon_user_db->get_one("id=".$_coupon_user_id." AND isused=1");
+		$data['isused']=0;
+		$data['isselect']=0;
+		$info = $this->zycoupon_user_db->update($data,'id='.$_coupon_user_id);
+
+		$coupon_info = $this->zycoupon_db->get_one("id=".$coupon_user_info['coupon']." AND takenum-usednum>0");
+		$coupon_info['usednum']-=1;
+		$info2 = $this->zycoupon_db->update($coupon_info,'id='.$coupon_user_info['coupon']);
+
+		if($info&&$info2)
+			return true;
+		else
+			return false;
+	}
 	
 	
 	
