@@ -383,7 +383,7 @@ class zyorder_api{
 	/**
 	 * 获取分销订单列表（店铺用户通用）
 	 */
-	public function fx_food_list(){
+	public function fx_good_list(){
 		$page = $_GET['page'];
 		$pagesize = $_GET['pagesize'];
 
@@ -408,16 +408,12 @@ class zyorder_api{
 		$children=$this->find_children($uid);
 
 		if(is_array($children)){
-			$childrenid='(';
-			$is_first=true;
+			$childrenid='(0';
+			//$is_first=true;
 			for($i=1; $i<= 3; $i++) {
 				for($j=0; $j< count($children[$i-1]); $j++) {
-					if($is_first) {
-						$childrenid .= $children[$i-1][$j];
-						$is_first=false;
-					}
-					else {
-						$childrenid .= ',' . $children[$i-1][$j];
+					if($children[$i-1][$j]!=null) {
+						$childrenid .= ',' . $children[$i - 1][$j];
 					}
 				}
 			}
