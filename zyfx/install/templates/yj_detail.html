@@ -67,7 +67,7 @@
                     ,done:function(page,next) {
                         var lis = [];
                         //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-                        aj.get('index.php?m=zyorder&c=zyorder_api&a=fx_food_list&page='+page,{userid:userid}, function (data) {
+                        aj.get('index.php?m=zyorder&c=zyorder_api&a=fx_good_list&page='+page,{userid:userid}, function (data) {
                             //假设你的列表返回在data集合中
                             console.log(data);
                             if(data.code==207){
