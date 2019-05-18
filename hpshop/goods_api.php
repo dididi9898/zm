@@ -38,6 +38,7 @@ class goods_api{
 		//商品搜索历史表
 		$this->goods_sh_db = pc_base::load_model('goods_sh_model');
 
+		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
 		$this->zyshoptype_db = pc_base::load_model('goodscat_model');
 	}
