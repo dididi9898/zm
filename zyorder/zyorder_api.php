@@ -13,6 +13,7 @@ class zyorder_api{
 		$this->logistics_db = pc_base::load_model('zy_logistics_model');
 		$this->evaluate_set_db = pc_base::load_model('zy_evaluate_set_model');
 		$this->evaluate_db = pc_base::load_model('zy_evaluate_model');
+		$this->order_comment = pc_base::load_model('order_comment_model');
 		//订单商品表
 		$this->ordergoods_db = pc_base::load_model('zy_order_goods_model');
         $this->goods_db = pc_base::load_model('goods_model');
@@ -80,7 +81,6 @@ class zyorder_api{
 
 
 
-
 	/**
      *单个订单商品详情(用户版，此处用户与商家相同)
      */
@@ -133,7 +133,7 @@ class zyorder_api{
 			}
 		}
 
-		$info = $this->ordergoods_db->select(['order_id'=>$oid],'id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
+		$info = $this->ordergoods_db->select(['order_id'=>$oid],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
 		if ( $ischeck != 1 ) {
 			return $info;
 			exit(0);

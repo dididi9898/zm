@@ -39,7 +39,9 @@ class goods_api{
 		$this->goods_sh_db = pc_base::load_model('goods_sh_model');
 
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
+		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		$this->zyshoptype_db = pc_base::load_model('goodscat_model');
+		$this->pageSize = 10;
 	}
 
 
@@ -164,8 +166,76 @@ class goods_api{
         exit($jg);
 
 	}
+	public function limitGoodsComment()//查询2条数据
+    {
+        $goods_id = $_POST["goods_id"];
+        list($info, $count) = $this->goods_db->moreTableSelect(
+            array('zy_order_comment'=>array("addtime", "photo", "content", "isAnonym", "commentGrade"), "zy_member"=>array("nickname", "headimgurl"), "zy_order_goods"=>array("specid_name")),
+            array("userid", "id"),
+            "B1.`goods_id`=".$goods_id, '2', 'addtime DESC', 1
+        );
+        foreach($info as $key=>$value)
+        {
+            $info[$key]["photo"] = json_decode($value["photo"], true);
+            $info[$key]["addtime"] = date("Y-m-d");
+            if($value["isAnonym"] == 2)
+            {
+                $info[$key]["nickname"] = "匿名用户";
+                $info[$key]["headimgurl"] = APP_PATH."statics/public/images/5b163ef9N4a3d7aa6.png";
+            }
 
+        }
+        $rdata = [
+            'status'=>'success',
+            'code'=>1,
+            'message'=>'OK',
+            'data'=> $info,
+            'count'=>$count,
+        ];
+        exit(json_encode($rdata,JSON_UNESCAPED_UNICODE));
+    }
 
+    public function goodsComment()
+    {
+        $goods_id = $_POST["goods_id"];
+        $commentGrade = intval($_POST["comment"]);
+        $where = "B1.`goods_id`=".$goods_id." AND ";
+        $page = isset($_POST["page"])?intval($_POST["page"]): 1;
+        switch ($commentGrade)
+        {
+            case "2":$where .= "B1.`photo` <> '' AND ";break;
+            case "3":$where .= "B1.`commentGrade` in (4, 5) AND ";break;
+            case "4":$where .= "B1.`commentGrade` = 3 AND ";break;
+            case "5":$where .= "B1.`commentGrade` in (1, 2) AND ";break;
+        }
+        $where .= "1";
+        list($info, $count) = $this->goods_db->moreTableSelect(
+            array('zy_order_comment'=>array("addtime", "photo", "content", "isAnonym", "commentGrade"), "zy_member"=>array("nickname", "headimgurl"), "zy_order_goods"=>array("specid_name")),
+            array("userid", "id"),
+            $where,  ((string)($page-1)*$this->pageSize).",".$this->pageSize, 'addtime DESC',1
+        );
+        foreach($info as $key=>$value)
+        {
+            $info[$key]["photo"] = json_decode($value["photo"], true);
+            $info[$key]["addtime"] = date("Y-m-d");
+            if($value["isAnonym"] == 2)
+            {
+                $info[$key]["nickname"] = "匿名用户";
+                $info[$key]["headimgurl"] = APP_PATH."statics/public/images/5b163ef9N4a3d7aa6.png";
+            }
+
+        }
+        $count = ceil($count/$this->pageSize);
+        $rdata = [
+
+            'status'=>'success',
+            'code'=>1,
+            'message'=>'OK',
+            'data'=> $info,
+            'count'=>$count
+        ];
+        exit(json_encode($rdata,JSON_UNESCAPED_UNICODE));
+    }
 	/**
      *分类栏目
      */
@@ -1617,16 +1687,31 @@ class goods_api{
 		$coupon_minus=$coupon_info['minus'];
 
 		foreach ($infos as $k => $v) {
-
-		    if($v["stock"]-$v["cartnum"]< 0)
+            if(!empty($v["specstock"]) || $v["specstock"] == '0')
             {
-                $result = [
-                    'status' => 'error',
-                    'code' => 0,
-                    'message' => $v["goods_name"]."的库存不足",
-                ];
-                exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+                if($v["specstock"]-$v["cartnum"]< 0)
+                {
+                    $result = [
+                        'status' => 'error',
+                        'code' => 0,
+                        'message' => $v["goods_name"]."的库存不足",
+                    ];
+                    exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+                }
             }
+            else
+            {
+                if($v["stock"]-$v["cartnum"]< 0)
+                {
+                    $result = [
+                        'status' => 'error',
+                        'code' => 0,
+                        'message' => $v["goods_name"]."的库存不足",
+                    ];
+                    exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+                }
+            }
+
 
 			if(!isset($narr[$v['shopid']])){
 				$narr[$v['shopid']] = [

@@ -327,26 +327,22 @@
             </template>
         	<div class="h1"></div>
         	<!-- 评价 -->
-        	<div class="goods-pj bg-fff">
+        	<div class="goods-pj bg-fff" >
         		<div class="h1"></div>
+                <div id="limitComment" >
 				<div class="pl1 pr1">
-                    <span class="icon iconfont icon-community mr05"></span>商品评价(500+)
+                    <span class="icon iconfont icon-community mr05"></span>商品评价({{ count }})
                 </div>
                 <hr>
-                <div class="pl1 pr1">
-                	<div class="pj-user-img"><img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png"></div>
-                	<span class="pj-user-name">用户名称</span>
+                <div class="pl1 pr1" v-for="item, index in commentData">
+                	<div class="pj-user-img"><img :src=item.headimgurl></div>
+                	<span class="pj-user-name">{{ item.nickname }}</span>
                 	<div class="h1 clear"></div>
-                	<p class="pl1 sm-fs">很好，很喜欢。</p>
+                	<p class="pl1 sm-fs">{{ item.content }}</p>
+                    <hr>
                 </div>
-                <hr>
-                <div class="pl1 pr1">
-                	<div class="pj-user-img"><img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png"></div>
-                	<span class="pj-user-name">用户名称</span>
-                	<div class="h1 clear"></div>
-                	<p class="pl1 sm-fs">测试内容测试内容测试内容测试内容测试内容。</p>
+
                 </div>
-                <hr>
                 <div class="goods-pj-more" @click="pj">
                 	<a>查看全部评价</a>
                 </div>
@@ -371,98 +367,18 @@
                         <span>商品评价</span>
                     </div>
                 </div>
-                <div class="goods-pj-tag">
+                <div >
+                <div class="goods-pj-tag" >
                     <div class="h05"></div>
-                    <span class="pj-tag-on">全部</span>
-                    <span>追加</span>
-                    <span>有图(10)</span>
-                    <span>好评(15)</span>
-                    <span>中评(8)</span>
-                    <span>差评(7)</span>
+                    <span v-bind:class="[type_info=='1'?on:'']" @click="changeType(1)">全部</span>
+                    <span v-bind:class="[type_info=='2'?on:'']" @click="changeType(2)">有图</span>
+                    <span v-bind:class="[type_info=='3'?on:'']" @click="changeType(3)">好评</span>
+                    <span v-bind:class="[type_info=='4'?on:'']" @click="changeType(4)">中评</span>
+                    <span v-bind:class="[type_info=='5'?on:'']" @click="changeType(5)">差评</span>
                 </div>
                 <hr>
-                <div class="goods-pj-w">
-                    <div class="goods-pj-con">
-                        <div class="goods-pj-user">
-                            <div class="pj-user-img">
-                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
-                            </div>
-                            <span class="pj-user-name">用户名称</span>
-                            <div class="goods-pj-time">2019-03-02</div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="h05"></div>
-                        <p>好评 有图</p>
-                        <div class="h05"></div>
-                        <ul class="goods-pj-img">
-                            <li><img src="{APP_PATH}statics/public/images/csshop.jpg"></li>
-                            <li><img src="{APP_PATH}statics/public/images/20170826043356617.jpg"></li>
-                            <div class="clear"></div>
-                        </ul>
-                        <div class="h05"></div>
-                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
-                    </div>
-                    <hr>
-                    <div class="goods-pj-con">
-                        <div class="goods-pj-user">
-                            <div class="pj-user-img">
-                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
-                            </div>
-                            <span class="pj-user-name">用户名称</span>
-                            <div class="goods-pj-time">2019-03-02</div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="h05"></div>
-                        <p>差评</p>
-                        <div class="h05"></div>
-                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
-                    </div>
-                    <hr>
-                    <div class="goods-pj-con">
-                        <div class="goods-pj-user">
-                            <div class="pj-user-img">
-                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
-                            </div>
-                            <span class="pj-user-name">用户名称</span>
-                            <div class="goods-pj-time">2019-03-02</div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="h05"></div>
-                        <p>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</p>
-                        <div class="h05"></div>
-                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
-                    </div>
-                    <hr>
-                    <div class="goods-pj-con">
-                        <div class="goods-pj-user">
-                            <div class="pj-user-img">
-                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
-                            </div>
-                            <span class="pj-user-name">用户名称</span>
-                            <div class="goods-pj-time">2019-03-02</div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="h05"></div>
-                        <p>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</p>
-                        <div class="h05"></div>
-                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
-                    </div>
-                    <hr>
-                    <div class="goods-pj-con">
-                        <div class="goods-pj-user">
-                            <div class="pj-user-img">
-                                <img src="{APP_PATH}statics/public/images/5b163ef9N4a3d7aa6.png">
-                            </div>
-                            <span class="pj-user-name">用户名称</span>
-                            <div class="goods-pj-time">2019-03-02</div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="h05"></div>
-                        <p>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</p>
-                        <div class="h05"></div>
-                        <div class="xs-fs c-afafaf">规格1:套餐1 规格2:颜色1</div>
-                    </div>
-                    <hr>
+                <div class="goods-pj-w" id="sergoods"></div>
+
                 </div>
             </div>
         </div>
@@ -572,26 +488,66 @@
 
 
 
+    <script>
+        function changeData(gid ,type)
+        {
+            $('#sergoods div,hr').remove();
+            flow = layui.flow;
 
+            flow.load({
+                elem: '#sergoods' //指定列表容器
+                ,mb:'10'
+                ,isAuto:true
+                ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+                    var lis = [];
+                    console.log(type);
+                    //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+                    aj.post('index.php?m=hpshop&c=goods_api&a=goodsComment',{'page':page, "goods_id":gid, 'comment':type},function(data){
+                        console.log(data);
+                        if(data.code==207){
+                            layer.msg('登录超时');
+                            setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'",1000);
+                        }
+                        layui.each(data.data, function(index, item){
+                            //订单状态
+                            //var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span></div></div>  </a></li>';
 
+                            var goodsInfo = '<div class="goods-pj-con"> <div class="goods-pj-user"> <div class="pj-user-img"><img src="'+item.headimgurl+'"></div><span class="pj-user-name">'+item.nickname+'</span> <div class="goods-pj-time">'+item.addtime+'</div><div class="clear"></div></div> <div class="h05"></div><p>'+item.content+'</p><div class="h05"></div>  <ul class="goods-pj-img">';
+                            for(var i in item.photo)
+                                goodsInfo += '<li><img src="'+item.photo[i]+'"></li>';
+                            goodsInfo += ' <div class="clear"></div> </ul><div class="h05"></div><div class="xs-fs c-afafaf">规格：'+item.specid_name+'</div></div><hr>';
+                            lis.push(goodsInfo);
+                        });
+                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+                        next(lis.join(''), page < data.count);
+                    });
+
+                }
+            });
+        }
+    </script>
     <script>
 	$(function(){
         //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
         ;
         ! function () {
 
-            var layer = layui.layer,
-                form = layui.form,
-                $ = layui.jquery,
-                upload = layui.upload,
-                table = layui.table;
-			
-			
-			
-		
+        var layer = layui.layer,
+            form = layui.form,
+            $ = layui.jquery,
+            upload = layui.upload,
+            table = layui.table,
+            flow = layui.flow;
+
+
+
+
 		var gid = {$_GET[id]};
 		var goodsinfo;
 		var type='0';
+        var type_info = 1;
+
 		aj.get('index.php?m=hpshop&c=goods_api&a=goodsinfo',{"gid":gid}, function (data) {
             console.log(data);
 			if (data.status == 'error') {
@@ -611,6 +567,8 @@
                 }
 				goodsinfo.specname = '';
 				goodsinfo.collect = false;
+				goodsinfo.type_info = 1;
+				goodsinfo.on = 'pj-tag-on';
 				var goods = new Vue({
 				    el: '#goods',
 				    data: goodsinfo,
@@ -648,10 +606,16 @@
 							  scrollbar: false,
 							  content: $('.goods-pjw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
 							});
+                            changeData(gid,1);
 						},
 						shut:function(){
 							layer.closeAll()
-						}
+                            changeData(gid,1);
+						},
+                        changeType:function(data){
+						    this.type_info = data;
+                            changeData(gid,data);
+                        }
 					},
 					mounted(){
 						// 商品主图轮播
@@ -972,7 +936,7 @@
                         }
                     })
                 }
-				
+
 
 				var goods_footer = new Vue({
 					el: '#goods_footer',
@@ -1061,10 +1025,30 @@
 				});
 
 
-				
+
 			}
 		});
-			
+            $.ajax({
+                url: 'index.php?m=hpshop&c=goods_api&a=limitGoodsComment',
+                type: 'POST', //GET
+                async: false,    //或true,是否同步
+                data: {
+                    goods_id: gid
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (data) {
+                    console.log(data);
+                    var limitComment = new Vue({
+                        el:'#limitComment',
+                        data: {
+                            commentData: data.data,
+                            count: data.count
+                        }
+                    })
+                }
+            });
+
             // 选择套餐
             /*$('.goods-tc').on('click', function () {
                 layer.open({
