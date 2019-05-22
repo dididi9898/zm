@@ -66,7 +66,7 @@
                 </ul>
                 <button :id="changeId('btn_', item.id)" type="button" hidden>ssss</button>
             <p>&nbsp;</p>
-            <button type="submit" value="提交">ddasd</button>
+            <button hidden type="submit" value="提交" id="dosubmit">ddasd</button>
             </form>
 
         </div>
@@ -79,6 +79,10 @@
     <script src="{APP_PATH}statics/comment/layui-v2.4.5/layui/layui.all.js"></script>
     <script src="{APP_PATH}statics/comment/swiper-4.4.6/dist/js/swiper.min.js"></script>
     <script>
+        function sub()
+        {
+            $("#dosubmit").click();
+        }
         var order_id = '{$_GET[order_id]}';
         //var id = new Array();
         //var num =0;
@@ -139,6 +143,7 @@
                                 , url: 'index.php?m=zymember&c=api&a=uploadfile_user'
                                 , multiple: true //多文件传送
                                 , number:5
+                                ,accept: 'images'
                                 ,bindAction:'#btn_'+id
                                 ,auto: false//是否自动上传
                                 ,choose: function (obj) {

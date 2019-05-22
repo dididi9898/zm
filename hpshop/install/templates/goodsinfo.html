@@ -238,7 +238,7 @@
         line-height: .3rem;
     }
     .goods-pj-w{
-        height: calc(100% - 1.25rem - 21px);
+        height: calc(100% - 1rem);
         overflow-y: auto;
         overflow: auto;
         overflow-x: hidden;
@@ -367,7 +367,6 @@
                         <span>商品评价</span>
                     </div>
                 </div>
-                <div >
                 <div class="goods-pj-tag" >
                     <div class="h05"></div>
                     <span v-bind:class="[type_info=='1'?on:'']" @click="changeType(1)">全部</span>
@@ -378,8 +377,6 @@
                 </div>
                 <hr>
                 <div class="goods-pj-w" id="sergoods"></div>
-
-                </div>
             </div>
         </div>
         
@@ -496,7 +493,7 @@
 
             flow.load({
                 elem: '#sergoods' //指定列表容器
-                ,mb:'10'
+                ,mb:'30'
                 ,isAuto:true
                 ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
                     var lis = [];
@@ -512,10 +509,10 @@
                             //订单状态
                             //var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span></div></div>  </a></li>';
 
-                            var goodsInfo = '<div class="goods-pj-con"> <div class="goods-pj-user"> <div class="pj-user-img"><img src="'+item.headimgurl+'"></div><span class="pj-user-name">'+item.nickname+'</span> <div class="goods-pj-time">'+item.addtime+'</div><div class="clear"></div></div> <div class="h05"></div><p>'+item.content+'</p><div class="h05"></div>  <ul class="goods-pj-img">';
+                            var goodsInfo = '<hr><div class="goods-pj-con"> <div class="goods-pj-user"> <div class="pj-user-img"><img src="'+item.headimgurl+'"></div><span class="pj-user-name">'+item.nickname+'</span> <div class="goods-pj-time">'+item.addtime+'</div><div class="clear"></div></div> <div class="h05"></div><p>'+item.content+'</p><div class="h05"></div>  <ul class="goods-pj-img">';
                             for(var i in item.photo)
                                 goodsInfo += '<li><img src="'+item.photo[i]+'"></li>';
-                            goodsInfo += ' <div class="clear"></div> </ul><div class="h05"></div><div class="xs-fs c-afafaf">规格：'+item.specid_name+'</div></div><hr>';
+                            goodsInfo += ' <div class="clear"></div> </ul><div class="h05"></div><div class="xs-fs c-afafaf">规格：'+item.specid_name+'</div></div>';
                             lis.push(goodsInfo);
                         });
                         //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
@@ -586,14 +583,18 @@
                                 title: false, //不显示标题
                                 shadeClose: true,
                                 isOutAnim: false,
-                                scrollbar: false,
+                                scrollbar: true,
+								move:true,
+								fixed:false,
                                 content: $('.goods-tcw'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
                             });
 
 						},
 						// 商品评论列表
 						pj:function(){
-							$('.goods-pjw').height($(window).height())
+						    document.body.style.top = `${document.body.getBoundingClientRect().top}px`;
+						    document.body.style.position = 'fixed';
+							$('.goods-pjw').height($(window).height());
 							layer.open({
 							  type: 1,
 							  area: ['100%', 'auto'],
@@ -609,6 +610,8 @@
                             changeData(gid,1);
 						},
 						shut:function(){
+                            document.body.style.top = `0px`;
+                            document.body.style.position = 'static';
 							layer.closeAll()
                             changeData(gid,1);
 						},
