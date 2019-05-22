@@ -691,7 +691,7 @@ class zyorder_api{
 	public function check_uid_status($id,$_userid,$status){
 		if ($_userid != null) {
 			$order = $this->order_db->get_one(array('order_id' => $id));
-			if ($order['status'] != $status || $order['userid'] != $_userid) {
+			if (!in_array($order["status"], $status) || $order['userid'] != $_userid) {
 				return false;
 			}
 			return true;
@@ -888,7 +888,7 @@ class zyorder_api{
 		    ];
 		    $url = APP_PATH.'index.php?m=zymember&c=zymember_api&a=zyshop_nickname';
 		    $return = json_decode($this->_crul_post($url,$data),true);
-			if($this->check_uid_status($id,$uid,3)){
+			if($this->check_uid_status($id,$uid,array("3", "4", "5"))){
 //			  $KdApi = pc_base::load_app_class('KdApiSearch');
 //			  $KdApi = new KdApiSearch();
 //			  $order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$uid));
@@ -975,7 +975,7 @@ class zyorder_api{
 		if($_userid ==null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$_userid,2)){	
+		if($this->check_uid_status($id,$_userid,array('2'))){
 		    $result = $this->order_db->update(array('remind'=>'提醒发货'),array('order_id'=>$id));
 			if($result){
 			  $this->caozuo_success("操作成功");
@@ -1090,7 +1090,7 @@ class zyorder_api{
 		if($uid ==null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$uid,2)||$this->check_uid_status($id,$uid,1)||$this->check_uid_status($id,$uid,7)){
+		if($this->check_uid_status($id,$uid,array('1', '2', '7'))){
 			$result = $this->order_db->update(array('status'=>6),array('order_id'=>$id));
 			$order_info = $this->order_db->get_one(array('order_id'=>$id));
 			$this->coupon_cancel($order_info['couponid']);
@@ -1134,7 +1134,7 @@ class zyorder_api{
 		if($uid==null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$uid,5)||$this->check_uid_status($id,$uid,6)){
+		if($this->check_uid_status($id,$uid,array('5', '6'))){
 			$result = $this->order_db->delete(array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("删除成功");
@@ -1167,7 +1167,7 @@ class zyorder_api{
 		$return = json_decode($this->_crul_post($url,$data),true);
 		
 		if($return['code']=='200'){
-		  if($this->check_uid_status($id,$_userid,1)){
+		  if($this->check_uid_status($id,$_userid,array('1'))){
 		    $order = $this->order_db->get_one(array('order_id'=>$id));
 			if($order['totalprice']!=$totalprice){
 				$this->caozuo_fail("totalprice !=");
@@ -1196,7 +1196,7 @@ class zyorder_api{
 	public function kuaidi_ajx() {
 		$id = $_POST['id'];
 		$_userid = $_POST['userid'];
-		if($this->check_uid_status($id,$_userid,3)){
+		if($this->check_uid_status($id,$_userid,array('3'))){
 			$KdApi = pc_base::load_app_class('KdApiSearch');
 			$KdApi = new KdApiSearch();
 			$order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$_userid));
@@ -1223,8 +1223,8 @@ class zyorder_api{
 		if($_userid == null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$_userid,3)){
-			$result = $this->order_db->update(array('status'=>4),array('order_id'=>$id));
+		if($this->check_uid_status($id,$_userid,array('3'))){
+			$result = $this->order_db->update(array('status'=>4, 'overtime'=>time()),array('order_id'=>$id));
 			if($result){
 				$this->caozuo_success("确认收货");
 			}else{
@@ -1246,7 +1246,7 @@ class zyorder_api{
 		if($_userid==null){
 			 $this->empty_userid();
 		}
-		if($this->check_uid_status($id,$_userid,4)){
+		if($this->check_uid_status($id,$_userid,array('4'))){
 		    foreach($evalute_arr as $val){
 				$shopid = $val['shopid'];
 		     	$content = $val['content'];
@@ -1669,25 +1669,30 @@ class zyorder_api{
 			   'module'=>'zyorder'
 			];
 			//减少余额
-            $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$oid), "id,goods_id, is_count, specid, goods_num");
+            $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$oid), "id,goods_id, is_count,is_xlCount,  specid, goods_num");
             foreach($goodsInfo as $k=>$v)
             {
-                $this->ordergoods_db->update(array("is_count"=>1), array("id"=>$v["id"]));
-                if($v["specid"] && $v["is_count"] == 0)
+                $this->ordergoods_db->update(array("is_xlCount"=>1), array("id"=>$v["id"]));
+                if($v["specid"] && $v["is_xlCount"] == 0)
                     $specidGoods[] = $v;
-                elseif($v["is_count"] == 0)
+                elseif($v["is_xlCount"] == 0)
                     $notSpecidGoods[] = $v;
             }
-            foreach($specidGoods as $k=>$v)
+            if(isset($specidGoods))
             {
-                $this->goods_specs_db->update(array("salenum"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
-                $this->goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                foreach($specidGoods as $k=>$v)
+                {
+                    $this->goods_specs_db->update(array("salenum"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+                    $this->goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                }
             }
-            foreach($notSpecidGoods as $k=>$v)
+            if(isset($notSpecidGoods))
             {
-                $this->goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                foreach($notSpecidGoods as $k=>$v)
+                {
+                    $this->goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                }
             }
-
 			$url = APP_PATH."index.php?m=zymember&c=zymember_api&a=pub_reduceamount&userid=$uid&amount=$tprice&describe=余额支付&module=zyorder";
 			$return = json_decode($this->_crul_get($url,$data),true);
 

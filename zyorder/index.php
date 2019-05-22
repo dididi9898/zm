@@ -43,7 +43,7 @@ class index{
             $this->order_comment->insert($value);
         }
         $this->order_db->update(["status"=>5], ["order_id"=>$order_id]);
-        echo "评价成功";
+        $this->order_list();
     }
 
 

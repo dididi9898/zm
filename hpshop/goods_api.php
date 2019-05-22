@@ -42,7 +42,7 @@ class goods_api{
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
 		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		$this->zyshoptype_db = pc_base::load_model('goodscat_model');
-		$this->pageSize = 10;
+		$this->pageSize = 10 ;
 	}
 
 
