@@ -98,7 +98,7 @@
 <form name="myform" id="myform" action="?m=zyman&c=zyfunds&a=funs_record_del" method="post" onsubmit="checkuid();return false;" >
 
 
-<div class="table-list">
+<div class="table-list" >
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
@@ -160,13 +160,13 @@
 
 	</tbody>
 </table>
-    <div>
+    <div >
 
         <!-- 页码 -->
         <div class="page">
             <div>
                 <span onclick=pagesubmit(<?php echo $page<=1?1:$page-1;?>)>上一页</span>
-                <?php for($i=1 ; $i <= $pagenums; $i++) { ?>
+                <?php for($i=$pageStart ; $i <= $pagenums; $i++) { ?>
                     <?php if($i == $page){?>
                         <span  class="page-on"  onclick=pagesubmit(<?php echo $i;?>);><?php echo $i;?></span>
                     <?php }else{?>
@@ -174,7 +174,11 @@
                     <?php }?>
                 <?php } ?>
                 <span onclick=pagesubmit(<?php echo $page>=$pagenums?$pagenums:$page+1;?>)>下一页</span>
+                <span>共<?php echo $pageCount?>页</span>
+                <input style="width: 40px; text-align: center;" onkeyup="value=value.replace(/[^\d]/g,'')" type="text" id="page_info">
+                <span onclick="pagesubmit($('#page_info').val())"> 跳转</span>
             </div>
+
         </div>
     </div>
 </div>
@@ -268,6 +272,17 @@ function check(id)
     void(0);
 }
 function pagesubmit(page){
+    var pageCount =  <?php echo $pageCount?>;
+    if(page > pageCount)
+    {
+        window.alert("页数过大");
+        return ;
+    }
+    else if(page <=0)
+    {
+        window.alert("页数不能小于0");
+        return ;
+    }
     $("#page").val(page);
     $("#sbt").submit();
 };
