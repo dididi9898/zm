@@ -61,7 +61,6 @@ a:hover{ text-decoration: none; }
             <th ><?php echo '品牌'?></th>
             <th ><?php echo '类型'?></th>
             <th ><?php echo '添加时间'?></th>
-
             <th ><?php echo '管理操作'?></th>
             </tr>
         </thead>
