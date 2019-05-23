@@ -6,8 +6,8 @@ class index
 {
 	function __construct() 
 	{
-
 		$this->get_db = pc_base::load_model('get_model');
+		$this->online_talk_list_db = pc_base::load_model('online_talk_list_model');	//聊天列表
 		$this->_userid = param::get_cookie('_userid');
 	}
 
@@ -27,6 +27,8 @@ class index
 	public function im_talk()
 	{
 		$_userid = $this->_userid;
+		$where=['records_id'=>$_userid];
+		$info=$this->online_talk_list_db->get_one($where,'talk_from_name,talk_from_img,talk_to_name,talk_to_img');
 		include template('zyim', 'im_talk');
 	}
 

@@ -122,7 +122,10 @@ class api{
 		$userid = $type==1 ? param::get_cookie('_userid') : $_POST['userid'];
 
 		//用手机号码查出用户账号
-		$records_info = $this->online_talk_record_db->select(array('records_id'=>$userid),'*',15,'send_time asc');
+		$where=' where records_id='.$userid;
+		$sql='SELECT * FROM ( select * from zy_online_talk_record '.$where.' order by send_time desc limit 10) aa ORDER BY send_time';
+		$records_info = $this->online_talk_record_db->spcSql($sql,1,1);
+		//$records_info = $this->online_talk_record_db->select(array('records_id'=>$userid),'*',15,'send_time desc');
 		//==================	操作失败-验证 START
 			//请先登录
 			if (!$userid) {
