@@ -32,7 +32,8 @@
                             <td  align="center"><?php echo $r['last_word']?></td>
                             <td  align="center"><?php echo date('Y-m-d H:i:s',$r['last_time'])?></td>
                             <td align="center">
-                                <a class="layui-btn layui-btn-normal layui-btn-sm" href="index.php?m=zyim&c=zyim&a=talk&records_id=<?php echo $r['records_id'] ?>" ,)">进入聊天</a>
+<!--                                <a class="layui-btn layui-btn-normal layui-btn-sm">你有--><?php //echo $r['unlook']?><!--条未读信息</a>-->
+                                <a class="layui-btn layui-btn-normal layui-btn-sm" onclick="talk(<?php echo $r['records_id'] ?>)">进入聊天<?php if($r['unlook']!=0){ ?><span class="layui-badge"><?php echo $r['unlook'];?></span><?php } ?></a>
                                 <a href="javascript:confirmurl('?m=zyim&c=zyim&a=del&id=<?php echo $r['id'] ?>', '确定删除')"
                                    class="layui-btn layui-btn-danger layui-btn-sm">删除</a>
                             </td>
@@ -50,13 +51,23 @@
         </form>
     </div>
 </div>
+<script src="<?php echo APP_PATH?>statics/zm/js/ajax.js"></script>
 <script>
 /**
  * api地址编辑
  */
-function talk(id,name)
+function talk(id)
 {
-    setTimeout("javascript:location.href='index.php?m=zyim&c=zyim&a=talk&records_id='+id", 1000);
+    aj.post('index.php?m=zyim&c=api&a=look_msg', {'type': '2','userid':id,'records_id':id}, function (res) {
+        if (res.status == 'error') {
+            layer.msg(res.message);
+            if(res.code==-103)
+                setTimeout("javascript:location.href='index.php?m=zymember&c=index&a=login'", 1000);
+        } else {
+            console.log(res.data);
+            setTimeout("javascript:location.href='index.php?m=zyim&c=zyim&a=talk&records_id="+id+"&pc_hash=<?php echo $_GET['pc_hash']?>'", 0);
+        }
+    });
 }
 
 function checkuid() {

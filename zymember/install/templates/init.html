@@ -194,8 +194,12 @@
                     <h3>售后服务</h3>
                     <ul>
                         <li>
-                            <a href="{APP_PATH}index.php?m=zyim&c=index&a=im_talk&mod=1">
-                                <div class="iconfont icon-sponsorfill"></div>
+                            <a @click="create_talk()">
+                                <div class="iconfont icon-sponsorfill">
+                                    <template v-if="unlook!=0">
+                                    <span class="layui-badge-dot" style="margin-bottom: 0.5rem"></span>
+                                    </template>
+                                </div>
                                 <p>咨询客服</p>
                             </a>
                         </li>
@@ -214,19 +218,31 @@
     {template "zymember","footer"}
     <script>
         $(function (){
+            var uid;
             aj.post('index.php?m=zymember&c=zymember_api&a=pub_memberinfo', {  'field': 'headimgurl,nickname,userid,point,new_point,used_point,mobile' }, function (data) {
                 console.log(data.data);
                 if (data.status == 'error') {
                     layer.msg(data.message);
                     setTimeout("javascript:location.href='" + data.forward + "'", 1000);
                 } else {
+                    uid=data.data.userid;
                     var info = new Vue({
                         el: '.info',
-                        data: data.data
+                        data: data.data,
+                        methods:{
+                            create_talk:function(){
+                                aj.post('index.php?m=zyim&c=api&a=create_talk', {userid:uid,type:3}, function (data) {
+                                    if (data.code == '-103') {
+                                        layer.msg(data.message);
+                                    } else {
+                                        setTimeout("javascript:location.href='index.php?m=zyim&c=index&a=im_talk&mod=1'", 0);
+                                    }
+                                });
+                            }
+                        }
                     });
                 };
             });
-
         });
 
             //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
@@ -241,10 +257,9 @@
             $('.no-way').on('click', function () {
                 layer.msg('该栏目正在开发中...');
             });
-
-
         }();
-        </script>
+
+    </script>
 
 </body>
 </html>
