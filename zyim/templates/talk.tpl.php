@@ -178,12 +178,16 @@ include $this->admin_tpl('header', 'admin');
             data.uid=userid;
             data.type='server';
             data.is_first='first_server';
-            data.sendtouid=<?php print_r($info['talk_from_uid']) ?>;
+            data.sendtouid="<?php print_r($info['talk_from_uid']) ?>";
+            data.from_name="<?php print_r($info['talk_from_name']) ?>";
+            data.to_name="<?php print_r($info['talk_to_name']) ?>";
+            data.from_img="<?php print_r($info['talk_from_img']) ?>";
+            data.to_img="<?php print_r($info['talk_to_img']) ?>";
             if( data.sendtouid==null){
                 layer.msg('聊天对象不存在');
             }else{
                 layer.msg('ajax');
-                aj.post('index.php?m=zyim&c=api&a=get_records', {'type': '1','userid':data.sendtouid}, function (res) {
+                aj.post('index.php?m=zyim&c=api&a=get_records', {'type': '2','userid':data.sendtouid}, function (res) {
                     if (res.status == 'error') {
                         layer.msg(res.message);
                         if(res.code==-103)
@@ -193,9 +197,9 @@ include $this->admin_tpl('header', 'admin');
                         for (var i in res.data) {
                             if(res.data[i].id!=null) {
                                 if (res.data[i].from_user == userid) {
-                                    $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="<?php print_r($info['talk_to_img']) ?>" class="user-logo"><p><i>' + res.data[i].send_time + '</i>小闲</p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
+                                    $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="'+data.to_img+'" class="user-logo"><p><i>' + res.data[i].send_time + '</i>'+data.to_name+'</p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
                                 } else {
-                                    $('#ct').append('<li><div class="layim-chat-user"><img src="<?php print_r($info['talk_from_img']) ?>" class="user-logo"><p>蚂蚁金服<i>' + res.data[i].send_time + '</i></p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
+                                    $('#ct').append('<li><div class="layim-chat-user"><img src="'+data.from_img+'" class="user-logo"><p>'+data.from_name+'<i>' + res.data[i].send_time + '</i></p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
                                 }
                             }
                         }
