@@ -16,6 +16,8 @@ class zymember_api{
 		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		//分销金额
 		$this->zyfxmoney_db=pc_base::load_model("zyfxmoney_model");
+		//聊天记录
+		$this->online_talk_record_db = pc_base::load_model('online_talk_record_model');
 
 		$this->_userid=param::get_cookie('_userid');
 	}
@@ -170,7 +172,8 @@ class zymember_api{
 		//未提现佣金
 		$zyfxmoney = $this->zyfxmoney_db->get_one(['userid'=>$userid]);
 		$data['WTXmoney']= $zyfxmoney['WTXmoney'];
-
+		//客服信息
+		$data['unlook']=$this->online_talk_record_db->count(array('to_user'=>$userid,'records_id'=>$userid,'status'=>0));
 		$result = [
 			'status'=>'success',
 			'code'=>200,
