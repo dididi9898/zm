@@ -195,6 +195,10 @@
             data.type='client';
             data.is_first='first_client';
             data.sendtouid=-1;
+            data.from_name=("{$info['talk_from_name']}");
+            data.to_name=("{$info['talk_to_name']}");
+            data.from_img=("{$info['talk_from_img']}");
+            data.to_img=("{$info['talk_to_img']}");
             if( userid==''){
                 layer.msg('登陆超时');
                 setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
@@ -210,9 +214,9 @@
                         for (var i in res.data) {
                             if(res.data[i].id!=null) {
                                 if (res.data[i].from_user == userid) {
-                                    $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="{IMG_PATH}56.jpg" class="user-logo"><p><i>' + res.data[i].send_time + '</i>小闲小闲小闲小闲</p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
+                                    $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="'+data.from_img+'" class="user-logo"><p><i>' + res.data[i].send_time + '</i>'+data.from_name+'</p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
                                 } else {
-                                    $('#ct').append('<li><div class="layim-chat-user"><img src="{IMG_PATH}56.jpg" class="user-logo"><p>客服<i>' + res.data[i].send_time + '</i></p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
+                                    $('#ct').append('<li><div class="layim-chat-user"><img src="'+data.to_img+'" class="user-logo"><p>'+data.to_name+'<i>' + res.data[i].send_time + '</i></p></div><div class="layim-chat-text">' + res.data[i].post_messages + '</div></li>');
                                 }
                             }
                         }
@@ -220,7 +224,9 @@
                     }
                 });
             }
+            //开启长连接
             ws = new WebSocket("ws://127.0.0.1:2000");//tcp://0.0.0.0:8282 ws://127.0.0.1:2000
+            //握手
             ws.onopen = function() {
                 console.log("连接成功");
                 data=JSON.stringify(data);
@@ -229,6 +235,7 @@
                 data.is_first='';
                 console.log("给服务端发送一个字符串:"+data);
             };
+            //接收消息
             ws.onmessage = function(e) {
                 var msg= JSON.parse(e.data);
                 if(msg.code==200) {
@@ -236,7 +243,7 @@
                         if((msg.data.from==data.sendtouid&&msg.data.to==data.uid)||(msg.data.to==data.sendtouid&&msg.data.from==data.uid)) {
                             console.log(msg.data);
                             var time= date('Y-m-d H:i:s',new Date()/1000);
-                            $('#ct').append('<li><div class="layim-chat-user"><img src="{IMG_PATH}56.jpg" class="user-logo"><p>客服<i>'+time+'</i></p></div><div class="layim-chat-text">' + msg.data.msg + '</div></li>');
+                            $('#ct').append('<li><div class="layim-chat-user"><img src="'+data.to_img+'" class="user-logo"><p>'+data.to_name+'<i>'+time+'</i></p></div><div class="layim-chat-text">' + msg.data.msg + '</div></li>');
                             $(".layim-chat-main").scrollTop($(".layim-chat-main")[0].scrollHeight);
                         }else{
                             console.log('不是和你聊');
@@ -248,6 +255,7 @@
                     layer.msg('网络不给力');
                 }
             };
+            //发送消息
             A.$('sd').onclick=function(){
                 var da=A.$('nrong').value.trim();
                 if(da==''){
@@ -259,7 +267,8 @@
                 data=JSON.stringify(data);
                 ws.send(data);
                 data=JSON.parse(data);
-                $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="{IMG_PATH}56.jpg" class="user-logo"><p><i>2019-05-18 16:27:21</i>小闲</p></div><div class="layim-chat-text">'+(da)+'</div></li>');
+                var time= date('Y-m-d H:i:s',new Date()/1000);
+                $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="'+data.from_img+'" class="user-logo"><p><i>'+time+'</i>'+data.from_name+'</p></div><div class="layim-chat-text">'+(da)+'</div></li>');
                 $(".layim-chat-main").scrollTop($(".layim-chat-main")[0].scrollHeight);
             }
             A.$('nrong').onkeydown=function(e){
@@ -268,6 +277,7 @@
                     A.$('sd').onclick();
                 }
             }
+            //转换为url编码
             function esc(da){
                 da=da.replace(/</g,'<').replace(/>/g,'>').replace(/\"/g,'"');
                 return encodeURIComponent(da);
