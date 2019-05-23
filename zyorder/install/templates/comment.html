@@ -21,128 +21,178 @@
         .layui-rate { padding: 0 !important; margin-top: -0.06rem; }
         span.layui-inline { margin-top: -0.06rem; }
         .layui-upload-list img { width: 1rem; }
+        .photoShow{white-space: nowrap}
+        .layui-col-xs3 .layui-upload-img { width: 70px; height:  70px; object-fit: cover; }
     </style>
-
     <script src="{APP_PATH}statics/comment/js/head.js"></script>
-    <div id="comment">
-        <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;border-bottom:1px solid #f1f1f1;">
-            <div style="float:left;width:0.3rem;padding-top:0.05rem;padding-left:0.1rem;">
-                <img src="images/csshop.jpg">
-            </div>
-            <span style="float:left;padding-left:0.1rem;font-size:0.13rem;">
-            描述相符
-            <div id="test3"></div>
-        </span>
-        </div>
-        <form class="layui-form" action="">
-            <textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="resize: none;border:0px;"></textarea>
-            <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;height: 0.3rem;">
+    <div id="comment" >
+        <form class="layui-form" action="index.php?m=zyorder&c=index&a=commint" method="post">
+        <input hidden type="text" name="order_id" v-model="data[0].order_id" >
+        <div v-for="(item, index) in data" >
+            <input hidden type="text" :name="changeName('shop', item.id, 'goods_id')" v-model="item.goods_id" >
+            <input hidden type="text" :name="changeName('shop', item.id, 'id')" v-model="item.id" >
+            <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;border-bottom:1px solid #f1f1f1;">
                 <div style="float:left;width:0.3rem;padding-top:0.05rem;padding-left:0.1rem;">
-                    <input type="checkbox" name="" title="匿名" lay-skin="primary" checked>
+                    <img :src="item.goods_img">
                 </div>
+                <span style="float:left;padding-left:0.1rem;font-size:0.13rem;">
+                描述相符
+                <div :id="changeId('test_',item.id)"></div>
+                <input  type="hidden" :name="changeName('shop', item.id, 'commentGrade')" :id="changeId('grade_', item.id)"/>
+            </span>
             </div>
-            <ul style="background:#fff;border-top:1px solid #f1f1f1;padding:10px 0;">
-                <li>
-                    <div class="layui-form-item primary-item" style="margin-bottom:0;">
-                        <label class="layui-form-label primary-label-1">图片展示<span class="layui-badge-dot"></span></label>
-                        <div class="layui-input-block text-left">
-                            <button type="button" class="layui-btn layui-btn-sm" id="graphs" style="margin-top: 0.035rem;">多图片上传</button>
+
+                <textarea name="desc" placeholder="宝贝满足你的期待吗？说说你的使用心得吧！" :name="changeName('shop', item.id, 'content')" class="layui-textarea" style="resize: none;border:0px;font-size:13px;"></textarea>
+                <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;height: 0.3rem;">
+                    <div style="float:left;width:0.3rem;padding-top:0.05rem;padding-left:0.1rem;">
+                        <input type="checkbox" :name="changeName('shop', item.id, 'isAnonym')" title="匿名" lay-skin="primary" checked>
+                    </div>
+                </div>
+                <ul style="background:#fff;border-top:1px solid #f1f1f1;padding:10px 0;">
+                    <li>
+                        <div class="layui-form-item primary-item" style="margin-bottom:0;">
+                            <label class="layui-form-label primary-label-1">图片展示<span class="layui-badge-dot"></span></label>
+                            <div class="layui-input-block text-left ">
+                                <button type="button" class="layui-btn layui-btn-sm" :id="changeId('graphs_',item.id)" style="margin-top: 0.035rem;">多图片上传</button>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <style>
-                        .layui-col-xs3 .layui-upload-img { width: 100%; height: 100%; object-fit: cover; }
-                    </style>
-                    <div class="layui-upload pl05 pr05">
-                        <div class="layui-upload-list" id="demo2"><div class="layui-row layui-col-space10"></div><div class="clear"></div></div>
-                    </div>
-                </li>
-            </ul>
-        </form>
+                    </li>
+                    <li>
+
+                        <div class="layui-upload pl05 pr05 ">
+                            <div class="layui-upload-list" :id="changeId('demo_', item.id)"><div class="layui-row layui-col-space10 photoShow"></div><div class="clear"></div></div>
+                        </div>
+                    </li>
+                </ul>
+                <button :id="changeId('btn_', item.id)" type="button" hidden>ssss</button>
+            <p>&nbsp;</p>
+            <button hidden type="submit" value="提交" id="dosubmit">ddasd</button>
+            </form>
+
+        </div>
     </div>
 
 
-
+    <!--{template "hpshop","footer"}-->
+    <script src="{APP_PATH}statics/public/js/ajax.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
     <script src="{APP_PATH}statics/comment/layui-v2.4.5/layui/layui.all.js"></script>
     <script src="{APP_PATH}statics/comment/swiper-4.4.6/dist/js/swiper.min.js"></script>
     <script>
-        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
-        ;
-        ! function () {
-            var layer = layui.layer,
-                form = layui.form;
-
-        }();
+        function sub()
+        {
+            $("#dosubmit").click();
+        }
+        var order_id = '{$_GET[order_id]}';
+        //var id = new Array();
+        //var num =0;
         $(function () {
-            layui.use(['rate'], function () {
-                var rate = layui.rate;
-                rate.render({
-                    elem: '#test3',
-                    value: 0 //初始值
-
-                    ,
-                    text: true,
-                    setText: function (value) { //自定义文本的回调
-                        var arrs = {
-                            '1': '极差',
-                            '2': '差',
-                            '3': '中等',
-                            '4': '好',
-                            '5': '极好'
-                        };
-                        this.span.text(arrs[value] || ("请评价"));
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        ; !function () {
-            var layer = layui.layer
-                , form = layui.form
-                , $ = layui.jquery
-                , upload = layui.upload
-                , table = layui.table;
-                //多图片上传
-                upload.render({
-                    elem: '#graphs'
-                    , url: '/upload/'
-                    , multiple: true
-                    , choose: function (obj) {
-                        //将每次选择的文件追加到文件队列
-                        var files = obj.pushFile();
-                        //预读本地文件示例，不支持ie8
-                        obj.preview(function (index, file, result) {
-                            $('#demo2>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 " style="position: relative;"><span class="iconfont icon-roundclosefill del" style="position: absolute;top: 0;right: 0;width: 16px;height: 16px;color: #ff0000;z-index: 999999;background: #fff;border-radius: 50px;" ></span> <img src="' + result + '" alt="' + file.name + '" class="layui-upload-img"></div>')
-                        });
-                    }
-                    , done: function (res) {
-                        //上传完毕
-
-                    }
-                });
-            $('#demo2').on('click', '.del', function () {
-                $(this).parent().remove();
-            });
-
-
-
-        }();
-    </script>
-    <script>
-        var order_id = {"$_GET['order_id']"};
-        ; !function () {
-            aj.get("{APP_PATH}index.php?m=zyorder&c=index&a=order_list", {userid:1,page:1,pagesize:10}, function(data){
+            aj.post("{APP_PATH}index.php?m=zyorder&c=zyorder_api&a=uordgoodsinfo", {oid:order_id}, function(data){
                 console.log(data);
+                setTimeout(500);
+                var layer = layui.layer
+                    , form = layui.form
+                    , $ = layui.jquery
+                    , upload = layui.upload
+                    , table = layui.table;
+
                 var comment = new Vue({
                     el:'#comment',
                     data:data,
+                    methods:{
+                        changeId:function(str,index){
+                            return str+index;
+                        },
+                        changeName:function(str, index, name){
+                            return str+'['+index+']'+'['+name+']';
+                      }
+                    },
+                    mounted(){
+                        for(item in this.data)
+                        {
+                            form.render('checkbox');
+                            var that = this;
+                            var id=this.data[item].id;
+                            //id.push(this.data[item].id);
+                            console.log(id);
+                            layui.use(['rate'], function () {
+                                var rate = layui.rate;
+                                rate.render({
+                                    elem: '#test_'+id,
+                                    value: 5 //初始值
+
+                                    ,
+                                    text: true,
+                                    setText: function (value) { //自定义文本的回调
+                                        var arrs = {
+                                            '1': '极差',
+                                            '2': '差',
+                                            '3': '中等',
+                                            '4': '好',
+                                            '5': '极好'
+                                        };
+                                        this.span.text(arrs[value] || ("请评价"));
+                                        var id = this.elem.selector.split("_")[1];
+                                        $('#grade_'+id).val(value);
+                                        //console.log(this.elem.selector.split("_"));
+                                    }
+                                });
+                            });
+                            upload.render({
+                                elem: '#graphs_'+id
+                                , url: 'index.php?m=zymember&c=api&a=uploadfile_user'
+                                , multiple: true //多文件传送
+                                , number:5
+                                ,accept: 'images'
+                                ,bindAction:'#btn_'+id
+                                ,auto: false//是否自动上传
+                                ,choose: function (obj) {
+                                    var id = this.elem.selector.split("_")[1];
+                                    //将每次选择的文件追加到文件队列
+                                    var files = this.files = obj.pushFile();
+                                    var index = $("#demo_"+ id +">.layui-row>.layui-col-xs3").size();
+                                    console.log($("#demo_"+ id +">.layui-row>.layui-col-xs3"));
+                                    var data  = Object.keys(files);
+                                    len = data.length;
+                                    if(Number(len) + Number(index) <= 5 )//最多上传图片量
+                                    {
+                                        $('#btn_'+id).click();
+                                        console.log(1);
+                                    }
+                                    else
+                                    {
+                                        for(var i in data)
+                                        {
+                                            delete files[data[i]];
+                                        }
+
+                                        layer.msg("最多上传5张图片");
+                                    }
+                                    //预读本地文件示例，不支持ie8
+                                    obj.preview(function (index, file, result) {
+
+                                    });
+                                }
+                                , done: function (res, index, upload) {
+                                    var id = this.elem.selector.split("_")[1];
+                                    $('#demo_'+ id +'>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 " style="position: relative;"><span class="iconfont icon-roundclosefill del" style="position: absolute;top: 0;right: 0;width: 16px;height: 16px;color: #ff0000;z-index: 999999;background: #fff;border-radius: 50px;" ></span><input hidden name="shop['+id+'][photo][]" value='+res.msg+'> <img src="' + res.msg + '"  class="layui-upload-img" ></div>')
+                                  delete this.files[index];
+                                }
+                            });
+                            $('#demo_'+ id).on('click', '.del', function () {
+                                $(this).parent().remove();
+                            });
+                        }
+
+                    }
                 });
             })
 
-        }();
+        });
     </script>
+
+
+
 
     <script src="{APP_PATH}statics/comment/js/order.js"></script>
 </body>

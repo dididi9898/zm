@@ -6,7 +6,6 @@ pc_base::load_sys_class('format', '', 0);
 
 class zymember_api{
 	function __construct() {
-		
 		$this->get_db = pc_base::load_model('get_model');	
 		$this->members_db = pc_base::load_model('members_model');
 		//会员附表

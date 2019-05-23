@@ -37,7 +37,7 @@ class order extends admin {
 		//快递公司表
 		$this->express_db = pc_base::load_model('zyexpress_model');
 		//$this->zy_logistics_company = pc_base::load_model('zy_logistics_company');
-        $this->pagesize = 10;
+        $this->pagesize = 15;
 
 		//引入卓远网络公共函数库
 		//require_once 'zywl/functions/global.func.php';
@@ -107,7 +107,7 @@ class order extends admin {
             $where
             , ((string)($page-1)*$this->pagesize).",".$this->pagesize, "B1.order_id DESC","1"
         );
-        list($page, $pagenums) = getPage($page, $this->pagesize, $count);
+        list($page, $pagenums, $pageStart, $pageCount) = getPage($page, $this->pagesize, $count);
 //		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
 //		$pages = $this->order_db->pages;  //分页
 		include $this->admin_tpl('order/order_manage'); //和模板对应上
@@ -226,7 +226,7 @@ class order extends admin {
             $where
             , ((string)($page-1)*$this->pagesize).",".$this->pagesize, "B1.order_id DESC","1"
         );
-        list($page, $pagenums) = getPage($page, $this->pagesize, $count);
+        list($page, $pagenums, $pageStart, $pageCount) = getPage($page, $this->pagesize, $count);
 //		$info=$this->order_db->listinfo($where,$order,$page,20); //读取数据库里的字段
 //		$pages = $this->order_db->pages;  //分页
         include $this->admin_tpl('order/try_order_manage'); //和模板对应上

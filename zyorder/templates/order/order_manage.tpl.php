@@ -98,7 +98,7 @@
 <form name="myform" id="myform" action="?m=zyman&c=zyfunds&a=funs_record_del" method="post" onsubmit="checkuid();return false;" >
 
 
-<div class="table-list">
+<div class="table-list" >
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
@@ -108,13 +108,13 @@
             <th align="center"><strong>购买者</strong></th>
             <th align="center"><strong>联系方式</strong></th>
             <th align="center"><strong>商品名称</strong></th>
-            <th align="center"><strong>当前状态</strong></th>
             <th align="center"><strong>下单时间</strong></th>
             <th align="center"><strong>发货时间</strong></th>
             <th align="center"><strong>完成时间</strong></th>
             <th align="center"><strong>快递单号</strong></th>
             <th align="center"><strong>地址详情</strong></th>
             <th align="center"><strong>备注</strong></th>
+            <th align="center"><strong>状态</strong></th>
             <th align="center"><strong>操作</strong></th>
 		</tr>
 	</thead>
@@ -131,8 +131,6 @@
                 查看商品
                 <a href="javascript:void(0);" onclick="view_shop('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
             </td>
-			<td align="center"><?php echo self::$statusType[$row["status"]];?></td>
-
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["addtime"])?></td>
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["deltime"])?></td>
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["overtime"])?></td>
@@ -143,13 +141,16 @@
                 <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
             </td>
             <td align="center"><?php echo $row["usernote"];?></td>
+            <td align="center"><?php echo self::$statusType[$row["status"]];?></td>
             <td align="center">
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
                 <?php }elseif($row["status"] == "2"){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('发货')?></a>
-                <?php }else{?>
+                <?php }elseif($row["status"] == '3'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('修改快递单')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('订单详情')?></a>
+                <?php }elseif($row["status"] == '4' || $row["status"] == '5'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('订单详情')?></a>
                 <?php }?>
                 <a href="javascript:confirmurl('?m=zyorder&c=order&a=dropOrder&order_id=<?php echo $row['order_id']?>', '<?php echo L('确定删除此订单吗，删除后无法恢复。')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
@@ -159,13 +160,13 @@
 
 	</tbody>
 </table>
-    <div>
+    <div >
 
         <!-- 页码 -->
         <div class="page">
             <div>
                 <span onclick=pagesubmit(<?php echo $page<=1?1:$page-1;?>)>上一页</span>
-                <?php for($i=1 ; $i <= $pagenums; $i++) { ?>
+                <?php for($i=$pageStart ; $i <= $pagenums; $i++) { ?>
                     <?php if($i == $page){?>
                         <span  class="page-on"  onclick=pagesubmit(<?php echo $i;?>);><?php echo $i;?></span>
                     <?php }else{?>
@@ -173,7 +174,11 @@
                     <?php }?>
                 <?php } ?>
                 <span onclick=pagesubmit(<?php echo $page>=$pagenums?$pagenums:$page+1;?>)>下一页</span>
+                <span>共<?php echo $pageCount?>页</span>
+                <input style="width: 40px; text-align: center;" onkeyup="value=value.replace(/[^\d]/g,'')" type="text" id="page_info">
+                <span onclick="pagesubmit($('#page_info').val())"> 跳转</span>
             </div>
+
         </div>
     </div>
 </div>
@@ -267,6 +272,17 @@ function check(id)
     void(0);
 }
 function pagesubmit(page){
+    var pageCount =  <?php echo $pageCount?>;
+    if(page > pageCount)
+    {
+        window.alert("页数过大");
+        return ;
+    }
+    else if(page <=0)
+    {
+        window.alert("页数不能小于0");
+        return ;
+    }
     $("#page").val(page);
     $("#sbt").submit();
 };

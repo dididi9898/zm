@@ -12,7 +12,7 @@ class index{
 		$this->logistics_db = pc_base::load_model('zy_logistics_model');
 		$this->evaluate_set_db = pc_base::load_model('zy_evaluate_set_model');
 		$this->evaluate_db = pc_base::load_model('zy_evaluate_model');
-		
+        $this->order_comment = pc_base::load_model('order_comment_model');
 	}
     /**
 	* api
@@ -24,9 +24,30 @@ class index{
 	public function order_list(){
 		include template('zyorder', 'order_list');		
 	}
-	
-	
-	public function order_list_shop(){
+
+	public function commint()
+    {
+        $userid=param::get_cookie('_userid');
+        $shop = $_POST["shop"];
+        $order_id = $_POST["order_id"];
+        foreach($shop as $key=>$value)
+        {
+            if(isset($value["photo"]))
+            {
+                $value["photo"] = json_encode($value["photo"], JSON_UNESCAPED_UNICODE);
+            }
+            $value["content"] = empty($value["content"])?"默认好评":$value["content"];
+            $value["isAnonym"] = isset($value["isAnonym"])? 2: 1;
+            $value["userid"] = $userid;
+            $value['addtime'] = time();
+            $this->order_comment->insert($value);
+        }
+        $this->order_db->update(["status"=>5], ["order_id"=>$order_id]);
+        $this->order_list();
+    }
+
+
+    public function order_list_shop(){
 		$_storeid = $_GET['storeid'];
 		$pageindex = $_GET['pageindex'];
 		$pagesize = $_GET['pagesize'];
