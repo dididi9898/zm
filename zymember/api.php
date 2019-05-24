@@ -20,6 +20,83 @@ class api{
 		$this->member_footprint_db = pc_base::load_model('member_footprint_model');
 	}
 
+	/**
+	 * 身份证认证
+	 * @param idCard POST
+	 * @param name POST
+	 * @return [json] [json数组]
+	 */
+	public function idcard_approve()
+	{
+		$userid = isset($_POST['userid'])? $_POST['userid']:param::get_cookie('_userid');
+		if (!$userid) {
+			$result = [
+				'status'=>'error',
+				'code'=>-1,
+				'message'=>'用户id不能为空',
+
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+		$host = "https://b4bankcard.market.alicloudapi.com";
+		$path = "/IDCard";
+		$method = "GET";
+		$appcode = "b6e61f51459f453b8cf63399d5f02bf6";
+		$headers = array();
+		array_push($headers, "Authorization:APPCODE " . $appcode);
+		$querys = "idCard=".$_POST['idCard']."&name=".$_POST['name'];
+		$bodys = "";
+		$url = $host . $path . "?" . $querys;
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($curl, CURLOPT_FAILONERROR, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HEADER, true);
+		if (1 == strpos("$".$host, "https://"))
+		{
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		}
+		$json=(curl_exec($curl));
+		($arr=json_decode(substr($json,strripos($json,"{")),true));
+		if($arr['status']==01){
+			$result = [
+				'status'=>'success',
+				'code'=>200,
+				'message'=>'认证成功',
+				'data'=>$arr
+			];
+			$member_data = [
+				'realname'=>$arr['name'],
+				'idcard'=>$arr['idCard'],
+				'lastdate'=>time(),
+			];
+			$this->member_db->update($member_data,array('userid'=>$userid));
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}else{
+			$result = [
+				'status'=>'error',
+				'code'=>$arr['status'],
+				'message'=>$arr['msg'],
+				'data'=>$arr
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+	}
+
+	public function is_identification($userid)
+	{
+		$bool=$this->member_db->get_one(array('userid'=>$userid));
+		if($bool['realname']&&$bool['idcard']){
+			return true;
+		}else {
+			return false;
+		}
+	}
+
 
 
 	/**
@@ -224,6 +301,10 @@ class api{
 			}
 			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
 			_crul_get($url);
+
+			if(!$this->is_identification($memberinfo['userid'])){
+				$forward=APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';
+			}
 			$result = [ 
 				'status'=>'success',
 				'code'=>200,
@@ -357,6 +438,9 @@ class api{
 			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
 			_crul_get($url);
 
+			if(!$this->is_identification($memberinfo['userid'])){
+				$forward=APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';
+			}
 			$result = [
 				'status'=>'success',
 				'code'=>200,
@@ -389,7 +473,7 @@ class api{
 		$verify_code = $_POST['verify_code'];	//短信验证码
 		$password = $_POST['password'];	//密码
 		$type = $_POST['type'];	//类型：1web端、2APP端
-		$forward = $_POST['forward'] ? urldecode($_POST['forward']) : APP_PATH.'index.php?m=member&c=index';	//接下来该跳转的页面链接
+		$forward = $_POST['forward'] ? urldecode($_POST['forward']) : APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';	//接下来该跳转的页面链接
 
 		//用手机号码查出用户账号
 		$memberinfo = $this->member_db->get_one(array('mobile'=>$mobile));
@@ -529,7 +613,7 @@ class api{
 				param::set_cookie('_username', $memberinfo['username'], $cookietime);
 				param::set_cookie('_nickname', $memberinfo['nickname'], $cookietime);
 				param::set_cookie('_groupid', $memberinfo['groupid'], $cookietime);
-				param::set_cookie('cookietime', $_cookietime, $cookietime);
+				param::set_cookie('cookietime', $cookietime, $cookietime);
 			}
 			
 			//调用通讯模块-短信接口-清空此账号的短信验证码

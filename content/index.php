@@ -30,6 +30,11 @@ class index {
 		$CATEGORYS = getcache('category_content_'.$siteid,'commons');
 		include template('content','index',$default_style);
 	}
+	//新品
+	public function init2() {
+		$_userid = $this->_userid;
+		include template('content','index_newst');
+	}
 	//内容页
 	public function show() {
 		$catid = intval($_GET['catid']);
