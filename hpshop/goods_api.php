@@ -173,7 +173,7 @@ class goods_api{
         list($info, $count) = $this->goods_db->moreTableSelect(
             array('zy_order_comment'=>array("addtime", "photo", "content", "isAnonym", "commentGrade"), "zy_member"=>array("nickname", "headimgurl"), "zy_order_goods"=>array("specid_name")),
             array("userid", "id"),
-            "B1.`goods_id`=".$goods_id, '2', 'addtime DESC', 1
+            "B1.`isShield` = 1 AND B1.`goods_id`=".$goods_id, '2', 'addtime DESC', 1
         );
         foreach($info as $key=>$value)
         {
@@ -200,7 +200,7 @@ class goods_api{
     {
         $goods_id = $_POST["goods_id"];
         $commentGrade = intval($_POST["comment"]);
-        $where = "B1.`goods_id`=".$goods_id." AND ";
+        $where = "B1.`isShield` = 1 AND B1.`goods_id`=".$goods_id." AND ";
         $page = isset($_POST["page"])?intval($_POST["page"]): 1;
         switch ($commentGrade)
         {

@@ -173,6 +173,7 @@ include $this->admin_tpl('header', 'admin');
 
             var key='all',mkey;
             var count=-1;
+            var x =<?php echo SERVER_IP;?>;
             var userid='-1';
             var ws_url="ws://<?php echo SERVER_IP; ?>:2000";
             var data={};

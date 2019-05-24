@@ -41,11 +41,11 @@
                 <input  type="hidden" :name="changeName('shop', item.id, 'commentGrade')" :id="changeId('grade_', item.id)"/>
             </span>
             </div>
-
-                <textarea name="desc" placeholder="宝贝满足你的期待吗？说说你的使用心得吧！" :name="changeName('shop', item.id, 'content')" class="layui-textarea" style="resize: none;border:0px;font-size:13px;"></textarea>
+                <span :id="changeId('text1_', item.id)"></span>
+                <textarea :id="changeId('text_', item.id)" name="desc" placeholder="宝贝满足你的期待吗？说说你的使用心得吧！" :name="changeName('shop', item.id, 'content')" class="layui-textarea" style="resize: none;border:0px;font-size:13px;"></textarea>
                 <div class="personal-head2" style="background:#fff;border-top:1px solid #f1f1f1;height: 0.3rem;">
                     <div style="float:left;width:0.3rem;padding-top:0.05rem;padding-left:0.1rem;">
-                        <input type="checkbox" :name="changeName('shop', item.id, 'isAnonym')" title="匿名" lay-skin="primary" checked>
+                        <input  type="checkbox" :name="changeName('shop', item.id, 'isAnonym')" title="匿名" lay-skin="primary" checked>
                     </div>
                 </div>
                 <ul style="background:#fff;border-top:1px solid #f1f1f1;padding:10px 0;">
@@ -79,8 +79,19 @@
     <script src="{APP_PATH}statics/comment/layui-v2.4.5/layui/layui.all.js"></script>
     <script src="{APP_PATH}statics/comment/swiper-4.4.6/dist/js/swiper.min.js"></script>
     <script>
+        var id_list = new Array();
         function sub()
         {
+            //
+            for(var i in id_list)
+            {
+                var grader = $('#grade_'+id_list[i]).val();
+                if($('#text_'+id_list[i]).val() == '' && grader !=5)
+                {
+                    layer.tips('请输入自己的看法吧', '#text1_'+id_list[i]);
+                    return
+                }
+            }
             $("#dosubmit").click();
         }
         var order_id = '{$_GET[order_id]}';
@@ -115,6 +126,7 @@
                             var id=this.data[item].id;
                             //id.push(this.data[item].id);
                             console.log(id);
+                            id_list.push(id);
                             layui.use(['rate'], function () {
                                 var rate = layui.rate;
                                 rate.render({
