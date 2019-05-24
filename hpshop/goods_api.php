@@ -678,7 +678,7 @@ class goods_api{
 		// 	exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		// }
 
-		$info = $this->goodscarts_db->get_one(['userid'=>$uid,'goodsspecId'=>$_POST['spec'],'goodsid'=>$_POST['gid']]);
+		$info = $this->goodscarts_db->get_one(['userid'=>$uid,'goodsspecId'=>$_POST['spec'],'goodsid'=>$_POST['gid'], 'ischeck'=>1]);
 
 		if ( count($info) == 0 ) {
 			$data = [];

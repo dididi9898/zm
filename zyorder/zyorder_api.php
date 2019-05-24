@@ -1299,8 +1299,8 @@ class zyorder_api{
 		if($this->check_uid($orderid,$_userid)){
 		$order = $this->order_db->get_one(array('order_id'=>$orderid));
 
-		if($order['status']>=2){
-		   $result = $this->order_db->update(array('status'=>7,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('order_id'=>$orderid));
+		if($order['status']>=2 && $order["status"] != '7'){
+		   $result = $this->order_db->update(array('status'=>8,'prestatus'=>$order['status'],'tk_reason'=>$tk_reason,'tk_explain'=>$tk_explain,'shstatus'=>4),array('order_id'=>$orderid));
 		   if($result){
 		      $this->caozuo_success("退款成功");
 		   }else{
