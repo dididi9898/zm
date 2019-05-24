@@ -33,12 +33,15 @@ class zyim extends admin
 	 */
 	public function zyim_list()
 	{
-		//$where = ['item_name'=>'zymessagesys'];
+		$where = 'records_id in (select records_id from zy_online_talk_record group by records_id HAVING count(*)>0)';
 		$order = 'id DESC';
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$info=$this->online_talk_list_db->listinfo('',$order,$page,20);
+		$info=$this->online_talk_list_db->listinfo( $where,$order,$page,20);
 		$pages = $this->online_talk_list_db->pages;
 
+		foreach($info as $k=> $value){
+			$info[$k]['unlook']=$this->online_talk_record_db->count(array('records_id'=>$value['records_id'],'status'=>0,'from_user'=>$value['records_id']));
+		}
 		include $this->admin_tpl('zyim_list');
 	}
 

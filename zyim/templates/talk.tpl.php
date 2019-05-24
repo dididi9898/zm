@@ -175,6 +175,7 @@ include $this->admin_tpl('header', 'admin');
             var count=-1;
             var x =<?php echo SERVER_IP;?>;
             var userid='-1';
+            var ws_url="ws://<?php echo SERVER_IP; ?>:2000";
             var data={};
             data.uid=userid;
             data.type='server';
@@ -208,7 +209,7 @@ include $this->admin_tpl('header', 'admin');
                     }
                 });
             }
-            ws = new WebSocket("ws://192.168.1.2:2000");//tcp://0.0.0.0:8282 ws://127.0.0.1:2000
+            ws = new WebSocket(ws_url);//tcp://0.0.0.0:8282 ws://127.0.0.1:2000
             ws.onopen = function() {
                 console.log("连接成功");
                 data=JSON.stringify(data);
@@ -224,7 +225,7 @@ include $this->admin_tpl('header', 'admin');
                         if((msg.data.from==data.sendtouid&&msg.data.to==data.uid)||(msg.data.to==data.sendtouid&&msg.data.from==data.uid)) {
                             console.log(msg.data);
                             var time= date('Y-m-d H:i:s',new Date()/1000);
-                            $('#ct').append('<li><div class="layim-chat-user"><img src="<?php print_r($info['talk_from_img']) ?>" class="user-logo"><p>客服<i>'+time+'</i></p></div><div class="layim-chat-text">' + msg.data.msg + '</div></li>');
+                            $('#ct').append('<li><div class="layim-chat-user"><img src="'+data.from_img+'" class="user-logo"><p>'+data.from_name+'<i>'+time+'</i></p></div><div class="layim-chat-text">' + msg.data.msg + '</div></li>');
                             $(".layim-chat-main").scrollTop($(".layim-chat-main")[0].scrollHeight);
                         }else{
                             console.log('不是和你聊');
@@ -248,7 +249,7 @@ include $this->admin_tpl('header', 'admin');
                 ws.send(data);
                 data=JSON.parse(data);
                 var time= date('Y-m-d H:i:s',new Date()/1000);
-                $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="<?php print_r($info['talk_to_img']) ?>" class="user-logo"><p><i>'+time+'</i>小闲</p></div><div class="layim-chat-text">'+(da)+'</div></li>');
+                $('#ct').append('<li class="layim-chat-mine"><div class="layim-chat-user"><img src="'+data.to_img+'" class="user-logo"><p><i>'+time+'</i>'+data.to_name+'</p></div><div class="layim-chat-text">'+(da)+'</div></li>');
                 $(".layim-chat-main").scrollTop($(".layim-chat-main")[0].scrollHeight);
             }
             A.$('nrong').onkeydown=function(e){
