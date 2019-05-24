@@ -97,6 +97,7 @@ if(is_array($infos)){
 
 	<td align="center">
         <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="edit('<?php echo $info['id']?>')"><?php echo L('编辑')?></a>
+        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="commint('<?php echo $info['id']?>')"><?php echo L('商品评论')?></a>
     	<a href="javascript:confirmurl('?m=hpshop&c=goods&a=goodsdel&id=<?php echo $info['id']?>', '<?php echo L('确定删除此商品')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
         <?php if($info["on_sale"] == 1){?>
             <a href="javascript:confirmurl('?m=hpshop&c=goods&a=goodsdisagree&id=<?php echo $info['id']?>', '<?php echo L('确定下架该商品吗')?>')" class="btn btn-success btn-sm"><?php echo L('下架')?></a>
@@ -133,22 +134,37 @@ if(is_array($infos)){
 
 function edit(id) {
     window.top.art.dialog({
-        id:'edit',
-        iframe:'?m=hpshop&c=goods&a=goodsedit&id='+id,
-        title:'修改商品信息',
-        width:'1200',
-        height:'700',
-        lock:true
-    },
-    function(){
-        var d = window.top.art.dialog({id:'edit'}).data.iframe;
-        var form = d.document.getElementById('dosubmit');
-        form.click();
-        return false;
-    },
-    function(){
-        window.top.art.dialog({id:'edit'}).close()
-    });
+            id:'edit',
+            iframe:'?m=hpshop&c=goods&a=goodsedit&id='+id,
+            title:'修改商品信息',
+            width:'1200',
+            height:'700',
+            lock:true
+        },
+        function(){
+            var d = window.top.art.dialog({id:'edit'}).data.iframe;
+            var form = d.document.getElementById('dosubmit');
+            form.click();
+            return false;
+        },
+        function(){
+            window.top.art.dialog({id:'edit'}).close()
+        });
+    void(0);
+}
+function commint(id) {
+    window.top.art.dialog({
+            id:'commint',
+            iframe:'?m=hpshop&c=goods&a=goodsCommint&goods_id='+id,
+            title:'修改商品信息',
+            width:'1300',
+            height:'700',
+            lock:true
+        },
+
+        function(){
+            window.top.art.dialog({id:'commint'}).close()
+        });
     void(0);
 }
 

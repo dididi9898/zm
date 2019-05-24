@@ -6,6 +6,8 @@ pc_base::load_sys_class('form', '', 0);
 pc_base::load_app_func('global');
 
 class goods extends admin {
+	public static $commintGrade = ["5"=>"非常好","4"=>"好", '3'=>"一般", '2'=>'差', '1'=>'非常差'];
+	public static $isShield = ["1"=>"未屏蔽","2"=>"已屏蔽"];
 	function __construct() {
 		parent::__construct();
 		$this->get_db = pc_base::load_model('get_model');
@@ -33,11 +35,11 @@ class goods extends admin {
 		//商品属性表
 		$this->goods_attr_db = pc_base::load_model('goods_attr_model');
 
-
+        $this->order_comment = pc_base::load_model('order_comment_model');
 		$this->zyconfig_db = pc_base::load_model('zyconfig_model');
 		$this->module_db = pc_base::load_model('module_model');
 		$this->config = $this->zyconfig_db->get_one('','url');
-		
+		$this->pagesize = 5;
 	}
 
 
@@ -237,7 +239,32 @@ class goods extends admin {
 	// 		exit();
 	// 	}		
 	// }
-
+	public function goodsCommint()
+	{
+        $status = isset($_GET["status"])?intval($_GET["status"]):'';
+        $Shield = isset($_GET["Shield"])?intval($_GET["Shield"]):'';
+		$goods_id = $_GET["goods_id"];
+		$where = "B1.`goods_id`=".$goods_id." AND ";
+		if(!empty($status))
+			$where .= '`commentGrade`='.$status." AND ";
+        if(!empty($Shield))
+            $where .= '`isShield`='.$Shield." AND ";
+		$where .= " 1";
+		$page = isset($_GET["page"])?intval($_GET["page"]):1;
+		list($info, $count) = $this->order_comment->moreTableSelect(array("zy_order_comment"=>array('*'), "zy_member"=>array("headimgurl", "nickname", "mobile"), "zy_goods_specs"=>array("specids")),
+			array("userid", "id"),
+			$where, ((string)($page-1)*$this->pagesize).",".$this->pagesize, "B1.addtime DESC","1"
+			);
+        list($page, $pagenums, $pageStart, $pageCount) = getPage($page, $this->pagesize, $count);
+        include $this->admin_tpl('commint');
+	}
+	public function CommintShield()
+	{
+		$commentid = isset($_GET["commentid"])? intval($_GET["commentid"]): exit('2');
+		$sql = "update zy_order_comment set isShield = case when isShield=1 THEN 2 when isShield=2 then 1 end where `commentid`=".$commentid.";";
+		$this->order_comment->spcSql($sql);
+		exit('1');
+	}
 
 	/**
 	* 商品_删除

@@ -28,6 +28,7 @@ class foreground {
 		$phpcms_userid = param::get_cookie('_userid');
 		if(ROUTE_M =='zymember' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register','psd_back'))) {
 			if ($phpcms_auth) {
+
 				if($this->is_identification($phpcms_userid))
 					showmessage('登录成功', 'index.php?m=zymember&c=index');
 				else
@@ -35,6 +36,7 @@ class foreground {
 			} else {
 				return true;
 			}
+
 		} else {
 			//判断是否存在auth cookie
 			if ($phpcms_auth) {
