@@ -30,7 +30,9 @@ class api{
 
 		$infos=$this->online_talk_list_db->get_one(['talk_from_uid'=>$userid]);
 		if($infos){
-			$this->_return_status(-1);
+			$data['status']=1;
+			$infos=$this->online_talk_record_db->update($data,['records_id'=>$userid,'status'=>0,'to_user'=>$userid]);
+			$this->_return_status(-1,$infos);
 		}
 		//数据
 		$where = ['userid'=>$userid];
@@ -49,63 +51,12 @@ class api{
 			$this->_return_status(-103);
 		}else{
 			$info=$this->online_talk_list_db->insert($data);
-
 		}
 		//==================	操作失败-验证 END
 
 		$this->_return_status(200,$info);
 		//==================	操作成功-返回数据 END
 	}
-
-	/**
-	* 创建会话
-	* @status [状态] -103请先登录
-	* @param  [type] $userid [*用户id]
-	* @param  [type] $type [*类型：1web端、2APP端]
-	* @param  [type] $page [当前页码，默认第一页]
-	* @param  [type] $pagesize [当前的条数，默认20条]
-	* @return [json] [json数组]
-	*/
-	public function create_talk2($userid)
-	{
-		$type = $_POST['type'] ? $_POST['type'] : 1;	//类型：1web端、2APP端
-		$userid = $type==1 ? param::get_cookie('_userid') : $_POST['userid'];
-
-		$page = $_POST['page'] ? $_POST['page'] : 1;	//当前页码
-		$pagesize = $_POST['pagesize'] ? $_POST['pagesize'] : 20;	//当前的条数，默认20条
-		
-		//差数据
-		$where = ['userid'=>$userid];
-		$order = 'id DESC';
-		$info=$this->online_talk_list_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
-		$totalnum = $this->online_talk_list_db->count($where);
-		$totalpage = ceil($totalnum/$pagesize);
-
-		//==================	操作失败-验证 START
-			//请先登录
-			if (!$userid) {
-				$this->_return_status(-103);
-			}
-		//==================	操作失败-验证 END
-
-		//==================	操作成功-返回数据 START
-			foreach ($info as $key => $value) {
-				$infos[$key]['id']=$value['id'];
-				$infos[$key]['title']=$value['title'];
-				$infos[$key]['content']=$value['content'];
-				$infos[$key]['thumb']=APP_PATH.$value['thumb'];
-				$infos[$key]['sendname']=$value['sendname'];
-				$infos[$key]['time']=date('Y/m/d',$value['addtime']);
-			}
-
-			$pages['pagesize'] = $pagesize;	//每页10条
-			$pages['totalpage'] = $totalpage;	//总页数
-			$pages['totalnum'] = $totalnum;	//总数据
-			
-			$this->_return_status(200,$infos,$pages);
-		//==================	操作成功-返回数据 END
-	}
-
 
 
 	/**
@@ -148,7 +99,33 @@ class api{
 
 	}
 
-	
+	/**
+	 * 创建会话
+	 * @status [状态] -103请先登录
+	 * @param  [type] $userid [*from用户id]
+	 * @param  [type] $records_id [*记录id]
+	 * @return [json] [json数组]
+	 */
+	public function look_msg($userid,$records_id)
+	{
+		$type = $_POST['type'] ? $_POST['type'] : 1;	//类型：1 client端、2 server端
+		$userid = $type==1 ? param::get_cookie('_userid') : $_POST['userid'];
+		$records_id = $_POST['records_id'];
+
+		if($records_id)
+		//==================	操作失败-验证 START
+		//请先登录
+		if (!$userid) {
+			$this->_return_status(-103);
+		}else{
+			$data['status']=1;
+			$infos=$this->online_talk_record_db->update($data,['records_id'=>$records_id,'status'=>0,'from_user'=>$userid]);
+		}
+		//==================	操作失败-验证 END
+
+		$this->_return_status(200,$infos);
+		//==================	操作成功-返回数据 END
+	}
 
 
 //====================================	私有验证函数 START
@@ -259,6 +236,7 @@ class api{
 						'status'=>'error',
 						'code'=>-1,
 						'message'=>'列表已存在，不重复添加',
+						'data'=>$data,
 					];
 					exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 					break;
