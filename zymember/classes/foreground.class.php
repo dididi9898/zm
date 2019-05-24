@@ -18,10 +18,10 @@ class foreground {
 		$phpcms_auth = param::get_cookie('auth');
 		if(ROUTE_M =='zymember' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register','psd_back'))) {
 			if ($phpcms_auth) {
-				showmessage('登录成功', 'index.php?m=zymember&c=index');
-			} else {
-				return true;
-			}
+                showmessage('登录成功', 'index.php?m=zymember&c=index');
+            } else {
+                return true;
+            }
 		} else {
 			//判断是否存在auth cookie
 			if ($phpcms_auth) {
