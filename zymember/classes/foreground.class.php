@@ -10,15 +10,28 @@ class foreground {
 			self::check_member();
 		}
 	}
-	
+
+	public function is_identification($userid)
+	{
+		$bool=$this->db->get_one(array('userid'=>$userid));
+		if($bool['realname']&&$bool['idcard']){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	/**
 	 * 判断用户是否已经登陆
 	 */
 	final public function check_member() {
 		$phpcms_auth = param::get_cookie('auth');
+		$phpcms_userid = param::get_cookie('_userid');
 		if(ROUTE_M =='zymember' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register','psd_back'))) {
 			if ($phpcms_auth) {
-				showmessage('登录成功', 'index.php?m=zymember&c=index');
+				if($this->is_identification($phpcms_userid))
+					showmessage('登录成功', 'index.php?m=zymember&c=index');
+				else
+					showmessage('登录成功', 'index.php?m=zymember&c=index&a=idCard_confirm');
 			} else {
 				return true;
 			}
