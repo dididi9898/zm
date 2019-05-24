@@ -19,7 +19,9 @@ class index extends foreground {
 
 
 //=========================== 验证 START
-	
+
+
+
 	/**
 	 * 公共_手机号码_是否重复验证
 	 */
@@ -54,6 +56,25 @@ class index extends foreground {
 
 	}
 
+	/**
+	 * 身份实名验证
+	 */
+	public function idCard_confirm()
+	{
+		$_userid = $this->_userid;
+		$bool=$this->is_identification($_userid);
+		include template('zymember', 'idCard_confirm');
+	}
+
+	public function is_identification($userid)
+	{
+		$bool=$this->member_db->get_one(array('userid'=>$userid));
+		if($bool['realname']&&$bool['idcard']){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	/**
 	 * 店铺首页
 	 */

@@ -45,6 +45,38 @@ class goods_api{
 		$this->pageSize = 10 ;
 	}
 
+	/**
+	 *最新商品
+	 */
+	public function newest_goods(){
+
+		$where = 'on_sale=1';
+		$sql ='SELECT id,goods_name,thumb,summary,market_price,shop_price,salesnum FROM phpcms_goods WHERE '.$where.' ORDER BY addtime DESC';
+		$page = $_GET['page'] ? $_GET['page'] : '1';
+		$info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
+
+		$sqls = 'SELECT COUNT(*) as num FROM phpcms_goods a WHERE '.$where.' ORDER BY addtime DESC';
+		$res = $this->goods_db->query($sqls);
+		$page = $this->goods_db->fetch_array($res);
+ 		$totalnum = $page[0]['num'];
+		$totalpage = ceil($totalnum/10);
+
+		$result = [
+			'status' => 'success',
+			'code' => 1,
+			'message' => 'OK',
+			'data' => $info,
+			 'page' => [
+			 	'pagesize'=>10,
+			 	'totalpage'=>$totalpage,
+			 	'totalnum' => $totalnum
+			 ]
+		];
+		$jg = json_encode($result,JSON_UNESCAPED_UNICODE);
+		$jg = stripslashes($jg);
+
+		exit($jg);
+	}
 
 	/**
      *推荐商品

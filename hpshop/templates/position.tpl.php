@@ -16,7 +16,6 @@
 a:hover{ text-decoration: none; }
 </style>
 
-<div class="pad_10">
 <div class="table-list">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="hpshop" name="m">
@@ -59,7 +58,7 @@ if(is_array($infos)){
 	<td  align="center"><?php echo $info['posname']?></td>
 	<td align="center">
         <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="edit('<?php echo $info['id']?>')"><?php echo L('编辑')?></a>
-    	<a href="javascript:confirmurl('?m=hpshop&c=goods&a=positiondel&id=<?php echo $info['id']?>', '<?php echo L('确定删除此品牌')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
+<!--    	<a href="javascript:confirmurl('?m=hpshop&c=goods&a=positiondel&id=--><?php //echo $info['id']?><!--', '--><?php //echo L('确定删除此品牌')?><!--')" class="btn btn-danger btn-sm">--><?php //echo L('删除')?><!--</a>-->
 	</td>
 	</tr>
 <?php 
@@ -74,7 +73,7 @@ if(is_array($infos)){
     <div class="btn" style=" width: 100%; text-align: left; margin-left: 0; "> 
         <label for="check_box"><?php echo L('selected_all')?>/取消</label>
         <input type="submit" class="btn btn-success btn-sm" name="dosubmit" onClick="document.myform.action='?m=hpshop&c=goods&a=positionlistorder'" value="排序"/>
-        <input type="submit" class="btn btn-danger btn-sm" name="dosubmit" value="批量删除" onclick="return confirm('<?php echo L('确定删除')?>')"/>
+        <!--<input type="submit" class="btn btn-danger btn-sm" name="dosubmit" value="批量删除" onclick="return confirm('<?php echo L('确定删除')?>')"/>-->
         
     </div>
 </div>
