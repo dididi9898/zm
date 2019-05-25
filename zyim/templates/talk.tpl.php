@@ -227,8 +227,7 @@ include $this->admin_tpl('header', 'admin');
                             $('#ct').append('<li><div class="layim-chat-user"><img src="'+data.from_img+'" class="user-logo"><p>'+data.from_name+'<i>'+time+'</i></p></div><div class="layim-chat-text">' + msg.data.msg + '</div></li>');
                             $(".layim-chat-main").scrollTop($(".layim-chat-main")[0].scrollHeight);
                         }else{
-                            msg=JSON.stringify(msg);
-                            console.log('不是和你聊'+msg);
+                            console.log('不是和你聊');
                         }
                     }else{
                         console.log(msg);
