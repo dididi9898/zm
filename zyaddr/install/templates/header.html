@@ -17,5 +17,47 @@
     <script src="{APP_PATH}statics/plugin/layui/layui.all.js"></script>
     <script src="{APP_PATH}statics/plugin/swiper-4.4.6/dist/js/swiper.min.js"></script>
     <script src='{APP_PATH}statics/plugin/mui/dist/js/mui.min.js'></script>
+    <style>
+        .per-head {
+            height: 0.4rem;
+            width: 100%;
+            background: #c4a966;
+            text-align: center;
+        }
+        .per-head {
+            background: #55acef;
+        }
+        .per-head-left {
+            height: 0.4rem;
+            width: 0.4rem;
+            float: left;
+            line-height: 0.4rem;
+        }
+        .per-head .tb-dw {
+            width: .2rem;
+        }
+        .per-head-hd {
+            font-size: .15rem;
+            line-height: 0.4rem;
+            color: #fff;
+        }
+        .per-head-right {
+            height: 0.4rem;
+            width: 0.4rem;
+            float: right;
+        }
+    </style>
 </head>
 <body>
+<div class="per-head">
+    <div class="per-head-left">
+        <a href="javascript:history.go(-1);">
+            <img src="http://localhost/zm/statics/zm/images/fh-b.png" class="tb-dw">
+        </a>
+    </div>
+    <a class="per-head-hd">收货地址</a>
+    <div class="per-head-right">
+        <!--             <img src='images/gd-b.png' class='tb-dw'> -->
+    </div>
+    <div class="clear"></div>
+</div>

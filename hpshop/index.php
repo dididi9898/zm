@@ -122,6 +122,14 @@ class index{
 		include template('hpshop', 'search');
 	}
 
+	/**
+	 *商品搜索
+	 */
+	public function all_search(){
+
+
+		include template('hpshop', 'all_search');
+	}
 
 	/**
      *商品结算
