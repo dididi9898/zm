@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1, maximum-scale=1">
     <title>{if isset($SEO['title']) && !empty($SEO['title'])}{$SEO['title']}{/if}{$SEO['site_title']}</title>
 
     <link rel="stylesheet" href="{APP_PATH}statics/public/layui-v2.4.5/layui/css/layui.css">
@@ -166,7 +166,7 @@
     </div>
     <div style='height:1rem;'></div>
         <!--<div id="us" class="jb">111</div>-->
-    <div class="layim-chat-main" style="overflow: auto">
+    <div class="layim-chat-main" style="overflow-y: auto;overflow-y:hidden">
         <ul id="ct"></ul>
     </div>
         <!--<a href="javascript:;" class="qp" onClick="this.parentNode.children[1].innerHTML=''">清屏</a>-->

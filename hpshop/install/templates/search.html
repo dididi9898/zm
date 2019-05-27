@@ -140,7 +140,13 @@
 							  content: $('.fl-search'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
 							});
 							aj.post('index.php?m=hpshop&c=goods_api&a=goods_sh',{}, function(data){
-                                that.history = data.data;
+								if(data.status=='error'){
+									layer.msg(data.message);
+									if(data.code==0)
+										setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+								}else {
+									that.history = data.data;
+								}
 							})
 
 						},
