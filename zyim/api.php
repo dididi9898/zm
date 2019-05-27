@@ -40,7 +40,7 @@ class api{
 		$data['talk_from_uid']=$userid;
 		$data['talk_from_name']=$info['nickname'];
 		$data['talk_from_img']=$info['headimgurl'];
-		$data['talk_to_uid']=0;
+		$data['talk_to_uid']=-1;
 		$data['talk_to_img']=APP_PATH.'statics/images/zz_bg.jpg';
 		$data['talk_to_name']='惠集信购客服';
 		$data['records_id']=$info['userid'];
