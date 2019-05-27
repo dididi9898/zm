@@ -173,7 +173,6 @@ include $this->admin_tpl('header', 'admin');
 
             var key='all',mkey;
             var count=-1;
-            var x =<?php echo SERVER_IP;?>;
             var userid='-1';
             var ws_url="ws://<?php echo SERVER_IP; ?>:2000";
             var data={};
@@ -209,7 +208,7 @@ include $this->admin_tpl('header', 'admin');
                     }
                 });
             }
-            ws = new WebSocket(ws_url);//tcp://0.0.0.0:8282 ws://127.0.0.1:2000
+            ws = new WebSocket("ws://192.168.1.2:2000");//tcp://0.0.0.0:8282 ws://127.0.0.1:2000
             ws.onopen = function() {
                 console.log("连接成功");
                 data=JSON.stringify(data);
