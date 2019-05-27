@@ -1,6 +1,11 @@
 <?php
 
 
+	function Error($info)
+	{
+        throw new Exception($info);
+	}
+
 	
 /**
  * 数据导入到Excel中
@@ -8,24 +13,88 @@
  * @param string $excel_file_name 导出的excel文件的名称
  * @param array $filed_cn_array 数据字段翻译，作为表头标题
  */
-function excel_import($filename,$encode='utf-8'){
-		require_once(dirname(dirname(__FILE__)).'\classes\PHPExcel.class.php');
+	function excel_import($filename,$excle_no, $encode='utf-8'){
+			require_once(dirname(dirname(__FILE__)).'\classes\PHPExcel.class.php');
 
 
-		   $objReader = PHPExcel_IOFactory::createReader('Excel5');
-          $objReader->setReadDataOnly(true);
-          $objPHPExcel = $objReader->load($filename);
-          $objWorksheet = $objPHPExcel->getActiveSheet();
-		  $highestRow = $objWorksheet->getHighestRow(); 
-		  $highestColumn = $objWorksheet->getHighestColumn(); 
-		  $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); 
-		  $excelData = array(); 
-		  for ($row = 2; $row <= $highestRow; $row++) { 
-		  for ($col = 0; $col < $highestColumnIndex; $col++) { 
-                 $excelData[$row][] =(string)$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-           } 
-         } 
-        return $excelData;
+			  $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+	//	      $objReader = PHPExcel_IOFactory::createReader('Excel5');
+			  //$objReader->setReadDataOnly(true);
+			  $objPHPExcel = $objReader->load($filename);
+			  $objWorksheet = $objPHPExcel->getActiveSheet();
+			  $highestRow = $objWorksheet->getHighestRow();
+			  $highestColumn = $objWorksheet->getHighestColumn();
+			  $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+			  $excelData = array();
+			  $img_path = array();
+			  for ($row = 3; $row <= $highestRow; $row++) {
+				   for ($col = 0; $col < $highestColumnIndex; $col++) {
+				   	$value = (string)$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+				   	if(!empty($value) || $value == '0')
+						$excelData[$row][$excle_no[$col]] = $value;
+				 }
+			   }
+	//		  $path = "/upload/";
+			  foreach($objWorksheet->getDrawingCollection() as $drawing){
+					$string = $drawing->getCoordinates();
+					preg_match("/\d+/",$string, $s);
+					preg_match("/[a-zA-Z]+/",$string, $d);
+
+					if($drawing instanceof  PHPExcel_Worksheet_Drawing) {
+						$imagePath = $drawing->getPath();
+						$imagePath = substr($imagePath, 6);
+						$imagePathSplitted = explode("#", $imagePath);
+
+						$imageZip = new ZipArchive();
+						$imageZip->open($imagePathSplitted[0]);
+						$imageContents = $imageZip->getFromName($imagePathSplitted[1]); // 这里得到图片的数据流
+						$imageZip->close();
+						unset($imageZip);
+						$expanded = '.' . explode('.', $imagePathSplitted[1])[1]; // 获取扩展名
+						$img = "/upload/" . uniqid() . mt_rand(10000, 99999) . $expanded;
+						file_put_contents("." . $img, $imageContents);
+						$count = count($img_path[$s[0]][$d[0]])+1;
+						$img_path[$s[0]][$d[0]][] = ['url'=> APP_PATH.$img, 'alt'=>$count];
+						$cell = $objWorksheet->getCell($string);
+						$cell->setValue($img);
+					} else if ($drawing instanceof PHPExcel_Worksheet_MemoryDrawing) {
+
+							$image = $drawing->getImageResource();
+
+							$renderingFunction = $drawing->getRenderingFunction();
+
+							switch ($renderingFunction) {
+
+								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG:
+
+									$imageFileName = $drawing->getIndexedFilename();
+									$path =  $drawing->getIndexedFilename();
+									imagejpeg($image, $path);
+									break;
+
+								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_GIF:
+									$imageFileName = $drawing->getIndexedFilename();
+									$path = $path . $drawing->getIndexedFilename();
+									imagegif($image, $path);
+									break;
+
+								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_PNG:
+									$imageFileName = $drawing->getIndexedFilename();
+									$path = $path . $drawing->getIndexedFilename();
+									imagepng($image, $path);
+									break;
+
+								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT:
+									$imageFileName = $drawing->getIndexedFilename();
+									$path = $path . $drawing->getIndexedFilename();
+									imagegif($image, $path);
+									break;
+							}
+				}
+
+		}
+
+        return array($excelData, $img_path);
     }    
 
 
