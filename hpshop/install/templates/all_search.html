@@ -1,0 +1,142 @@
+﻿<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi" />
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>首页</title>
+	<link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/swiper.min.css">
+	<link rel="stylesheet" href="{APP_PATH}statics/public/layui-v2.4.5/layui/css/layui.css">
+	<link type="text/css" rel="stylesheet" href="{APP_PATH}statics/zm/css/style.css">
+	<link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+	<link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_ocuxyk7vg8.css">
+	<script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+	<script src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="{APP_PATH}statics/zm/js/swiper.min.js"></script>
+	<script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
+</head>
+<style>
+	.list{
+		text-align: left;padding: 0.3rem;
+	}
+	.r2{
+		  padding: 0.2rem
+	}
+</style>
+<body>
+<div id="dosearch">
+	<div class='per-head index-head' style="background-color: #f1f1f1;">
+		<div class="pl1 pr1">
+			<div class="bt5"></div>
+			<div class='per-head-left'>
+				<a href='javascript:history.go(-1);'>
+					<i class="layui-icon layui-icon-return tb-dw" style="margin-bottom: 0.2rem;margin-top: 0rem;"></i>
+				</a>
+			</div>
+			<div class='per-head-right'>
+				<button class="layui-btn layui-btn-radius layui-btn-danger layui-btn-sm" @click="submit_search">搜索</button>
+			</div>
+			<div class="index-head-sear">
+				<input type="text" onclick="openSearch()" placeholder="商品搜索" v-model="search">
+				<span class="iconfont icon-search1" @click="submit_search"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="bt5"></div>
+		</div>
+	</div>
+
+	<div style="height: 1.1rem"></div>
+	<!--<div style="width: 100%;background: white;border-radius: 10px;text-align: center;margin: auto;">-->
+		<!--<div class="list"><p >13131<i class="layui-icon layui-icon-search" style="float: right"></i></p></div>-->
+		<!--<hr style="margin: 0">-->
+		<!--<div class="list"><p >13131<i class="layui-icon layui-icon-search" style="float: right"></i></p></div>-->
+		<!---->
+	<!--</div>-->
+	<div class="fl-tj" style="position: relative;">
+		<div class="r2"><h1>搜索记录</h1></div>
+		<template  v-model="history" v-for="x,y in history.hiscon">
+			<span style="background-color: #e8e8e8;border-radius: 20px;padding: 5px 10px;margin: 0 5px 5px 5px" @click="showHistory(x)">{{ x }}</span>
+		</template>
+	</div>
+	<div style="width:100%;position: absolute;bottom: 0.5rem;margin: auto;text-align: center" @click="clearHistory">清除搜索记录</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+<script type="text/javascript" src="{APP_PATH}statics/public/js/leftTime.min.js"></script>
+<script src="{APP_PATH}statics/zm/js/ajax.js"></script>
+<script src="{APP_PATH}statics/public/layui-v2.4.5/layui/layui.all.js"></script>
+<script src="{APP_PATH}statics/public/swiper-4.4.6/dist/js/swiper.min.js"></script>
+
+
+
+<script>
+	//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+	var sercon = "{$_GET[sercon]}";
+	var type = "{php if(isset($_GET[type])) echo $_GET[type]; else echo '1';}";
+	;
+	! function () {
+
+		var layer = layui.layer,
+				form = layui.form,
+				$ = layui.jquery,
+				upload = layui.upload,
+				table = layui.table;
+
+		var  history='';
+		aj.post('index.php?m=hpshop&c=goods_api&a=goods_sh',{}, function(data){
+			if(data.status=='error'){
+				layer.msg(data.message);
+				if(data.code==0)
+					setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+			}else {
+				history = data.data;
+				console.log(history);
+				var dosearch = new Vue({
+					el: '#dosearch',
+					data: {
+						search: sercon,
+						history: history,
+						type: type,
+						fl: 'fl',
+						on: 'on'
+					},
+					methods: {
+						//打开搜索
+						changeType: function (data) {
+							this.type = data;
+							changeData(data);
+						},
+						//关闭搜索
+						close: function () {
+							$(".layui-container.search-fl").hide();
+							layer.closeAll()
+						},
+						submit_search: function () {
+							if (this.search) {
+								aj.post('index.php?m=hpshop&c=goods_api&a=sergoods', {sercon: this.search}, function (data) {
+									console.log(data);
+								});
+
+							} else {
+								layer.msg('搜索内容不能为空');
+							}
+							//console.log(this.search);
+							window.location.href = "index.php?m=hpshop&c=index&a=search&sercon=" + this.search;
+						},
+						showHistory: function (data) {
+							this.search = data;
+						},
+						clearHistory: function () {
+							this.history = '';
+							aj.post('index.php?m=hpshop&c=goods_api&a=clearHistory', {}, function (data) {
+								console.log(data);
+							});
+						}
+					}
+				});
+			}
+		});
+
+	}();
+</script>
+</body>
+</html>

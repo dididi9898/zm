@@ -473,6 +473,7 @@ class api{
 		$verify_code = $_POST['verify_code'];	//短信验证码
 		$password = $_POST['password'];	//密码
 		$type = $_POST['type'];	//类型：1web端、2APP端
+		$token = $_POST['token'];	//类型：1web端、2APP端
 		$forward = $_POST['forward'] ? urldecode($_POST['forward']) : APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';	//接下来该跳转的页面链接
 
 		//用手机号码查出用户账号
@@ -577,8 +578,13 @@ class api{
 
 			//主表
 			$userid=$this->member_db->insert($userinfo,true);
-			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=insertMember&userid=".$userid;
+			$url = APP_PATH."index.php?m=zyfx&c=frontApi&a=insertMember&userid=".$userid;
             _crul_get($url);
+			if($token){
+				$token = sys_auth($token, 'DECODE','add');
+				$url = APP_PATH."index.php?m=zyfx&c=frontApi&a=addchild&userid=".$userid.'&pid='.$token;
+				_crul_get($url);
+			}
 			$this->member_db->update(array('phpssouid'=>$userid),'userid='.$userid);
 			
 			//sso表

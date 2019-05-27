@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="h1"></div>
                                     <div class="lh015 xs-fs">
-                                        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6 text-left"><a href="{APP_PATH}index.php?m=zymember&c=index&a=login" class="c-afafaf">已有账户，立即登录</a></div>
+                                        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6 text-left"><a href="{APP_PATH}index.php?m=zymember&c=index&a=login&token={$_GET[token]}" class="c-afafaf">已有账户，立即登录</a></div>
                                         <div class="layui-col-xs6 layui-col-sm6 layui-col-md6 text-right"><a href="" class="c-afafaf">找回密码</a></div>
                                         <div class="clear"></div>
                                     </div>
@@ -101,6 +101,7 @@
                 layer.msg('该栏目正在开发中...');
             });
 
+            var token='{$_GET[token]}';
             //自定义验证规则
             form.verify({
                 pass: [
@@ -122,6 +123,7 @@
                 }
                 if (data.field.mobile && data.field.password && data.field.verify_code) {
                     data.field.type = '1';
+                    data.field.token = token;
                     aj.post('index.php?m=zymember&c=api&a=sms_registered', data.field, function (data) {
                         console.log(data);
                         if (data.status == 'error') {

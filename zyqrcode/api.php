@@ -54,11 +54,14 @@ class api
         $msg = empty($_POST['msg']) ? 0 : $_POST['msg'];
         $data['thumb'] = empty($_POST['thumb']) ? 0 : $_POST['thumb'];
         $data['userid'] = empty($_POST['userid']) ? $this->_userid : $this->_userid;
+
         if(!empty($data['userid'])){
+            $token=sys_auth($data['userid'], 'ENCODE', 'add');
+            $url=APP_PATH.'index.php?m=zymember&c=index&a=register&token='.$token;
             if ($msg==1){
-                $data['qrcode']= $this->create_qrcode_pic( $data['userid'],$data['thumb']);
+                $data['qrcode']= $this->create_qrcode_pic($url,$data['thumb']);
             }else {
-                $data['qrcode'] = $this->create_qrcode($data['userid']);
+                $data['qrcode'] = $this->create_qrcode($url);
             }
         }else{
             $json['status']='error';
