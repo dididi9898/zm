@@ -6,7 +6,24 @@
         throw new Exception($info);
 	}
 
-	
+	function returnAjaxData($code, $info="成功", $data=[])//ajax返回函数
+	{
+		$resule = ['code'=>$code, 'data'=>$data];
+		if($code == 1)
+		{
+			$resule_info = [
+				'status' => 'success',
+				'message' => $info,
+			];
+		}
+		else {
+			$resule_info = [
+				'status' => 'error',
+				'message' => $info,
+			];
+		}
+		exit(json_encode(array_merge($resule, $resule_info),JSON_UNESCAPED_UNICODE));
+	}
 /**
  * 数据导入到Excel中
  * @param array $data_array 要导出的二维数组
