@@ -81,7 +81,65 @@ class zyorder_api{
        return $result;
       }
 
+	/**
+	 *单个订单商品详情(用户版，此处用户与商家相同)
+	 */
+	public function one_goods_info($ischeck = 1,$order_goods_id = 0){
 
+		if ( $_POST['order_goods_id'] ) {
+			$id = $_POST['order_goods_id'];//订单id
+		} else {
+			$id = $order_goods_id;//订单id
+		}
+		//$info = $this->ordergoods_db->select(1);
+		if ( empty($id) ) {
+			$result = [
+				'status' => 'error',
+				'code' => -1,
+				'message' => '访问受限，缺少参数',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+		}
+
+		if ( $ischeck == 1 ) {
+
+			$_userid = param::get_cookie('_userid');
+			$userid = $_POST['uid'];//用户id，APP端必须传
+			//$oid = $_POST['oid'];
+			//非APP端直接用$_userid
+			if($_userid){
+				$uid = $_userid;
+			}else{
+				$uid = $userid;
+			}
+
+			if ( !$uid ) {
+				$result = [
+					'status' => 'error',
+					'code' => 0,
+					'message' => '请先登录！',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+			}
+		}
+
+		$info = $this->ordergoods_db->select(['id'=>$id],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
+		if ( $ischeck != 1 ) {
+			return $info;
+			exit(0);
+		}
+
+		$result = [
+			'status' => 'success',
+			'code' => 1,
+			'message' => 'OK',
+			'data' => $info,
+		];
+		$jg = json_encode($result,JSON_UNESCAPED_UNICODE);
+		$jg = stripslashes($jg);
+
+		exit($jg);
+	}
 
 	/**
      *单个订单商品详情(用户版，此处用户与商家相同)
