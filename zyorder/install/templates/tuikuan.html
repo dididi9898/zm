@@ -1,6 +1,5 @@
 ﻿{template "zyorder","top-head"}
-<link rel="stylesheet" href="{APP_PATH}statics/comment/icon/iconfont.css">
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1180984_2lqquvvcw3t.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1180984_6azux45wb7b.css">
 <style>
 	p{
 		padding-right: 0.1rem;
@@ -74,6 +73,9 @@
 
 </style>
 <style>
+	.none{
+		display: none;
+	}
 	.select1{
 		height: 2rem;
 		padding: 0 0.1rem 0 0.1rem;
@@ -129,6 +131,28 @@
 	 .layui-layer-page .layui-layer-content{overflow: inherit !important}
 	 .layui-layer-setwin .layui-layer-close2 {right: -.1rem}
 </style>
+<style>
+	.goods-tcn-num-add {
+		text-align: center;
+	}
+	.goods-tcn-num-add span {
+		display: inline-block;
+		width: .2rem;
+		line-height: .2rem;
+		background-color: #e6e6e6;
+		text-align: center;
+		font-size: .15rem;
+	}
+	.goods-tcn-num-add input {
+		width: .3rem;
+		line-height: .2rem;
+		border-style: none;
+		text-align: center;
+	}
+	input[type="number"] {
+		-moz-appearance: textfield;
+	}
+</style>
 <body class="bg-f4f4f4">
 	<div class="personal-head" >
 		<a onclick="javascript :history.back(-1);">
@@ -171,10 +195,9 @@
 		</div>
 	</div>
 
-	<form action="">
+	<form action="index.php?m=zyorder&c=index&a=afterSaleApi" name="myform" method="post">
 	<div class="goods_info">
 		<div class="sh-div" style="margin: 0; margin-top:0.1rem;">
-
 			<div class="goods-content" @click="goods_status()">
 				<div class="fl" >
 					<p >货物状态</p>
@@ -196,13 +219,26 @@
 				</div>
 				<div class="clear"></div>
 			</div>
-
+			<hr style="margin:0">
 			<div class="goods-content">
 				<div class="fl" >
 					<p >退款金额</p>
 				</div>
 				<div class="fl" >
-					<span style="color: red">￥</span><input id="return_price" type="text" style="color: red" placeholder="填写金额" :value="data[0].goods_price*data[0].goods_num">
+					<span style="color: red">￥</span>
+					<span id="return_price"  style="color: red" >{{s_price}}</span>
+					<!--<input id="return_price" type="text" style="color: red" placeholder="填写金额" :value="data[0].goods_price*data[0].goods_num">-->
+				</div>
+				<div class="fr" >
+					<div class="goods-tcn-num">
+						<div class="goods-tcn-num-add">
+							<input type="hidden" :name="changeName('shop', order_goods_id, 'number')" :value="s_shuliang">
+							<span class="jian" v-on:click="jiannum">-</span>
+							<span style="background: #fff;font-size: 0.14rem">{{s_shuliang}}</span>
+							<span class="jia" v-on:click="jianum" >+</span>
+						</div>
+						<div class="clear"></div>
+					</div>
 				</div>
 				<div style="height: 0.3rem"></div>
 				<div class="clear"></div>
@@ -210,9 +246,10 @@
 					<p >退款说明</p>
 				</div>
 				<div class="fl	" >
-					<input type="text" placeholder="选填">
+					<input type="text" :name="changeName('shop', order_goods_id, 'remark')" placeholder="选填">
 				</div>
 				<div class="clear"></div>
+				<input type="hidden" name="order_id" :value="order_id">
 			</div>
 		</div>
 	</div>
@@ -241,11 +278,11 @@
 					</div>
 				</li>
 			</ul>
-			<button id="btn" type="button" hidden>ssss</button>
+			<!--<button id="btn" type="button" hidden>ssss</button>-->
 			<div class="clear"></div>
 		</div>
 	</div>
-	<button class="layui-btn layui-btn-danger layui-btn-fluid" style="position: absolute; bottom: 0;" type="submit" value="" id="dosubmit">提交</button>
+	<button class="layui-btn layui-btn-danger layui-btn-fluid" style="position: absolute; bottom: 0;" type="submit" value="dosubmit" id="dosubmit">提交</button>
 	</form>
 	<div style="height: 0.1rem"></div>
 
@@ -268,6 +305,7 @@
 		<!--<button class="layui-btn layui-btn-danger layui-btn-fluid" style="position:fixed; bottom: 0;width: 95%" type="button" @click="shut()">关闭</button>-->
 		</div>
 	</div>
+
 	<div class="layui-container select2" >
 		<div class="goods-tcn">
 			<!--<form class="layui-form" action="">-->
@@ -285,6 +323,7 @@
         ! function () {
 			var layer = layui.layer
 					, form = layui.form
+					, $ = layui.jquery
 					, upload = layui.upload
 					, table = layui.table;
 
@@ -292,6 +331,7 @@
 			if(id){
 				aj.post('index.php?m=zyorder&c=zyorder_api&a=one_goods_info',{order_goods_id:id},function(data){
 					if(data.status =='success'){
+						console.log(data);
 						var order_info = new Vue({
 							el: '.order_info',
 							data: data,
@@ -301,8 +341,18 @@
 						});
 						var goods_info = new Vue({
 							el: '.goods_info',
-							data: data,
+							data: {
+								data:data,
+								s_shuliang: "1",
+								s_price:data.data[0].goods_price,
+								max_sum:data.data[0].goods_num,
+								order_goods_id:id,
+								order_id:data.data[0].order_id,
+							},
 							methods:{
+								changeName:function(str, index, name){
+									return str+'['+index+']'+'['+name+']';
+								},
 								//货物状态
 								goods_status(){
 									console.log('货物状态');
@@ -365,12 +415,12 @@
 										}else if(goods_status=='未收到货'){
 											$('.select2').children().empty();
 											var content='<h5 style="text-align: center">退款原因</h5>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">多拍/拍错/不想要</span><input type="radio" name="tuikuan_reason" value="多拍/拍错/不想要" title="多拍/拍错/不想要" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递一直未到</span><input type="radio" name="tuikuan_reason" value="快递一直未到" title="快递一直未到" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">未按约定时间发货</span><input type="radio" name="tuikuan_reason" value="未按约定时间发货" title="未按约定时间发货" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递无跟踪记录</span><input type="radio" name="tuikuan_reason" value="快递无跟踪记录" title="快递无跟踪记录" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">空包裹/少货</span><input type="radio" name="tuikuan_reason" value="空包裹/少货" title="空包裹/少货" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">其他</span><input type="radio" name="tuikuan_reason" value="其他" title="其他" > </div> </div><hr> ';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">多拍/拍错/不想要</span><span class="none">111</span></span><input type="radio" name="tuikuan_reason" value="多拍/拍错/不想要" title="多拍/拍错/不想要" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递一直未到</span><span class="none">222</span><input type="radio" name="tuikuan_reason" value="快递一直未到" title="快递一直未到" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">未按约定时间发货</span><span class="none">333</span><input type="radio" name="tuikuan_reason" value="未按约定时间发货" title="未按约定时间发货" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递无跟踪记录</span><span class="none">444</span><input type="radio" name="tuikuan_reason" value="快递无跟踪记录" title="快递无跟踪记录" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">空包裹/少货</span><span class="none">555</span><input type="radio" name="tuikuan_reason" value="空包裹/少货" title="空包裹/少货" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">其他</span><span class="none">666</span><input type="radio" name="tuikuan_reason" value="其他" title="其他" > </div> </div><hr> ';
 											content+='<div class="layui-form-item"> <div class="input-block fr">  </div> </div>';
 											$('.select2').children().append(content);
 											layer.open({
@@ -396,8 +446,8 @@
 
 									}
 								},
-								huanhuo(id){
-									console.log(id);
+								huanhuo(){
+									console.log();
 //									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id="+id+"'",0);
 								},
 								shut(){
@@ -410,7 +460,24 @@
 										console.log(data);
 										$('.status').text('我被改变了');
 										layer.close();
-								}
+								},
+								jiannum: function () {
+									if(this.s_shuliang<2){
+										this.s_shuliang = "1";
+										layer.msg('不能再减了');
+									}else{
+										this.s_shuliang --;
+										this.s_price =toDecimal(Number(this.s_price)-Number(data.data[0].goods_price));
+									}
+								},
+								jianum: function () {
+									if(this.s_shuliang >= this.max_sum){
+										layer.msg('超出以购买数量');
+									}else{
+										this.s_shuliang ++;
+										this.s_price =toDecimal(Number(this.s_price)+Number(data.data[0].goods_price));
+									}
+								},
 							}
 						});
 					}else{
@@ -429,7 +496,6 @@
 					,bindAction:'#btn'
 					,auto: false//是否自动上传
 					,choose: function (obj) {
-						var id = this.elem.selector.split("_")[1];
 						//将每次选择的文件追加到文件队列
 						var files = this.files = obj.pushFile();
 						var index = $("#demo>.layui-row>.layui-col-xs3").size();
@@ -456,8 +522,7 @@
 						});
 					}
 					, done: function (res, index, upload) {
-						var id = this.elem.selector.split("_")[1];
-						$('#demo>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 " style="position: relative;"><span class="iconfont icon-roundclosefill del" style="position: absolute;top: 0;right: 0;width: 16px;height: 16px;color: #ff0000;z-index: 999999;background: #fff;border-radius: 50px;" ></span><input hidden name="shop['+id+'][photo][]" value='+res.msg+'> <img src="' + res.msg + '"  class="layui-upload-img" ></div>')
+						$('#demo>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 " style="position: relative;"><span class="iconfont icon-quxiao del" style="position: absolute;top: 0;right: 0;width: 16px;height: 16px;color: #ff0000;z-index: 999999;background: #fff;border-radius: 50px;" ></span><input hidden name="shop['+id+'][photo][]" value='+res.msg+'> <img src="' + res.msg + '"  class="layui-upload-img" ></div>')
 						delete this.files[index];
 					}
 				});
@@ -487,25 +552,55 @@
 				layer.msg('未获得订单号');
 			}
 
+			//给父页面传值
+			$( "input[name$='goods_status']").on('click', function(){
+				console.log($(this).val());
+				if($(this).val()!=parent.$('.status').text()) {
+					parent.$('.reason').text('请选择');
+					parent.$('.reason').css("color","gray");
+					$('.des').remove();
+				}
+				parent.$('.status').text($(this).val());
+				parent.$('.status').css("color","black");
+				parent.$('.status').parent().append('<input type="hidden" name="shop['+id+'][goodsType]" value='+$(this).val()+'>');
+				layer.closeAll();
+			});
+			$( ".select2").on('click',"input[name$='tuikuan_reason']", function(){
+				console.log($(this).val());
+				parent.$('.reason').text($(this).val());
+				parent.$('.reason').css("color","black");
+				$('.des').remove();
+				parent.$('.reason').parent().parent().append('<div class="des" style="display: inline-block" > <span >'+$(this).siblings(".none").text()+'</span> </div>');
+				parent.$('.reason').parent().append('<input type="hidden" name="shop['+id+'][reason]" value='+$(this).val()+'>');
+				layer.closeAll();
+
+			});
         }();
+		//制保留2位小数，如：2，会在2后面补上00.即2.00
+		function toDecimal(x) {
+			var f = parseFloat(x);
+			if (isNaN(f)) {
+				return false;
+			}
+			var f = Math.round(x*100)/100;
+			var s = f.toString();
+			var rs = s.indexOf('.');
+			if (rs < 0) {
+				rs = s.length;
+				s += '.';
+			}
+			while (s.length <= rs + 2) {
+				s += '0';
+			}
+			return s;
+		}
 
-		//给父页面传值
-		$( "input[name$='goods_status']").on('click', function(){
-			console.log($(this).val());
-			parent.$('.status').text($(this).val());
-			parent.$('.status').css("color","black");
-			layer.closeAll();
-		});
-		$( ".select2").on('click',"input[name$='tuikuan_reason']", function(){
-			console.log($(this).val());
-			parent.$('.reason').text($(this).val());
-			parent.$('.reason').css("color","black");
-			layer.closeAll();
 
-		});
+
 
 	})
-    </script>
+
+	</script>
 </body>
 
 </html>
