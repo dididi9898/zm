@@ -51,9 +51,11 @@
 					<div class="clear"></div>
 				</ul>
 			</div>
+			<div id="rq">
 			<ul class="index-wares-ul" id="sergoods">
 
 			</ul>
+			</div>
 		</div>
     </div>
 
@@ -63,36 +65,48 @@
 <script>
     function changeData(data)
     {
-        $('#sergoods div').remove();
-		flow = layui.flow;
-
-        flow.load({
-            elem: '#sergoods' //指定列表容器
-            ,mb:'10'
-            ,isAuto:true
-            ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
-                var lis = [];
-                console.log(page);
-                //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-                aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon , 'page':page, 'type':data},function(data){
-                    console.log(data.data);
-                    if(data.code==207){
-                        layer.msg('登录超时');
-                        setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'",1000);
-                    }
-                    layui.each(data.data, function(index, item){
-                        //订单状态
-                        var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span></div></div>  </a></li>';
-                        lis.push('<div class="order-div">'+goodsInfo+'</div>');
-
-                    });
-                    //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-                    //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-                    next(lis.join(''), page < data.page.totalpage);
-                });
-
-            }
-        });
+        var sercon = "{$_GET[sercon]}";
+        var type = data;
+        window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+sercon+"&type="+type;
+//        $('#rq').empty();
+//        var id_data = "sergoods_"+Math.ceil(Math.random() * 10000);
+//        console.log(id_data);
+//        $('#rq').append('<ul class="index-wares-ul" id='+id_data+'></ul>');
+//		var flow = layui.flow;
+////        if(data==temp)
+////		var temp=null;
+//
+//
+//        flow.load({
+//            elem: '#'+id_data //指定列表容器
+//            ,mb:'10'
+//            ,isAuto:true
+//            ,done: function(page, next){ //到达临界点（默认滚动触发），触发下一页
+//                var lis = [];
+//                console.log(page);
+//                //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+//                aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon , 'page':page, 'type':data},function(data){
+//                    console.log(data.data);
+//                    console.log('ji4');
+//                    if(data.code==207){
+//                        layer.msg('登录超时');
+//                        setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'",1000);
+//                    }
+//                    console.log('ji2');
+//                    layui.each(data.data, function(index, item){
+//                        //订单状态
+//                        var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span></div></div>  </a></li>';
+//                        lis.push('<div class="order-div">'+goodsInfo+'</div>');
+//
+//                    });
+//                    console.log('ji');
+//                    //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+//                    //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+//                    next(lis.join(''), page < data.page.totalpage);
+//                });
+//
+//            }
+//        });
     }
 </script>
 
@@ -207,6 +221,7 @@
                     //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
                     aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon , 'page':page, 'type':type},function(data){
                         console.log(data.data);
+                        console.log('ji5');
                         if(data.code==207){
                             layer.msg('登录超时');
                             setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'",1000);
@@ -224,6 +239,7 @@
 
                 }
             });
+//            changeData(1);
         }();
 
     </script>
