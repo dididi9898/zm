@@ -362,7 +362,7 @@ class goods_api{
                 break;
 			}
 
-		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,salesnum FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_POST['page'] ? $_POST['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 		//$pages = $this->goods_db->pages;

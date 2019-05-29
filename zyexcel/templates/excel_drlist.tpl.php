@@ -68,7 +68,6 @@
             </div>
 		</div>
 	</div>
-    <button onclick="check()">点击</button>
 	<div class="layui-col-md8">
         <div class="pad-10">
             <fieldset>
