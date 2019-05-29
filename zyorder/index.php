@@ -13,6 +13,7 @@ class index{
 		$this->evaluate_set_db = pc_base::load_model('zy_evaluate_set_model');
 		$this->evaluate_db = pc_base::load_model('zy_evaluate_model');
         $this->order_comment = pc_base::load_model('order_comment_model');
+        $this->order_aftersale = pc_base::load_model('zy_order_aftersale_model');
 	}
     /**
 	* api
@@ -41,8 +42,32 @@ class index{
             $value["userid"] = $userid;
             $value['addtime'] = time();
             $this->order_comment->insert($value);
+            $this->ordergoods_db->update(["is_comment"=>1], ["id"=>$key]);
         }
         $this->order_db->update(["status"=>5], ["order_id"=>$order_id]);
+        $this->order_list();
+    }
+    public function afterSaleApi()
+    {
+        $userid=param::get_cookie('_userid');
+        $shop = $_POST["shop"];
+        $order_id = $_POST["order_id"];
+        $isDeliver = $this->order_db->get_one(["order_id"=>$order_id], "status");
+        foreach($shop as $key=>$value)
+        {
+            if(isset($value["photo"]))
+            {
+                $value["photo"] = json_encode($value["photo"], JSON_UNESCAPED_UNICODE);
+            }
+            $value["id"] = $key;
+            $value["isDeliver"] = $isDeliver["status"] <= 2? 1: 2;
+            $value["userid"] = $userid;
+            $value['addtime'] = time();
+            $this->order_comment->insert($value);
+            $this->ordergoods_db->update(["isAfterSale"=>2], ["id"=>$key]);
+        }
+        $this->order_db->update(["status"=>8], ["order_id"=>$order_id]);
+
         $this->order_list();
     }
 
