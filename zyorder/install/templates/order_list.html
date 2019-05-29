@@ -85,7 +85,6 @@
     <div style="height: 0.9rem;"></div>
     <!--待付款订单-->
     <div id="order_list" ></div>
-	{template "hpshop","bottom-footer"}
     {template "hpshop","footer"}
     <script>
 		$(function(){
@@ -141,7 +140,7 @@
 										}
 
 										// 订单头 店铺加订单状态'+item.storename+' '+status+'
-										var store = '<div class="order-div-h"><div class="order-div-h-logo"><i class="layui-icon layui-icon-home"></i></div><span class="order-div-span">&nbsp;&nbsp;&nbsp;福建筑梦</span>'+bgcolor+'</div>';
+										var store = '<div class="order-div-h"><div class="order-div-h-logo"><i class="layui-icon layui-icon-home"></i></div><span class="order-div-span">&nbsp;&nbsp;&nbsp;惠集信购</span>'+bgcolor+'</div>';
 										
 										//订单产品列表详情
 										var goods_list = '';
@@ -263,6 +262,12 @@
 
 						})
 					})
+				})
+				//申请售后
+				$('#order_list').on('click','.aftersale',function(){
+					var id = $(this).data('id');
+					console.log(id);
+					setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_id="+id+"'",0);
 				})
 				//确认收货
 				$('#order_list').on('click','.sh',function(){

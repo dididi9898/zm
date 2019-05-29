@@ -104,7 +104,7 @@
 	}
 </style>
 <body class="bg-f4f4f4">
-	<div class="personal-head" style=" position: relative;">
+	<div class="personal-head" >
 		<a onclick="javascript :history.back(-1);">
 			<div class="fl head-icon">
 				<i class="layui-icon layui-icon-left"></i>
@@ -120,6 +120,7 @@
 		<div class="fr head-icon">
 		</div>
 	</div>
+	<div style="height: .29rem;"></div>
     <div class="order_info">
 		<div class="commodity-details-head">
 			<div class="tips">
@@ -199,6 +200,10 @@
 				</div>
 				<div class="clear"></div>
 				</a>
+				<template v-if="status==4">
+				<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
+				<div class="clear"></div>
+				</template>
 			</div>
 			<!--合计-->
 			<div class="order-div-h">
@@ -274,6 +279,11 @@
 							el: '.order_info',
 							data: data.data,
 							methods:{
+								//申请售后
+								afterSale(id){
+									console.log(id);
+									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id="+id+"'",0);
+								}
 							}
 						});
 						var wl_list2 = new Vue({

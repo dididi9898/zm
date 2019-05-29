@@ -597,7 +597,30 @@ class index{
 		include template('zyorder', 'shop_pay');
 	}
 
-	
+	/**
+	 * 订单中心_待支付
+	 */
+	public function aftersale(){
+		include template('zyorder', 'aftersale');
+	}
 
+	/**
+	 * 退款
+	 */
+	public function tuikuan(){
+		include template('zyorder', 'tuikuan');
+	}
+	/**
+	 * 退货
+	 */
+	public function tuihuo(){
+		include template('zyorder', 'tuihuo');
+	}
+	/**
+	 * 换货
+	 */
+	public function huanhuo(){
+		include template('zyorder', 'huanhuo');
+	}
 }
 ?>
