@@ -656,10 +656,11 @@ class zyorder_api{
             }
 
         }
-		
+
 		$idarr = [];
+
 		foreach ($_POST['shopdata'] as $ks => $vs) {
-		
+
 			$newdata = $data;
 			$newdata['storeid'] = $vs['shopid'];
 			$newdata['ordersn'] = time() + mt_rand(100,999);
@@ -677,6 +678,7 @@ class zyorder_api{
 				$sql.="(".$id.", ".$val['goodsid'].", '".$val['goodsname']."', '".$val['cartnum']."', '".$val['goodsimg']."', '".$val['goodsprice']."', '".$val['goodsspec']."', '".$val['goodsspecs']."', '".$val['goodsprice']*$val['cartnum']."'),";
 			};
 			$sql = substr($sql,0,strlen($sql)-1);
+
 			$this->ordergoods_db->query($sql);
 		}
         $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$id), "id,goods_id, is_count, specid, goods_num");

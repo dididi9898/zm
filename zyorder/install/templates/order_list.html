@@ -55,7 +55,6 @@
 
 		<div class="order-head"  id="pic_list">
             <ul>
-                
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list">
                     <li {if !$_GET[status]} class="on" {/if}>全部</li>
                 </a>
@@ -86,6 +85,15 @@
     <!--待付款订单-->
     <div id="order_list" ></div>
     {template "hpshop","footer"}
+	<script>
+		$(document).ready(function () {
+			//获取滚动条的位置
+			{if $_GET[status]== 6||$_GET[status]== 3||$_GET[status]== 4}
+				$("#pic_list").scrollLeft(1000);
+			{/if}
+		});
+//		document.getElementById('pic_list').scrollTop=1000;
+	</script>
     <script>
 		$(function(){
 			//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
@@ -152,7 +160,8 @@
 										if(item.status == 1){
 											botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton><a href="{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+item.id+'&sn='+item.ordersn+'" class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment" style="border: 1px solid red;color:red;">付款</a>';
 										}else if(item.status == 2){
-											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel remind">提醒发货</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel tk" data-id="'+item.id+'">申请退款</button>';
+											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel remind">提醒发货</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button>';
+											//<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel tk" data-id="'+item.id+'">申请退款</button>
 										
 										}else if(item.status == 3){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment sh" style="border: 1px solid red;color:red;" data-id="'+item.id+'" data-sn="'+item.ordersn+'">确认收货</button>';
@@ -247,20 +256,20 @@
 					  btn: ['确定','取消'] //按钮
 						,offset: '2.5rem'
 					}, function(){
-						aj.post('index.php?m=zyorder&c=zyorder_api&a=apply_tk',{id:id},function(data){
-							console.log(data);
-							if(data.status == 'success'){
-								layer.msg('已申请退款',{
-									offset: '3rem'
-								});
-								setTimeout("window.location.reload()", 1000);
-							}else{
-								layer.msg(data.message,{
-									offset: '3rem'
-								});
-							}
-
-						})
+//						aj.post('index.php?m=zyorder&c=zyorder_api&a=apply_tk',{id:id},function(data){
+							console.log(id);
+//							if(data.status == 'success'){
+//								layer.msg('已申请退款',{
+//									offset: '3rem'
+//								});
+							//setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_id="+id+"'",0);
+//							}else{
+//								layer.msg(data.message,{
+//									offset: '3rem'
+//								});
+//							}
+//
+//						})
 					})
 				})
 				//申请售后

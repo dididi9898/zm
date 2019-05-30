@@ -1718,7 +1718,53 @@ class goods_api{
 		//优惠券减少金额查询
 		$coupon_info=$this->coupon_select($uid);
 		$coupon_minus=$coupon_info['minus'];
+		foreach ($infos as $k => $v) {
+			if(!empty($v["specstock"]) || $v["specstock"] == '0')
+			{
+				if($v["specstock"]-$v["cartnum"]< 0)
+				{
+					$result = [
+						'status' => 'error',
+						'code' => 0,
+						'message' => $v["goods_name"]."的库存不足",
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+			}
+			else
+			{
+				if($v["stock"]-$v["cartnum"]< 0)
+				{
+					$result = [
+						'status' => 'error',
+						'code' => 0,
+						'message' => $v["goods_name"]."的库存不足",
+					];
+					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				}
+			}
 
+
+			if(!isset($narr[$v['shopid']])){
+				$narr[$v['shopid']] = [
+					'shopid' => $v['shopid'],
+					'stprice'=>0,
+					'stnum'=>0
+				];
+			}
+			if ( $v['goodsspecid'] != 0 ) {
+				$jg = $v['specprice'];
+			} else {
+				$jg = $v['shop_price'];
+			}
+			$total += $jg*$v['cartnum'];
+
+			$total_pay=$total-$coupon_minus;
+			$discount=$total_pay/$total;
+			if($total_pay<0){
+				$total_pay=0;
+			}
+		}
 		foreach ($infos as $k => $v) {
             if(!empty($v["specstock"]) || $v["specstock"] == '0')
             {
@@ -1760,12 +1806,6 @@ class goods_api{
 				$jg = $v['shop_price'];
 			}
 
-			$total += $jg*$v['cartnum'];
-
-			$total_pay=$total-$coupon_minus;
-			if($total_pay<0){
-				$total_pay=0;
-			}
 			//**********************************************************************************************************
 			$narr[$v['shopid']]['stprice'] = $total_pay;
 			$narr[$v['shopid']]['stnum'] += $v['cartnum'];
@@ -1778,7 +1818,7 @@ class goods_api{
 				'goodsimg' => $v['thumb'],
 				'goodsspec' => $v['specid'],
 				'goodsspecs' => $v['specids'],
-				'goodsprice' => $jg,
+				'goodsprice' => $jg*$discount,
 				'cartnum' => $v['cartnum'],
 			];
 		}
@@ -1798,6 +1838,7 @@ class goods_api{
 			'shopdata' => $narr,
 			'coupon_user_id' => $_coupon_user_id,
 		);
+
 		$content = http_build_query($data);
 		$content_length = strlen($content);
 		$options = array(
