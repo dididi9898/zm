@@ -149,9 +149,11 @@
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('发货')?></a>
                 <?php }elseif($row["status"] == '3'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('修改快递单')?></a>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('订单详情')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == '4' || $row["status"] == '5'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('订单详情')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
+                <?php }elseif($row["status"] == '8' || $row["status"] == '10'){?>
+                    <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="checkAfterSale('<?php echo $row['order_id']?>')"><?php echo L('售后商品')?></a>
                 <?php }?>
                 <a href="javascript:confirmurl('?m=zyorder&c=order&a=dropOrder&order_id=<?php echo $row['order_id']?>', '<?php echo L('确定删除此订单吗，删除后无法恢复。')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
             </td>
@@ -258,6 +260,27 @@ function check(id)
             title:'快递信息',
             width:'1000',
             height:'800',
+            lock:true
+        },
+        function () {
+            var d = window.top.art.dialog({id:'deliver'}).data.iframe;
+            var form = d.document.getElementById('dosubmit');
+            form.click();
+            return false;
+        },
+        function(){
+            window.top.art.dialog({id:'edit'}).close();
+        });
+    void(0);
+}
+function checkAfterSale(id)
+{
+    window.top.art.dialog({
+            id:"check",
+            iframe:"?m=zyorder&c=order&a=checkAfterSale&XDEBUG_SESSION_START=18804&order_id="+id,
+            title:'售后信息',
+            width:'800',
+            height:'500',
             lock:true
         },
         function () {

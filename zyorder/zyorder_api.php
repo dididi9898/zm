@@ -18,7 +18,7 @@ class zyorder_api{
 		$this->ordergoods_db = pc_base::load_model('zy_order_goods_model');
         $this->goods_db = pc_base::load_model('goods_model');
         $this->goods_specs_db = pc_base::load_model('goods_specs_model');
-
+        $this->order_aftersale = pc_base::load_model('zy_order_aftersale_model');
 		//分销用户表
 		$this->zyfxmember_db = pc_base::load_model("zyfxmember_model");
 		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
@@ -144,7 +144,7 @@ class zyorder_api{
 	/**
      *单个订单商品详情(用户版，此处用户与商家相同)
      */
-	public function uordgoodsinfo($ischeck = 1,$orderid = 0){
+	public function uordgoodsinfo($ischeck = 1,$orderid = 0, $status){
 
 		if ( $_POST['oid'] ) {
 			$oid = $_POST['oid'];//订单id
@@ -192,8 +192,10 @@ class zyorder_api{
 				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 			}
 		}
-
-		$info = $this->ordergoods_db->select(['order_id'=>$oid],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
+        if($status == "6")
+		    $info = $this->ordergoods_db->select(['order_id'=>$oid,"isAfterSale"=>2],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
+		else
+		    $info = $this->ordergoods_db->select(['order_id'=>$oid,"isAfterSale"=>1],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
 		if ( $ischeck != 1 ) {
 			return $info;
 			exit(0);
@@ -319,13 +321,13 @@ class zyorder_api{
 		}else if($_GET['status']==3){
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
-			$where.= ' AND status=4';
+			$where.= ' AND status=4 OR status=10';
 		}else if($_GET['status']==5){
 			$where.= ' AND status=7';
 		}else if($_GET['status']==6){
-			$where.= ' AND (status=8 OR status=9)';
+			$where.= ' AND (status=8 OR status=9 OR status=10)';
 		}else{
-			$where.= ' AND 1';
+			$where.= ' AND status<>8 AND status<>9 AND 1';
 		}
 
 		$sql = 'SELECT storeid from phpcms_zy_order WHERE userid = '.$_userid.' GROUP BY storeid';
@@ -360,13 +362,13 @@ class zyorder_api{
         	$snamarr[$vs['userid']] = $vs;
         }
 
-        $where.=' AND status < 10 ';
+        $where.=' AND status <= 10 ';
 		$order = ' order_id DESC ';
 		//$page = $pageindex ? $pageindex : '1';
 		$orders = $this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
 		$totalcount = $this->order_db->count($where);
 		foreach ($orders as $k => $v) {
-			$goodsinfo = $this->uordgoodsinfo(0,$v['order_id']);
+			$goodsinfo = $this->uordgoodsinfo(0,$v['order_id'], $_GET['status']);
 			$orders[$k]['goodsinfo'] = $goodsinfo;
 			$orders[$k]["id"] = $v["order_id"];
 			$orders[$k]['storename'] = $snamarr[$v['storeid']]['shopname'];
@@ -439,7 +441,15 @@ class zyorder_api{
 		];
 		echo json_encode($data);
 	}
-
+    function changeDeal()
+    {
+        $neadArg = ["isDeal"=>[true, 0], "commentid"=>[true, 1],];
+        $info = checkArgBcak($neadArg, "POST");
+        $info["isDeal"] = $info["isDeal"] == "同意"? 2:3;
+        $where["afterSaleid"] = array_pop($info);
+        $this->order_aftersale->update($info, $where);
+        returnAjaxData("1", "成功");
+    }
 	/**
 	 * 获取分销订单列表（店铺用户通用）
 	 */

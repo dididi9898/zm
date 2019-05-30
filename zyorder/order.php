@@ -9,8 +9,8 @@ class order extends admin {
 	/**
 	*构造函数，初始化
 	*/
-    public static $statusType = ["1"=>"待付款","2"=>"待发货","3"=>"待收货","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款"];
-    public static $tryStatusType = ["7"=>"待审核","2"=>"待发货","3"=>"待收货","1"=> "待付款","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款"];
+    public static $statusType = ["1"=>"待付款","2"=>"待发货","3"=>"待收货","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款","10"=>"部分商品售后"];
+    public static $tryStatusType = ["7"=>"待审核","2"=>"待发货","3"=>"待收货","1"=> "待付款","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款","10"=>"部分商品售后"];
     public static $pay_type = ["1"=>"余额","2"=>"支付宝", "3"=>"微信"];
 
 	public function __construct()
@@ -33,7 +33,7 @@ class order extends admin {
 		$this->module_db = pc_base::load_model('module_model');
 		$this->config = $this->zyconfig_db->get_one('','url');
 		$this->ordergoods_db = pc_base::load_model('zy_order_goods_model');
-
+        $this->order_aftersale = pc_base::load_model('zy_order_aftersale_model');
 		//快递公司表
 		$this->express_db = pc_base::load_model('zyexpress_model');
 		//$this->zy_logistics_company = pc_base::load_model('zy_logistics_company');
@@ -153,6 +153,7 @@ class order extends admin {
             include $this->admin_tpl("order/addOrderEx");
         }
     }
+
     function EXInfo()
     {
         $EBINfo = pc_base::load_config('EXinfo');
@@ -170,7 +171,7 @@ class order extends admin {
         $neadArg = ["ordersn"=>[true,0]];
         $info = checkArgBcak($neadArg);
         list($orderInfo,$count) = $this->members_db->moreTableSelect(
-            array("zy_zy_order"=>array("logistics_order"), "zy_zy_logistics_company"=>array("name,value")),
+            array("zy_zy_order"=>array("logistics_order"), "zy_zy_logistics_company"=>array("name","value")),
             array("EXid"),
             $info
         );
@@ -181,6 +182,24 @@ class order extends admin {
         $EXinfo = json_decode($data);
         //$EXname = $this->zyexcompany->get_one(array("abbreviation"=>$EXinfo->ShipperCode), "*");
         include $this->admin_tpl("EX/checkEX");
+    }
+    function checkAfterSale()
+    {
+        $neadArg = ["order_id"=>[true,0]];
+        $info = checkArgBcak($neadArg);
+        list($orderInfo,$count) = $this->members_db->moreTableSelect(
+            array("zy_order_aftersale"=>array("*"),  "zy_order_goods"=>array("goods_name","goods_num", "goods_img")),
+            array("id"),
+            "B2.`order_id`=".$info["order_id"], "", "", 1
+        );
+        if($orderInfo == null)
+            showmessage("没有该订单信息");
+        //print_r($orderInfo);
+//        $EBINfo = pc_base::load_config('EXinfo');
+//        $data = getOrderTracesByJson($EBINfo, $orderInfo["value"],$orderInfo["logistics_order"]);
+//        $EXinfo = json_decode($data);
+        //$EXname = $this->zyexcompany->get_one(array("abbreviation"=>$EXinfo->ShipperCode), "*");
+        include $this->admin_tpl("order/afterSale");
     }
     function dropOrder()
     {
