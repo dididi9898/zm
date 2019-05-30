@@ -200,7 +200,7 @@
 				</div>
 				<div class="clear"></div>
 				</a>
-				<template v-if="status==4">
+				<template v-if="status==4||status==2||status==10">
 				<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
 				<div class="clear"></div>
 				</template>
@@ -281,8 +281,12 @@
 							methods:{
 								//申请售后
 								afterSale(id){
-									console.log(id);
-									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id="+id+"'",0);
+									if(data.data.status==2){
+										setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=tuikuan&order_goods_id=" + id + "&status=" + data.data.status + "'", 0);
+									}else {
+										console.log(id);
+										setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id=" + id + "&status=" + data.data.status + "'", 0);
+									}
 								}
 							}
 						});

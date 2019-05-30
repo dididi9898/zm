@@ -268,7 +268,7 @@
 					<div class="layui-form-item primary-item" style="margin-bottom:0;">
 						<label class="layui-form-label primary-label-1">图片展示<span class="layui-badge-dot"></span></label>
 						<div class="layui-input-block text-left ">
-							<button type="button" class="layui-btn layui-btn-sm" id="upload" style="margin-top: 0.035rem;">多图片上传</button>
+							<button type="button" class="layui-btn layui-btn-sm" id="upload_img" style="margin-top: 0.035rem;">多图片上传</button>
 						</div>
 					</div>
 				</li>
@@ -278,7 +278,7 @@
 					</div>
 				</li>
 			</ul>
-			<!--<button id="btn" type="button" hidden>ssss</button>-->
+			<button id="btn" type="button" hidden>ssss</button>
 			<div class="clear"></div>
 		</div>
 	</div>
@@ -328,10 +328,16 @@
 					, table = layui.table;
 
 			var id = '{$_GET[order_goods_id]}';
+			var status = '{$_GET[status]}';
+			if(status==2){
+				parent.$('.status').text('未收到货');
+				parent.$('.status').css("color","black");
+				parent.$('.status').parent().append('<input type="hidden" name="shop['+id+'][goodsType]" value="未收到货">');
+				$('.status').parent().parent().hide();
+			}
 			if(id){
 				aj.post('index.php?m=zyorder&c=zyorder_api&a=one_goods_info',{order_goods_id:id},function(data){
 					if(data.status =='success'){
-						console.log(data);
 						var order_info = new Vue({
 							el: '.order_info',
 							data: data,
@@ -488,7 +494,7 @@
 					}
 				});
 				upload.render({
-					elem: '#upload'
+					elem: '#upload_img'
 					, url: 'index.php?m=zymember&c=api&a=uploadfile_user'
 					, multiple: true //多文件传送
 					, number:6
@@ -522,6 +528,7 @@
 						});
 					}
 					, done: function (res, index, upload) {
+						console.log(111111111111111111);
 						$('#demo>.layui-row').prepend('<div class="layui-col-xs3 layui-col-sm3 layui-col-md3 " style="position: relative;"><span class="iconfont icon-quxiao del" style="position: absolute;top: 0;right: 0;width: 16px;height: 16px;color: #ff0000;z-index: 999999;background: #fff;border-radius: 50px;" ></span><input hidden name="shop['+id+'][photo][]" value='+res.msg+'> <img src="' + res.msg + '"  class="layui-upload-img" ></div>')
 						delete this.files[index];
 					}

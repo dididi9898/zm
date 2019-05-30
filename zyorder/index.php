@@ -59,8 +59,10 @@ class index{
             {
                 $value["photo"] = json_encode($value["photo"], JSON_UNESCAPED_UNICODE);
             }
+
             $value["goodsType"] = $value["goodsType"] == "已收到货"? 2:1;
             $value["id"] = $key;
+
             $value["isDeliver"] = $isDeliver["status"] <= 2? 1: 2;
             $value["userid"] = $userid;
             $value['addtime'] = time();
