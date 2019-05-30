@@ -59,15 +59,19 @@ class index{
             {
                 $value["photo"] = json_encode($value["photo"], JSON_UNESCAPED_UNICODE);
             }
+            $value["goodsType"] = $value["goodsType"] == "已收到货"? 2:1;
             $value["id"] = $key;
             $value["isDeliver"] = $isDeliver["status"] <= 2? 1: 2;
             $value["userid"] = $userid;
             $value['addtime'] = time();
-            $this->order_comment->insert($value);
+            $this->order_aftersale->insert($value);
             $this->ordergoods_db->update(["isAfterSale"=>2], ["id"=>$key]);
         }
-        $this->order_db->update(["status"=>8], ["order_id"=>$order_id]);
-
+        $info = $this->ordergoods_db->select(["order_id"=>$order_id, "isAfterSale"=>1],"*");
+        if(empty($info))
+            $this->order_db->update(["status"=>8], ["order_id"=>$order_id]);
+        else
+            $this->order_db->update(["status"=>10], ["order_id"=>$order_id]);
         $this->order_list();
     }
 

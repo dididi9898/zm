@@ -157,7 +157,7 @@
 										}else if(item.status == 3){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment sh" style="border: 1px solid red;color:red;" data-id="'+item.id+'" data-sn="'+item.ordersn+'">确认收货</button>';
 										
-										}else if(item.status == 4){
+										}else if(item.status == 4 || item.status == 10){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">评价</button>';
 										
 										}else if(item.status == 5){
