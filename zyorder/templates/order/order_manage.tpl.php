@@ -240,14 +240,8 @@ function deliver(id)
             height:'250',
             lock:true
         },
-        function () {
-            var d = window.top.art.dialog({id:'deliver'}).data.iframe;
-            var form = d.document.getElementById('dosubmit');
-            form.click();
-            return false;
-        },
         function(){
-            window.top.art.dialog({id:'edit'}).close();
+            window.top.art.dialog({id:'deliver'}).close();
         });
     void(0);
 
@@ -262,35 +256,24 @@ function check(id)
             height:'800',
             lock:true
         },
-        function () {
-            var d = window.top.art.dialog({id:'deliver'}).data.iframe;
-            var form = d.document.getElementById('dosubmit');
-            form.click();
-            return false;
-        },
         function(){
-            window.top.art.dialog({id:'edit'}).close();
+            window.top.art.dialog({id:'check'}).close();
         });
     void(0);
 }
 function checkAfterSale(id)
 {
     window.top.art.dialog({
-            id:"check",
+            id:"checkAfterSale",
             iframe:"?m=zyorder&c=order&a=checkAfterSale&XDEBUG_SESSION_START=18804&order_id="+id,
             title:'售后信息',
             width:'800',
             height:'500',
             lock:true
         },
-        function () {
-            var d = window.top.art.dialog({id:'deliver'}).data.iframe;
-            var form = d.document.getElementById('dosubmit');
-            form.click();
-            return false;
-        },
+
         function(){
-            window.top.art.dialog({id:'edit'}).close();
+            window.top.art.dialog({id:'checkAfterSale'}).close();
         });
     void(0);
 }
