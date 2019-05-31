@@ -75,7 +75,7 @@ include $this->admin_tpl('header', 'admin');
         <div id="div_setting_2" class="contentList">
             <?php foreach($orderInfo as $key=>$data) { ?>
                 <fieldset>
-                    <legend id="<?php echo "comment_".$data["afterSaleid"]; ?>"  class="<?php if($data["isDeal"] == '1') echo "wpb"; else echo "pb"?>"><?php if($data["isDeal"] == '1') echo "未处理"; elseif($data["isDeal"])echo "同意"; else echo "不同意";?></legend>
+                    <legend id="<?php echo "comment_".$data["afterSaleid"]; ?>"  class="<?php if($data["isDeal"] == '1') echo "wpb"; else echo "pb"?>"><?php if($data["isDeal"] == '1') echo "未处理"; elseif($data["isDeal"]== "2")echo "同意"; else echo "不同意";?></legend>
 
                     <table class="table_form"  style="min-width: 100%;overflow:auto;display: block;">
                         <tbody>
