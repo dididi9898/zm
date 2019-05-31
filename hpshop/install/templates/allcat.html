@@ -1,29 +1,80 @@
 ﻿{php $SEO['site_title'] = '分类'}
 {template "hpshop","top-head"}
-
+<style>
+	.index-sp .pl1 h3 {
+		font-size: 0.16rem;
+	}
+	.sp-xl{
+		font-size: 0.12rem;
+	}
+	.index-sp .pl1 .sp-xl span {
+		color: #ff6700;
+		font-size: 0.16rem;
+	}
+	.index-sp .pl1 p {
+		font-size: 0.14rem;
+		color: #ff6700;
+		line-height: 0.14rem;
+	}
+	.index-sp .pl1 .sp-yj {
+		font-size: 0.14rem;
+		color: #999;
+		overflow: hidden;
+	}
+	.index-sp .pl1 .sp-yj button {
+		float: right;
+		border-radius: 10rem;
+		border-style: none;
+		line-height: 0.2rem;
+		background-color: #f5222d;
+		color: #fff;
+		padding: 0 0.248rem;
+	}
+</style>
 
 <body class="bg-f4f4f4" >
 	<div id="allcat" style="width: 100vw; overflow: hidden;">
 		<div class="personal-head" style="height: 0.6rem;">
 			<div class="index-search">
-				<div @click="open" class="search-box" style="color: #8a8a8a;"><template v-if="search != ''">{{ search }}</template><template v-else>搜索商品</template></div>
+				<div @click="open" class="search-box" style="color: #8a8a8a;"><template v-if="data.search != ''">{{ data.search }}</template><template v-else>搜索商品</template></div>
 			</div>
 		</div>
 		<div class="layui-container search-fl" style="height:100vh;" >
 			<div class="layui-row">
 				<ul class="fl-nav">
 					<template v-for="(allcat,index) in data">
-						<li v-if="index == 0" class="fl-nav-on"  @click="choice($event)">{{ allcat.name }}</li>
-						<li v-else  @click="choice($event)">{{ allcat.name }}</li>
+						<li v-if="catid == ''&& index==0" class="fl-nav-on"  @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</li>
+						<li v-else-if="catid==allcat.id" class="fl-nav-on"  @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</li>
+						<li v-else   @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</li>
 					</template>
 				</ul>
 
 				<div class="fl-con" v-for="(allcat,index) in data">
-					<div class="fl-ban">
-						<img src="{APP_PATH}statics/public/images/fl.png">
-					</div>
+					<!--<div class="fl-ban">-->
+						<!--<img src="{APP_PATH}statics/public/images/fl.png">-->
+					<!--</div>-->
 					<div class="h05"></div>
-					<template v-for="childrens in allcat.children">
+					<template v-for="k in goods.data">
+						<div class="fl-ban">
+						<div class="index-sp">
+							<div class="fl-ban" style="height: auto;">
+								<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+
+							</div>
+							<div class="pl1">
+								<h3>{{k.goods_name}}</h3>
+								<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+								<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+								<div class="sp-yj">
+									<s>原价：￥{{k.market_price}}</s>
+									<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" ><button>立即购买</button></a>
+								</div>
+							</div>
+						</div>
+						<div class="bt10"></div>
+						</div>
+					</template>
+					<template v-for="(childrens,index) in allcat.children">
 						<div class="pl1 lg-fs"><a :href="'{APP_PATH}index.php?m=hpshop&c=index&a=cgoodslist&catid='+childrens.id" class="d-b">{{ childrens.name }}</a></div>
 						<div class="h05"></div>
 						<ul>
@@ -42,10 +93,10 @@
 					</template>
 				</div>
 				<!-- 搜索页-隐藏 -->
-				<div class="fl-search">
+				<div class="fl-search"pl1 lg-fs>
 					<div class="personal-head" style="height: 0.6rem;">
 						<div class="index-search2">
-							<input type="text" placeholder="商品搜索" v-model="search">
+							<input type="text" placeholder="商品搜索" v-model="data.search">
 							<button @click="submit_search">搜索</button>
 						</div>
 					</div>
@@ -79,7 +130,6 @@
 			</div>
 		</div>
 	</div>
-	{template "hpshop","bottom-footer"}
     {template "hpshop","footer"}
 
 
@@ -94,22 +144,47 @@
                 $ = layui.jquery,
                 upload = layui.upload,
                 table = layui.table;
+
+			var catid='{$_GET[catid]}';
 				aj.get('index.php?m=hpshop&c=goods_api&a=allcat','', function (data) {
 					if(data.status == "success"){
 						data.search = '';
+						console.log(data);
 						var allcat =  new Vue({
 				    		el: '#allcat',
-							data:data,
+							data:{
+								data:data.data,
+								goods:"",
+								catid:catid
+							},
+							beforeCreate:function(){
+								var _self=this;
+								console.log(data.data[0].id);
+								if(catid=='') {
+									catid = data.data[0].id;
+								}
+								aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
+									console.log(data);
+									_self.goods=data;
+								})
+							},
 							methods:{
 								//分类选项卡
+
 								choice:function(event){
-									console.log($(event.target).index());
+									var catid=event.srcElement.dataset.id;
+									console.log(event.srcElement.dataset.id);
 									$('.fl-nav .fl-nav-on').removeClass('fl-nav-on')
 									$('.fl-con').each(function(){
 										$('.fl-con').hide();
 									})
 									$('.fl-nav li').eq($(event.target).index()).addClass('fl-nav-on')
 									$('.fl-con').eq($(event.target).index()).show()
+									var _self=this;
+									aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
+										console.log(data);
+										_self.goods=data;
+									})
 								},
 								//打开搜索
 								open:function(){
@@ -133,8 +208,8 @@
 									layer.closeAll()
 								},
 								submit_search:function(){
-									if(this.search){
-										aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.search},function(data){
+									if(this.data.search){
+										aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.data.search},function(data){
 											console.log(data);
 											
 										});
@@ -143,7 +218,7 @@
 										layer.msg('搜索内容不能为空');
 									}
 									//console.log(this.search);
-									window.location.href="/index.php?m=hpshop&c=index&a=search&sercon="+this.search;
+									window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+this.data.search;
 								},
 								children_search:function(event){
 									var chuan;
@@ -153,7 +228,7 @@
 									}else{
 										chuan = $(event.target).html();
 									};
-									window.location.href="/index.php?m=hpshop&c=index&a=search&sercon="+chuan;
+									window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+chuan;
 									
 								}
 							}
@@ -161,8 +236,6 @@
 					}else{
 						layer.msg(data.message);
 					}
-					console.log(data);
-					
 				});
         }();
     </script>
