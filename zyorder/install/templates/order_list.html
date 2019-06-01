@@ -153,7 +153,7 @@
 										//订单产品列表详情
 										var goods_list = '';
 										$.each(item.goodsinfo,function(i,v){
-											goods_list+='<div class="order-content"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p></div><div class="clear"></div></div>';
+											goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p></div><div class="clear"></div></a></div>';
 										})
 										var store_total = '<div class="order-div-h"><p class="order-div-total"><span>共<span class="c-ff0000">'+ item.goodsinfo.length +'</span>件商品</span>&nbsp;&nbsp;&nbsp;<span>合计：￥<span class="c-ff0000">'+ item.totalprice +'</span></span></p></div>';
 										var botton ;
