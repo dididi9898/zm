@@ -41,7 +41,7 @@ class api{
 		$host = "https://b4bankcard.market.alicloudapi.com";
 		$path = "/IDCard";
 		$method = "GET";
-		$appcode = "b6e61f51459f453b8cf63399d5f02bf6";
+		$appcode = "bcbbc6dcdd3a4fabb99b616233897b93";
 		$headers = array();
 		array_push($headers, "Authorization:APPCODE " . $appcode);
 		$querys = "idCard=".$_POST['idCard']."&name=".$_POST['name'];
