@@ -1,5 +1,9 @@
 ﻿{template "zyorder","top-head"}
-
+<style>
+    [v-cloak]{
+        display: none;
+    }
+</style>
 <body>
     <div class='personal-head'>
         <a onClick='javascript :history.back(-1);'>
@@ -26,9 +30,9 @@
     <!--地址-->
     <form class="" id="order">
        
-        <div class="choose-address">
+        <div class="choose-address" v-cloak>
             <div class="address">
-                <div class="Consignee">
+                <div class="Consignee" v-cloak>
                     <div class="fl">收货人：<span>{{ address.lx_name }}</span></div>
                     <div class="fr"><span class="mobile">{{ address.lx_mobile }}</span></div>
                     <div class="clear"></div>
@@ -42,7 +46,7 @@
         </div>
         <!--商品列表-->
 		<template v-for="store in dianpu">
-        <ul class="ware-list">
+        <ul class="ware-list" v-cloak>
             <div class="h1"></div>
 			<div class="order-div-h bg-fff">
 				<div class="order-div-h-logo">
@@ -82,7 +86,7 @@
 		</template>
         
         <!--商品其他-->
-        <div class="ware-other">
+        <div class="ware-other" v-cloak>
             <div class="leave-word">
                 <div class="fl tit">买家留言：</div>
                 <div class="fr input">
@@ -94,7 +98,7 @@
         </div>
         <!--商品支付方式-->
         <div class="ware-other">
-            <ul class="payment">
+            <ul class="payment" v-cloak>
 
                  <label>
                     <li class="Balance" @click="paylist(1)" >
@@ -126,7 +130,7 @@
             </ul>
         </div>
         <div style=" height: 0.8rem"></div>
-        <div class="Pay-footer-fixd">
+        <div class="Pay-footer-fixd" v-cloak>
             <div class="fl">合计：<span>￥&nbsp;{{ other.total }}</span></div>
 			<div class="fr"><botton type="botton" @click="submit()">确认支付</botton></div>
         </div>

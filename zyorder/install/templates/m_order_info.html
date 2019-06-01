@@ -1,6 +1,9 @@
 ﻿{template "zyorder","top-head"}
 
 <style type="text/css">
+	[v-cloak]{
+		display: none;
+	}
 	.wl-list{
 		padding: 0 0.248rem 0 1.25rem;
 	}
@@ -163,7 +166,7 @@
 			<!--</div>-->
 		<!--</a>-->
 
-		<div class="details-address">
+		<div class="details-address" v-cloak>
 			<div class="details-address-div">
 				<p class="p1">
 					{{ lx_name }}&nbsp;&nbsp;&nbsp;<span style="color:#808080;">{{ lx_mobile }}</span>
@@ -175,7 +178,7 @@
 			<div class="clear"></div>
 		</div>
 
-		<div class="order-div" style="margin: 0; margin-top:0.1rem;">
+		<div class="order-div" style="margin: 0; margin-top:0.1rem;" v-cloak>
 			<!--头部状态-->
 			<div class="order-div-h">
 				<div class="order-div-h-logo">
@@ -185,7 +188,7 @@
 			</div>
 			<!--订单内容-->
 			
-			<div class="order-content" v-for="info in goodsinfo">
+			<div class="order-content" v-for="info in goodsinfo" v-cloak>
 				<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+info.goods_id" class="d-b">
 				<div class="fl order-shop-w1">
 					<img :src="info.goods_img">
@@ -200,13 +203,13 @@
 				</div>
 				<div class="clear"></div>
 				</a>
-				<template v-if="status==4||status==2||status==10">
+				<template v-if="status==4">
 				<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
 				<div class="clear"></div>
 				</template>
 			</div>
 			<!--合计-->
-			<div class="order-div-h">
+			<div class="order-div-h" v-cloak>
 				<p class="order-div-total">
 					<span>共<span style="color:#55acee">{{ goodsinfo.length }}</span>件商品</span>&nbsp;&nbsp;&nbsp;<span>合计：￥<span style="color:#55acee">{{ totalprice }}</span><!--(含运费￥2.50)--></span>
 				</p>
@@ -216,7 +219,7 @@
     <div style="height:0.1rem;width:100%;"></div>
 
 
-    <div class="order_info1" style="background:#fff;">
+    <div class="order_info1" style="background:#fff;" v-cloak>
         <div class="order-information">
             <p>订单信息<p>
         </div>
@@ -234,11 +237,11 @@
         </ul>
         <div class="clear"></div>
     </div>
-	<div style="background-color: white">
+	<div style="background-color: white" >
 		<div class="order-information">
 			<p>物流详情<p>
 		</div>
-		<ul class="wl-list2">
+		<ul class="wl-list2" v-cloak>
 			<li v-for="x,y in recerseSum">
 				<h3>{{ x.AcceptTime }}</h3>
 				<p>{{ x.AcceptStation }}</p>
@@ -281,12 +284,8 @@
 							methods:{
 								//申请售后
 								afterSale(id){
-									if(data.data.status==2){
-										setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=tuikuan&order_goods_id=" + id + "&status=" + data.data.status + "'", 0);
-									}else {
-										console.log(id);
-										setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id=" + id + "&status=" + data.data.status + "'", 0);
-									}
+									console.log(id);
+									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id="+id+"'",0);
 								}
 							}
 						});

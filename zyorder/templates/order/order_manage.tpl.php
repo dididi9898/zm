@@ -241,6 +241,12 @@ function deliver(id)
             lock:true
         },
         function(){
+            var d = window.top.art.dialog({id:'deliver'}).data.iframe;
+            var form = d.document.getElementById('dosubmit');
+            form.click();
+            return false;
+        },
+        function(){
             window.top.art.dialog({id:'deliver'}).close();
         });
     void(0);
