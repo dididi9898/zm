@@ -11,6 +11,9 @@
         color: #fff;
     }
 */
+	[v-cloak]{
+		display: none;
+	}
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -295,7 +298,7 @@
 				</div>
         	</div>
         	<!-- 价格标题 -->
-        	<div class="goods-tp bg-fff">
+        	<div class="goods-tp bg-fff" v-cloak>
         		<div class="h1"></div>
         		<div class="pl1 bg-fs c-eb3c3c">￥{{ shop_price }}<span class="pl05 sm-fs c-afafaf">￥{{ market_price }}</span></div>
         		<div class="h05"></div>
@@ -318,7 +321,7 @@
         	<div class="h1"></div>
         	<!-- 套餐选择 -->
             <template >
-        	<div class="goods-tc bg-fff" @click="tc">
+        	<div class="goods-tc bg-fff" @click="tc" v-cloak>
                 <div class="h1"></div>
         		<div class="goods-tc-tit">规格：</div>
         		<div class="goods-tc-txt">请选择<template v-for="specnames in specname">{{ specnames.name }} </template></div>
@@ -328,7 +331,7 @@
             </template>
         	<div class="h1"></div>
         	<!-- 评价 -->
-        	<div class="goods-pj bg-fff" >
+        	<div class="goods-pj bg-fff" v-cloak>
         		<div class="h1"></div>
                 <div id="limitComment" >
 				<div class="pl1 pr1">

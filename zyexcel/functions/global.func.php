@@ -36,7 +36,7 @@
 
 			  $objReader = PHPExcel_IOFactory::createReader('Excel2007');
 	//	      $objReader = PHPExcel_IOFactory::createReader('Excel5');
-			  //$objReader->setReadDataOnly(true);
+			  $objReader->setReadDataOnly(true);
 			  $objPHPExcel = $objReader->load($filename);
 			  $objWorksheet = $objPHPExcel->getActiveSheet();
 			  $highestRow = $objWorksheet->getHighestRow();
@@ -52,64 +52,64 @@
 				 }
 			   }
 	//		  $path = "/upload/";
-			  foreach($objWorksheet->getDrawingCollection() as $drawing){
-					$string = $drawing->getCoordinates();
-					preg_match("/\d+/",$string, $s);
-					preg_match("/[a-zA-Z]+/",$string, $d);
-
-					if($drawing instanceof  PHPExcel_Worksheet_Drawing) {
-						$imagePath = $drawing->getPath();
-						$imagePath = substr($imagePath, 6);
-						$imagePathSplitted = explode("#", $imagePath);
-
-						$imageZip = new ZipArchive();
-						$imageZip->open($imagePathSplitted[0]);
-						$imageContents = $imageZip->getFromName($imagePathSplitted[1]); // 这里得到图片的数据流
-						$imageZip->close();
-						unset($imageZip);
-						$expanded = '.' . explode('.', $imagePathSplitted[1])[1]; // 获取扩展名
-						$img = "/upload/" . uniqid() . mt_rand(10000, 99999) . $expanded;
-						file_put_contents("." . $img, $imageContents);
-						$count = count($img_path[$s[0]][$d[0]])+1;
-						$img_path[$s[0]][$d[0]][] = ['url'=> APP_PATH.$img, 'alt'=>$count];
-						$cell = $objWorksheet->getCell($string);
-						$cell->setValue($img);
-					} else if ($drawing instanceof PHPExcel_Worksheet_MemoryDrawing) {
-
-							$image = $drawing->getImageResource();
-
-							$renderingFunction = $drawing->getRenderingFunction();
-
-							switch ($renderingFunction) {
-
-								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG:
-
-									$imageFileName = $drawing->getIndexedFilename();
-									$path =  $drawing->getIndexedFilename();
-									imagejpeg($image, $path);
-									break;
-
-								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_GIF:
-									$imageFileName = $drawing->getIndexedFilename();
-									$path = $path . $drawing->getIndexedFilename();
-									imagegif($image, $path);
-									break;
-
-								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_PNG:
-									$imageFileName = $drawing->getIndexedFilename();
-									$path = $path . $drawing->getIndexedFilename();
-									imagepng($image, $path);
-									break;
-
-								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT:
-									$imageFileName = $drawing->getIndexedFilename();
-									$path = $path . $drawing->getIndexedFilename();
-									imagegif($image, $path);
-									break;
-							}
-				}
-
-		}
+//			  foreach($objWorksheet->getDrawingCollection() as $drawing){
+//					$string = $drawing->getCoordinates();
+//					preg_match("/\d+/",$string, $s);
+//					preg_match("/[a-zA-Z]+/",$string, $d);
+//
+//					if($drawing instanceof  PHPExcel_Worksheet_Drawing) {
+//						$imagePath = $drawing->getPath();
+//						$imagePath = substr($imagePath, 6);
+//						$imagePathSplitted = explode("#", $imagePath);
+//
+//						$imageZip = new ZipArchive();
+//						$imageZip->open($imagePathSplitted[0]);
+//						$imageContents = $imageZip->getFromName($imagePathSplitted[1]); // 这里得到图片的数据流
+//						$imageZip->close();
+//						unset($imageZip);
+//						$expanded = '.' . explode('.', $imagePathSplitted[1])[1]; // 获取扩展名
+//						$img = "/upload/" . uniqid() . mt_rand(10000, 99999) . $expanded;
+//						file_put_contents("." . $img, $imageContents);
+//						$count = count($img_path[$s[0]][$d[0]])+1;
+//						$img_path[$s[0]][$d[0]][] = ['url'=> APP_PATH.$img, 'alt'=>$count];
+//						$cell = $objWorksheet->getCell($string);
+//						$cell->setValue($img);
+//					} else if ($drawing instanceof PHPExcel_Worksheet_MemoryDrawing) {
+//
+//							$image = $drawing->getImageResource();
+//
+//							$renderingFunction = $drawing->getRenderingFunction();
+//
+//							switch ($renderingFunction) {
+//
+//								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG:
+//
+//									$imageFileName = $drawing->getIndexedFilename();
+//									$path =  $drawing->getIndexedFilename();
+//									imagejpeg($image, $path);
+//									break;
+//
+//								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_GIF:
+//									$imageFileName = $drawing->getIndexedFilename();
+//									$path = $path . $drawing->getIndexedFilename();
+//									imagegif($image, $path);
+//									break;
+//
+//								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_PNG:
+//									$imageFileName = $drawing->getIndexedFilename();
+//									$path = $path . $drawing->getIndexedFilename();
+//									imagepng($image, $path);
+//									break;
+//
+//								case PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT:
+//									$imageFileName = $drawing->getIndexedFilename();
+//									$path = $path . $drawing->getIndexedFilename();
+//									imagegif($image, $path);
+//									break;
+//							}
+//				}
+//
+//		}
 
         return array($excelData, $img_path);
     }    

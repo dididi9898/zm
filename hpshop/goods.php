@@ -74,7 +74,7 @@ class goods extends admin {
 			$where .= " and addtime <= '".strtotime($_GET['end_addtime'])."'";
 		} 
 		$page = $_GET['page'] ? $_GET['page'] : '1';
-		$infos = $this->goods_db->listinfo($where, $order = 'addtime DESC,id DESC', $page, $pagesize = 20);
+		$infos = $this->goods_db->listinfo($where, $order = 'addtime DESC,id DESC', $page, $pagesize = 15);
 		$pages = $this->goods_db->pages;
 		//dump($pages,true);
 

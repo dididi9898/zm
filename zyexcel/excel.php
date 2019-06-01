@@ -70,10 +70,38 @@ class excel extends admin {
                     if($v != '0' && $v != '1')
                         Error(self::$CN["point_mode"]."只能为0或者1，输入值为：".$v);
                     break;
-                case "thumb":
-                    if(count($value[$k]) > 1)
-                        Error(self::$CN["thumb"]."商品缩略图只能有一张，现在有".count($value[$k])."张");
-                    $value[$k] = $v[0]["url"];break;
+//                case "thumb":
+//                    if(count($value[$k]) > 1)
+//                        Error(self::$CN["thumb"]."商品缩略图只能有一张，现在有".count($value[$k])."张");
+//                    $value[$k] = $v[0]["url"];break;
+                case "album":
+                    $z = str_replace("，", ",", $v);
+                    $z = explode(',', $z);
+                    $count = 1;
+                    $img_info = array();
+                    foreach ($z as $x=>$y)
+                    {
+                        if(empty($y))
+                            Error(self::$CN["album"]."第".($count-1)."个逗号位置有误");
+                        $img_info[] = ['url'=> $y, 'alt'=>$count];
+                        $count++;
+                    }
+                    $value[$k] = array2string($img_info);
+                    break;
+                case "goodsimg_infos":
+                    $z = str_replace("，", ",", $v);
+                    $z = explode(',', $z);
+                    $count = 1;
+                    $img_info = array();
+                    foreach ($z as $x=>$y)
+                    {
+                        if(empty($y))
+                            Error(self::$CN["goodsimg_infos"]."第".($count-1)."个逗号位置有误");
+                        $img_info[] = ['url'=> $y, 'alt'=>$count];
+                        $count++;
+                    }
+                    $value[$k] = array2string($img_info);
+                    break;
                 case "point_value":
                     if(!is_numeric($v))
                         Error(self::$CN["point_value"]."必须为数字,输入值为：".$v);
@@ -260,20 +288,20 @@ class excel extends admin {
 	$excelConfig = $this->zyexcelconfig->get_one(["id"=>1], "DBField");
 	$configArray = json_decode($excelConfig["DBField"], true);
 	$errorNum = $this->zyexcelerror->get_one("1", "Max(errorNumber) as errorNumber");
-	foreach($img as $num=>$v) //num是行数
-    {
-        foreach($v as $x=>$y) //x是列
-        {
-            if(empty($res[$num][$x]))
-                $res[$num][$x] = $y;
-            else
-            {
-                $this->zyexcelerror->insert(array("errorNumber"=>$errorNum["errorNumber"]+1, 'info'=>"在".$num."行".$x."列,数据和图片重合", "addtime"=>time(), 'row'=>$num));
-                unset($res[$num]);
-                break;
-            }
-        }
-    }
+//	foreach($img as $num=>$v) //num是行数 (由于只加载数据不加载图片，所以注释掉)
+//    {
+//        foreach($v as $x=>$y) //x是列
+//        {
+//            if(empty($res[$num][$x]))
+//                $res[$num][$x] = $y;
+//            else
+//            {
+//                $this->zyexcelerror->insert(array("errorNumber"=>$errorNum["errorNumber"]+1, 'info'=>"在".$num."行".$x."列,数据和图片重合", "addtime"=>time(), 'row'=>$num));
+//                unset($res[$num]);
+//                break;
+//            }
+//        }
+//    }
 
 	foreach($res as $key=>$value)//$key=>行$value=>数据
     {
@@ -304,30 +332,6 @@ class excel extends admin {
     }
     returnAjaxData('1', "成功",array("errorNum"=>$errorNum["errorNumber"]+1));
 
-
-	////*********************************************写入数据库需要修改的地方*******************************************
-//	foreach ($res as $v) {
-//		//if(empty($v[8])){$v[8]='0';}
-//		//$v[1]=str_replace('\'', '', $v[1]);
-//		$data=array(
-//			'jobnumber'=> $v[0],	//工号
-//			'password'=> $v[0],	//医院所在地
-//			'headpic'=> $v[1],	//医院所在地
-//			'thumb'=> $v[2],	//医院所在地
-//			'name'=> $v[3],	//医院所在地代码
-//			'sex'=>$v[4],	//状态
-//			'phone'=>$v[5],	//具体位置
-//			'power'=>$v[6],	//具体位置
-//			'undownload'=>$v[7],	//具体位置
-//			'addtime'=>time(),	//等级
-//		);
-//		$memid=$this->enze_db->insert($data,$return_insert_id = true);
-//	}
-//		if ($memid){
-//			 showmessage('导入成功',HTTP_REFERER);
-//			}else{
-//			showmessage('导入失败',HTTP_REFERER);
-//		}
 	}
 
 	
