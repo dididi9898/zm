@@ -25,11 +25,12 @@ include $this->admin_tpl('header', 'admin');
                 <table class="table_form"  style="min-width: 100%;overflow:auto;display: block;">
                     <tbody>
                     <tr >
+                        <td >商品id：</td>
+                        <td colspan="1"><?php echo $data["goods_id"]?></td>
                         <td >商品名：</td>
-                        <td colspan="2"><?php echo $data["goods_name"]?></td>
-
+                        <td colspan="1"><?php echo $data["goods_name"]?></td>
                         <td >缩略图:</td>
-                        <td colspan="2">
+                        <td colspan="1">
                             <img src="<?php echo $data["goods_img"]?>"  height="90" width="90" >
                         </td>
                     </tr>
