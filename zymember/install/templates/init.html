@@ -2,7 +2,7 @@
 <!--zm-->
 <link href="{APP_PATH}statics/zm/css/style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
-<link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_9fl3ao859vb.css">
+<link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_tluzjgimho8.css">
 <link href="{APP_PATH}statics/zm/css/picture_upload.css" rel="stylesheet" type="text/css">
 <script src="{APP_PATH}statics/zm/js/auto-size.js" type="text/javascript"></script>
 <!--<script src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js" type="text/javascript"></script>-->
@@ -10,6 +10,39 @@
 <style>
     [v-cloak]{
         display: none;
+    }
+    .p-a {
+        position: absolute;
+    }
+    .p-r {
+        position: relative;
+    }
+    .huizhang{
+        height: 0.35rem;
+        width: 0.35rem;
+        border-width: 1px;
+        border-style: solid;
+        border-color: red;
+        background-color: #fff;
+        border-radius: 50%;
+        color: #f00;
+        right: 0.75rem;
+        top:0.06rem;
+    }
+    .per-content .user-list .huizhang{
+        line-height: 0.3rem;
+        font-size: 0.23rem;
+        font-weight: normal;
+    }
+    i{
+        display:block;
+        background:#f00;
+        border-radius:50%;
+        width:0.4em;
+        height:0.4em;
+        top:0px;
+        right:-0.2em;
+        position:absolute;
     }
 </style>
 <body style="background: #f1f1f1;">
@@ -25,7 +58,8 @@
 
         <div class='per-head-right'>
             <a href="{APP_PATH}index.php?m=zymember&c=index&a=personal_config">
-                <img src="{IMG_PATH}timg.png" alt="" class='tb-dw'>
+                <!--<img src="{IMG_PATH}timg.png" alt="" class='tb-dw'>-->
+                <li class="iconfont icon-shezhi tb-dw" style="color: #fff"></li>
             </a>
         </div>
     </div>
@@ -47,7 +81,7 @@
                     </div>
                     <div class="user-xx" style="margin-top: 1rem">
                         <a href="{APP_PATH}index.php?m=zyqrcode&c=index&a=show_member">
-                            <div class="iconfont icon-qrcode c-fff"></div>
+                            <div class="iconfont icon-erweima c-fff"></div>
                             <div class="iconfont icon-right c-fff"></div>
                         </a>
                     </div>
@@ -74,13 +108,13 @@
                         </li>
                         <li>
                             <a href="{APP_PATH}index.php?m=zyfx&c=index&a=yj_detail">
-                                <div class="iconfont icon-moneybag"></div>
+                                <div class="iconfont icon-yongjinmingxi"></div>
                                 <p>佣金明细</p>
                             </a>
                         </li>
                         <li>
                             <a href="{APP_PATH}index.php?m=zyfunds&c=index&a=with_cash">
-                                <div class="iconfont icon-vipcard"></div>
+                                <div class="iconfont icon-tixian"></div>
                                 <p>提现</p>
                             </a>
                         </li>
@@ -95,39 +129,40 @@
                 <div class="div3">
                     <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list"><h3>我的订单</h3></a>
                     <ul>
-                        <li>
+                        <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1">
-                                <div class="iconfont icon-pay"></div>
+                                <div class="iconfont icon-pay"> <span class="huizhang p-a">99</span></div>
                                 <p>待付款</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=2">
-                                <div class="iconfont icon-send"></div>
+                                <div class="iconfont icon-send"><span class="huizhang p-a">9</span></div>
                                 <p>待发货</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=3">
-                                <div class="iconfont icon-deliver"></div>
+                                <div class="iconfont icon-deliver"><span class="huizhang p-a">99+</span></div>
                                 <p>待收货</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=4">
-                                <div class="iconfont icon-message"></div>
+                                <div class="iconfont icon-message"><span class="huizhang p-a">99</span></div>
                                 <p>评价</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=6">
-                                <div class="iconfont icon-transaction"></div>
+                                <div class="iconfont icon-transaction"><span class="huizhang p-a">99</span></div>
                                 <p>退款/售后</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">
-                                <div class="iconfont icon-attention"></div>
+                                <div class="iconfont icon-attention"><span class="huizhang p-a">99</span></div>
+
                                 <p>待审核</p>
                             </a>
                         </li>
@@ -156,7 +191,7 @@
                         </li>
                         <li>
                             <a href="{APP_PATH}index.php?m=zypoints&c=index&a=gift_exchange">
-                                <div class="iconfont icon-present"></div>
+                                <div class="iconfont icon-youhui"></div>
                                 <p>兑换礼品</p>
                             </a>
                         </li>
@@ -173,7 +208,7 @@
                     <ul>
                         <li>
                             <a href="{APP_PATH}index.php?m=zycoupon&c=index&a=show_coupon&mod=1">
-                                <div class="iconfont icon-ticket"></div>
+                                <div class="iconfont icon-youhuiquan"></div>
                                 <p>去领券</p>
                             </a>
                         </li>
@@ -200,7 +235,7 @@
                     <ul>
                         <li>
                             <a @click="create_talk()">
-                                <div class="iconfont icon-sponsorfill">
+                                <div class="iconfont icon-kefu">
                                     <template v-if="unlook!=0">
                                     <span class="layui-badge-dot" style="margin-bottom: 0.5rem"></span>
                                     </template>
