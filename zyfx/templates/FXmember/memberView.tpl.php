@@ -17,7 +17,7 @@ include $this->admin_tpl('header', 'admin');
 			<tbody>
 				<tr> 
 					<th width="120">账号名称</th>
-					<td><?php echo $member['username']?></td> 
+					<td><?php echo $member['username']?></td>
 				</tr>
                 <tr>
                     <th>团长ID</th>
@@ -45,18 +45,18 @@ include $this->admin_tpl('header', 'admin');
 					<th>注册日期</th>  
 					<td><?php echo date('Y-m-d H:i:s',$member['addTime']);?></td>
 				</tr>
-                <tr>
-                    <th>省份</th>
-                    <td><?php echo $member['province'];?></td>
-                </tr>
-                <tr>
-                    <th>城市</th>
-                    <td><?php echo $member['province'];?></td>
-                </tr>
-                <tr>
-                    <th>详细地址</th>
-                    <td><?php echo $member['address'];?></td>
-                </tr>
+<!--                <tr>-->
+<!--                    <th>省份</th>-->
+<!--                    <td>--><?php //echo $member['province'];?><!--</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <th>城市</th>-->
+<!--                    <td>--><?php //echo $member['province'];?><!--</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <th>详细地址</th>-->
+<!--                    <td>--><?php //echo $member['address'];?><!--</td>-->
+<!--                </tr>-->
 			</tbody>
 		</table>
         </fieldset>

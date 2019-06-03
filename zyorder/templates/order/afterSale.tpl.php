@@ -85,8 +85,8 @@ include $this->admin_tpl('header', 'admin');
                             <td >原因：</td>
                             <td colspan="2"><?php echo $data["reason"]?></td>
 
-                            <td >是否发货</td>
-                            <td colspan="1"><?php echo $data["goodsType"]?> </td>
+                            <td >货物状态：</td>
+                            <td colspan="1"><?php if($data["isDeliver"] == '1')echo "未发货"; else  echo"以发货"?> </td>
                         </tr>
                         <!--                    <tr>-->
                         <!--                        <td>商品简述：</td>-->
@@ -157,16 +157,16 @@ include $this->admin_tpl('header', 'admin');
 
     function changeCommentId_1(info, commentId)
     {
-
-        $.ajax({
-            type : "post",
-            url : "index.php?m=zyorder&c=zyorder_api&a=changeDeal&pc_hash=<?php echo $_GET["pc_hash"]?>",
-            data:{
-                "commentid":commentId,
-                "isDeal":info
-            },
-            datatype : "JSON",
-            success: function (data) {
+        layer.confirm('确定提交？',{icon:3, title:"提示"}, function (index){
+            $.ajax({
+                type : "post",
+                url : "index.php?m=zyorder&c=zyorder_api&a=changeDeal&pc_hash=<?php echo $_GET["pc_hash"]?>",
+                data:{
+                    "commentid":commentId,
+                    "isDeal":info
+                },
+                datatype : "JSON",
+                success: function (data) {
 
                     console.log($("#comment_"+commentId).html());
 
@@ -184,8 +184,11 @@ include $this->admin_tpl('header', 'admin');
                             break;
                     }
 
-            }
-        })
+                }
+            })
+        });
+        layer.close(index);
+
     }
 </script>
 

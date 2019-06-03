@@ -39,6 +39,14 @@ include $this->admin_tpl('header', 'admin');
 					<td><?php echo $member['nickname']?></td>
 				</tr>
                 <tr>
+                    <th width="120">真实姓名</th>
+                    <td><?php echo $member['realname']?></td>
+                </tr>
+                <tr>
+                    <th width="120">身份证号</th>
+                    <td><?php echo $member['idcard']?></td>
+                </tr>
+                <tr>
 					<th>手机号码</th>
 					<td><?php echo $member['mobile']?></td>
 				</tr>
@@ -51,40 +59,8 @@ include $this->admin_tpl('header', 'admin');
 					<td><?php echo date('Y-m-d H:i:s',$member['regdate']);?></td>
 				</tr>
                 <tr>
-					<th>注册ip</th>
-					<td><?php echo $member['regip'];?></td>
-				</tr>
-                <tr>
-					<th>会员组</th>
-					<td>
-						<?php 
-							foreach($member_group as $group){
-								if($group['groupid']==$member['groupid']){
-									if($group['icon']){
-										echo '<img src="statics/'.$group['icon'].'" height="18" width="18">';
-									}
-									echo $group['name'];
-								}
-
-							}
-						?>
-					</td>
-				</tr>
-                <tr>
 					<th>积分</th>
 					<td><?php echo $member['point'];?></td>
-				</tr>
-                <tr>
-					<th>vip会员</th>
-					<td>
-					<?php if($member['vip']==0){ ?>
-						否
-					<?php }?>
-					<?php if($member['vip']==1){ ?>
-						到期时间：<?php echo date('Y-m-d H:i:s',$member['overduedate']);?>
-					<?php }?>
-
-					</td>
 				</tr>
                 <tr>
 					<th>状态</th>

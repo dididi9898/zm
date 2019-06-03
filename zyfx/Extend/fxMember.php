@@ -112,6 +112,13 @@ class Fx
         }
         return $data;
     }
+    public function getPidMemberInfo($_userid)
+    {
+        list($info, $count) = $this->zyfxmember->moreTableSelect(array("zy_zyfxmember"=>array("addTime"), "zy_member"=>array("username","nickname", "mobile", "userid", "headimgurl")), array("userid")
+        , "B1.`userid`=".$_userid["userid"], "", "", 0
+        );
+        return $info;
+    }
     public function insertMember($_userid)//添加新用户
     {
         try

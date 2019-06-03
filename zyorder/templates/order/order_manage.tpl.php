@@ -153,6 +153,7 @@
                 <?php }elseif($row["status"] == '4' || $row["status"] == '5'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == '8' || $row["status"] == '10'){?>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                     <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="checkAfterSale('<?php echo $row['order_id']?>')"><?php echo L('售后商品')?></a>
                 <?php }?>
                 <a href="javascript:confirmurl('?m=zyorder&c=order&a=dropOrder&order_id=<?php echo $row['order_id']?>', '<?php echo L('确定删除此订单吗，删除后无法恢复。')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>

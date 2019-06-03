@@ -122,7 +122,6 @@
 									layui.each(data.data, function(index, item){
 										//订单状态
 
-										var status ;
 										if(item.status == '1'){
 											status = '<span class="order-div-status">待付款</span>';
 										}else if(item.status == '2'){
@@ -153,7 +152,15 @@
 										//订单产品列表详情
 										var goods_list = '';
 										$.each(item.goodsinfo,function(i,v){
-											goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p></div><div class="clear"></div></a></div>';
+										    if(v.isDeal == 1)
+                                                goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p><p>退款中</p></div><div class="clear"></div></a></div>';
+										    else if(v.isDeal == 2)
+                                                goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p><p style="color: green">同意退款</p></div><div class="clear"></div></a></div>';
+											else if(v.isDeal == 3)
+                                                goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p><p style="color: red">拒绝退款</p></div><div class="clear"></div></a></div>';
+										    else
+                                                goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p></div><div class="clear"></div></a></div>';
+
 										})
 										var store_total = '<div class="order-div-h"><p class="order-div-total"><span>共<span class="c-ff0000">'+ item.goodsinfo.length +'</span>件商品</span>&nbsp;&nbsp;&nbsp;<span>合计：￥<span class="c-ff0000">'+ item.totalprice +'</span></span></p></div>';
 										var botton ;
@@ -166,7 +173,7 @@
 										}else if(item.status == 3){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment sh" style="border: 1px solid red;color:red;" data-id="'+item.id+'" data-sn="'+item.ordersn+'">确认收货</button>';
 										
-										}else if(item.status == 4 || item.status == 10){
+										}else if(item.status == 4|| (item.status == 10 && status == 4)){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">评价</button>';
 										
 										}else if(item.status == 5){
@@ -179,9 +186,9 @@
 										}else if(item.status == 7){
 											botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton>' +
 													'<botton class="layui-btn layui-btn-radius layui-btn-disabled layui-btn-xs"  data-id="'+item.id+'">审核中</botton>';
-										}else if(item.status == 8||item.status == 9){
-											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看详情</button>' +
-													'<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">售后评价</button>';
+										}else if(item.status == 8||item.status == 9 || (item.status == 10 && status == 6)){
+											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看详情</button>';
+//													'<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">售后评价</button>';
 										}
 
 
