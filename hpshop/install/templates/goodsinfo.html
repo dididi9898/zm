@@ -566,11 +566,11 @@
 				goodsinfo = data.data;
 				if(goodsinfo.isspec == '1')
                 {
-                    goodsinfo.salesnum = 0;
+//                    goodsinfo.salesnum = 0;
                     goodsinfo.stock = 0;
                     for(x in goodsinfo.specdata)
                     {
-                        goodsinfo.salesnum += Number(goodsinfo.specdata[x].salenum);
+//                        goodsinfo.salesnum += Number(goodsinfo.specdata[x].salenum);
                         goodsinfo.stock += Number(goodsinfo.specdata[x].specstock);
 //                        console.log(y);
                     }
