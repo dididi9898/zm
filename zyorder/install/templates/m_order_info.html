@@ -144,7 +144,13 @@
 				<span style="font-weight:700;">已取消</span>
 				</template>
 				<template v-if="status == 8">
-				<span style="font-weight:700;">已退款</span>
+				<span style="font-weight:700;">申请退款</span>
+				</template>
+				<template v-if="status == 9">
+					<span style="font-weight:700;">已退款</span>
+				</template>
+				<template v-if="status == 10">
+					<span style="font-weight:700;">部分商品申请退款</span>
 				</template>
 			</div>
 		</div>
@@ -200,11 +206,27 @@
 				<div class="order-shop-w3">
 					<p>￥{{ info.goods_price }}</p>
 					<p>x{{ info.goods_num }}</p>
+					<template v-if="info.isDeal == 1">
+						<p>退款中</p>
+					</template>
+					<template v-else-if="info.isDeal == 2">
+						<p>同意退款</p>
+					</template>
+					<template  v-else-if="info.isDeal == 3">
+						<p>拒绝退款</p>
+					</template>
+					<template v-else>
+
+					</template>
 				</div>
 				<div class="clear"></div>
 				</a>
-				<template v-if="status==4">
-				<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
+				<template v-if="status==4 || status == 10">
+
+					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
+						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
+					</template>
+
 				<div class="clear"></div>
 				</template>
 			</div>

@@ -35,8 +35,8 @@
 
 
 			  $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-	//	      $objReader = PHPExcel_IOFactory::createReader('Excel5');
-			  $objReader->setReadDataOnly(true);
+//		      $objReader = PHPExcel_IOFactory::createReader('Excel5');
+//			  $objReader->setReadDataOnly(true);
 			  $objPHPExcel = $objReader->load($filename);
 			  $objWorksheet = $objPHPExcel->getActiveSheet();
 			  $highestRow = $objWorksheet->getHighestRow();

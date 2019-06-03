@@ -23,6 +23,7 @@ class zyorder_api{
 		$this->zyfxmember_db = pc_base::load_model("zyfxmember_model");
 		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
+        $this->order_aftersale = pc_base::load_model('zy_order_aftersale_model');
 	}
     /**
      * CURL方式的GET传值
@@ -193,9 +194,13 @@ class zyorder_api{
 			}
 		}
         if($status == "6")
-		    $info = $this->ordergoods_db->select(['order_id'=>$oid,"isAfterSale"=>2],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
+            list($info, $count) = $this->ordergoods_db->moreTableSelect(array("zy_order_goods"=>array("id","order_id","goods_id","goods_name","goods_num","final_price","goods_price","specid","specid_name","is_comment","goods_img"),"zy_order_aftersale"=>array("isDeal"))
+            ,array("id"), ['order_id'=>$oid,"isAfterSale"=>2], "", "", 1
+            );
 		else
-		    $info = $this->ordergoods_db->select(['order_id'=>$oid,"isAfterSale"=>1],'id,order_id,goods_id,goods_name,goods_num,final_price,goods_price,specid,specid_name,is_comment,goods_img');
+            list($info, $count) = $this->ordergoods_db->moreTableSelect(array("zy_order_goods"=>array("id","order_id","goods_id","goods_name","goods_num","final_price","goods_price","specid","specid_name","is_comment","goods_img"),"zy_order_aftersale"=>array("isDeal"))
+                ,array("id"), ['order_id'=>$oid], "", "", 1
+            );
 		if ( $ischeck != 1 ) {
 			return $info;
 			exit(0);
@@ -372,6 +377,7 @@ class zyorder_api{
 			$orders[$k]['goodsinfo'] = $goodsinfo;
 			$orders[$k]["id"] = $v["order_id"];
 			$orders[$k]['storename'] = $snamarr[$v['storeid']]['shopname'];
+
  		}
 
 		// $orderss = $this->order_db->select($where);
