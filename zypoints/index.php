@@ -15,5 +15,11 @@ class index{
 		$_userid = $this->_userid;
 		include template('zypoints','gift_exchange');
 	}
+
+	public function gift_exchange_des()
+	{
+		$_userid = $this->_userid;
+		include template('zypoints','gift_exchange_des');
+	}
 }
 ?>

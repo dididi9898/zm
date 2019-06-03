@@ -402,6 +402,9 @@
                         <template v-if="specid !='' ">
                         <div class="sm-fs lh2 c-707070">请选择：<template v-for="spec_name in specname"> {{ spec_name.name }}</template></div>
                         </template>
+                        <template v-if="type =='3' ">
+                            <div class="sm-fs lh2 c-707070 fr">试穿天数（7天）</div>
+                        </template>
                         <template v-for="prices in specdata">
                         	<div class="xs-fs lh2 c-707070" v-if="specid == prices.specid ">库存：{{ prices.specstock }}</div>
 						</template>
@@ -557,6 +560,8 @@
 		var goodsinfo;
 		var type='0';
         var type_info = 1;
+        var  goods_spec;
+
 
 		aj.get('index.php?m=hpshop&c=goods_api&a=goodsinfo',{"gid":gid}, function (data) {
             console.log(data);
@@ -668,7 +673,7 @@
 								var thumb = goodsinfo.thumb;
 								console.log(goodsinfo.thumb);
 								goods.specname = specname;
-								var goods_spec = new Vue({
+                                goods_spec = new Vue({
 									el: '#goods_spec',
 									data: {
 										spec:spec,
@@ -677,7 +682,7 @@
 										specdata:goods.specdata,
 										s_shuliang: "1",
 										max_sum:goods.specdata[0].specstock,
-										type:"",
+										type:type,
 										thumb:thumb
 									},
 									methods:{
@@ -822,7 +827,7 @@
                                 var thumb = goodsinfo.thumb;
                                 console.log(goodsinfo.thumb);
                                 goods.specname = specname;
-                                var goods_spec = new Vue({
+                                goods_spec = new Vue({
                                     el: '#goods_spec',
                                     data: {
                                         spec:spec,
@@ -831,7 +836,7 @@
                                         specdata:goodsinfo.shop_price,
                                         s_shuliang: "1",
                                         max_sum:goodsinfo.stock,
-                                        type:"",
+                                        type:type,
                                         thumb:thumb
                                     },
                                     methods:{
@@ -963,6 +968,7 @@
 						// 选择套餐
 						buy:function(){
 							type = '1';
+                            goods_spec.type=type;
 							layer.open({
 							  type: 1,
 							  area: ['100%', 'auto'],
@@ -979,6 +985,7 @@
 						// 选择套餐
 						add:function(){
 							type = '2';
+                            goods_spec.type=type;
                                 layer.open({
                                     type: 1,
                                     area: ['100%', 'auto'],
@@ -996,6 +1003,7 @@
                         // 选择套餐
                         trynow:function(){
                             type = '3';
+                            goods_spec.type=type;
                             layer.open({
                                 type: 1,
                                 area: ['100%', 'auto'],

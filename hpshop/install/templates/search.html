@@ -228,7 +228,7 @@
                         }
                         layui.each(data.data, function(index, item){
                             //订单状态
-                            var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span></div></div>  </a></li>';
+                            var goodsInfo = '<li class="index-wares-li fl">'+'<a href="'+'index.php?m=hpshop&c=index&a=goodsinfo&id='+item.id+'"><div class="wares-img"><img src="'+item.thumb+'"></div> <div class="wares-word"><p class="wares-keyword">'+item.goods_name+'</p><div class="Price"><i>￥</i><span class="Front Price">'+item.shop_price+' </span><span class="prime">'+ item.market_price +'</span><span class="fr" style="color: #0C0C0C;font-size: 0.1rem">'+item.salesnum+'人购买</span></div></div>  </a></li>';
                             lis.push('<div class="order-div">'+goodsInfo+'</div>');
 
                         });

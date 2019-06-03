@@ -173,7 +173,7 @@ class goods_api{
 			}
 		}
 
-		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,salesnum FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 		$sqls = 'SELECT COUNT(*) as num FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
@@ -274,6 +274,7 @@ class goods_api{
      */
 	public function allcat(){
         require('classes/PHPTree.class.php');//加载树形结构类
+		$where='isshow=1';
         $infos = $this->goodscat_db->select($where,'id,cate_name,cate_img,pid','',$order = 'sort ASC,id ASC');
         $data = catetree($infos);
 
