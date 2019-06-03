@@ -3,6 +3,9 @@
 <body>
     <style>
         a.layui-layer-btn2 { background-color: #84c101; border: 1px solid #84c101; color: #FFF; }
+        [v-cloak]{
+            display: none;
+        }
     </style>
     <div class='personal-head'>
         <a onClick='javascript :history.back(-1);'>
@@ -26,7 +29,7 @@
     <!--个人信息-->
     <div class="layui-container grxx" style="min-height: calc( 100vh - 1rem); background: #f1f1f1;">
         <div class="layui-row">
-            <form class="layui-form " action="" id="info">
+            <form class="layui-form " action="" id="info" v-cloak>
                 <div class="box box-indent sm-fs bg-fff">
                     <div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
                         <ul>

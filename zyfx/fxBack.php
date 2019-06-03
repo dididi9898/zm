@@ -71,7 +71,7 @@ class fxBack extends admin
     {
         $neadArg = ["userid" =>[true, 1]];
         $info = checkArgBcak($neadArg);
-        $member = $this->fxMember->getMemberInfo($info);
+        $member = $this->fxMember->getPidMemberInfo($info);
         include $this->admin_tpl("FXmember/memberView");
     }
     function teamView()

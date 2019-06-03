@@ -97,7 +97,10 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 					<th width="125">商品简述</th>  
 					<td><textarea rows="4" cols="60" name="summary" style="resize: vertical;"><?php echo $info['summary'];?></textarea></td>
 				</tr>
-
+                <tr>
+                    <th width="125">修改销量</th>
+                    <td><input type="text" name="salesnum" class="input-text" value="<?php echo $info['salesnum'];?>" required="required"></input>(前台销量直接修改)</td>
+                </tr>
 				<tr>
 					<th width="125">所属栏目</th>  
 					<td>
