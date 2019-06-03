@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="{APP_PATH}statics/public/layui-v2.4.5/layui/css/layui.css">
 </head>
 <style type="text/css">
+    [v-cloak]{
+        display: none;
+    }
     .per-content .user-info{
         border-color: #eee;
     }
@@ -74,7 +77,7 @@
     <!--head_food-->
     <div class='per-head'>
         <div class='per-head-left'>
-            <a href='javascript:history.go(-1);'>
+            <a href='index.php?m=zymember&c-index&a=init'>
                 <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
             </a>
         </div>
@@ -94,7 +97,7 @@
                     <div class="user-logo">
                         <img :src="headimgurl">
                     </div>
-                    <div class="user-text">
+                    <div class="user-text" v-cloak>
                         <h3>用户名称</h3>
                         <p>{{nickname}}</p>
                     </div>

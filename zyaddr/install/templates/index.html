@@ -1,4 +1,4 @@
-{template 'zyaddr','header'}
+{template 'zyaddr','indexHeader'}
 <div class="address">
 	<form class="layui-form" action="">
 		{loop $lists $data}
@@ -46,18 +46,24 @@
 		form.render();
 	});
 
-	function del(id,obj){
-		$.ajax({
-			url: 'index.php?m=zyaddr&c=index&a=del',
-			type: 'post',
-			data: {id:id},
-			dataType: 'json',
-			success: function(res){
-				mui.toast(res.message);
-				if(res.code==200){
-					$(obj).parents('.list').remove();
-				}
-			}
-		});
-	}
+		function del(id,obj){
+            layer.confirm('确定删除？',{icon:3, title:"提示"}, function (index){
+				$.ajax({
+					url: 'index.php?m=zyaddr&c=index&a=del',
+					type: 'post',
+					data: {id:id},
+					dataType: 'json',
+					success: function(res){
+						mui.toast(res.message);
+						if(res.code==200){
+							$(obj).parents('.list').remove();
+						}
+					}
+				});
+                layer.close(index);
+            })
+
+		}
+
+
 </script>
