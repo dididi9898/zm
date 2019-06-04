@@ -326,7 +326,7 @@ class zyorder_api{
 		}else if($_GET['status']==3){
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
-			$where.= ' AND status=4 OR status=10';
+			$where.= ' AND (status=4 OR status=10)';
 		}else if($_GET['status']==5){
 			$where.= ' AND status=7';
 		}else if($_GET['status']==6){
@@ -964,7 +964,7 @@ class zyorder_api{
 		    ];
 		    $url = APP_PATH.'index.php?m=zymember&c=zymember_api&a=zyshop_nickname';
 		    $return = json_decode($this->_crul_post($url,$data),true);
-			if($this->check_uid_status($id,$uid,array("3", "4", "5"))){
+			if($this->check_uid_status($id,$uid,array("3", "4", "5", "8", "9", "10"))){
 //			  $KdApi = pc_base::load_app_class('KdApiSearch');
 //			  $KdApi = new KdApiSearch();
 //			  $order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$uid));
