@@ -30,7 +30,7 @@
         top:0.06rem;
     }
     .per-content .user-list .huizhang{
-        line-height: 0.3rem;
+        line-height: 0.35rem;
         font-size: 0.23rem;
         font-weight: normal;
     }
@@ -131,37 +131,37 @@
                     <ul>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1">
-                                <div class="iconfont icon-pay"> <span class="huizhang p-a">99</span></div>
+                                <div class="iconfont icon-pay"> <span class="huizhang p-a" v-if="order_count[1]!=null">{{order_count[1]}}</span></div>
                                 <p>待付款</p>
                             </a>
                         </li>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=2">
-                                <div class="iconfont icon-send"><span class="huizhang p-a">9</span></div>
+                                <div class="iconfont icon-send"><span class="huizhang p-a" v-if="order_count[2]!=null">{{order_count[2]}}</span></div>
                                 <p>待发货</p>
                             </a>
                         </li>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=3">
-                                <div class="iconfont icon-deliver"><span class="huizhang p-a">99+</span></div>
+                                <div class="iconfont icon-deliver"><span class="huizhang p-a" v-if="order_count[3]!=null">{{order_count[3]}}</span></div>
                                 <p>待收货</p>
                             </a>
                         </li>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=4">
-                                <div class="iconfont icon-message"><span class="huizhang p-a">99</span></div>
+                                <div class="iconfont icon-message"><span class="huizhang p-a" v-if="order_count[4]!=null||order_count[10]!=null">{{order_count[4]+order_count[10]}}</span></div>
                                 <p>评价</p>
                             </a>
                         </li>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=6">
-                                <div class="iconfont icon-transaction"><span class="huizhang p-a">99</span></div>
+                                <div class="iconfont icon-transaction"><span class="huizhang p-a" v-if="order_count[8]!=null">{{order_count[8]}}</span></div>
                                 <p>退款/售后</p>
                             </a>
                         </li>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">
-                                <div class="iconfont icon-attention"><span class="huizhang p-a">99</span></div>
+                                <div class="iconfont icon-attention"><span class="huizhang p-a" v-if="order_count[7]!=null">{{order_count[7]}}</span></div>
 
                                 <p>待审核</p>
                             </a>

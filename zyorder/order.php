@@ -87,11 +87,11 @@ class order extends admin {
 		$where = '`try_status` = 0';
         if(!empty($status)) $where .= " AND `status` = ".$status." ";
         if(!empty($start_addtime))
-            $where .= " AND `add_time` > '$start_addtime' AND "; //优先考虑几天之内的筛选框中内容去查询数据
+            $where .= " AND `addtime` > '$start_addtime' "; //优先考虑几天之内的筛选框中内容去查询数据
         if(!empty($end_addtime))
-            $where .= " AND `add_time` < '$end_addtime' AND ";
+            $where .= " AND `addtime` < '$end_addtime' ";
 		if($_GET['ordersn']){
-			$where .= " and ordersn ='".$_GET['ordersn']."' ";
+			$where .= " and B1.userid ='".$_GET['ordersn']."' ";
 		}
 		if($_GET['pay_type']){
 			//1 .余额 
