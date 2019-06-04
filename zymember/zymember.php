@@ -282,7 +282,9 @@ class zymember extends admin {
 			$userinfo['vip'] = $_POST['info']['vip']==1 ? 1 : 0;
 			$userinfo['overduedate'] = strtotime($_POST['info']['overduedate']);
 			$userinfo['mobile'] = $_POST['info']['mobile'];
-
+            $userinfo["realname"] =  $_POST['info']['realname'];
+            $userinfo["idcard"] = $_POST['info']['idcard'];
+            $userinfo["amount"] = $_POST['info']['amount'];
 			
 			//传入phpsso为明文密码，加密后存入phpcms_v9
 			$password = $userinfo['password'];
@@ -397,6 +399,7 @@ class zymember extends admin {
 			$basicinfo['groupid'] = $_POST['info']['groupid'];
 			$basicinfo['vip'] = $_POST['info']['vip'];
 			$basicinfo['overduedate'] = $_POST['info']['overduedate'];
+			$basicinfo['amount'] = $_POST['info']['amount'];
 
 			$basicinfo['shopname'] = $_POST['info']['shopname'];
 
@@ -432,7 +435,7 @@ class zymember extends admin {
 				'groupid'=>$basicinfo['groupid'],
 				'vip'=>$basicinfo['vip'],
 				'overduedate'=>strtotime($basicinfo['overduedate']),
-
+                'amount'=>$basicinfo['amount'],
 				'shopname'=>$basicinfo['shopname'],
 			);
 			$this->member_db->update($data,'userid='.$basicinfo['userid']);

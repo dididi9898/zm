@@ -27,23 +27,42 @@ $(function(){
 	$("#password").formValidator({onshow:"请输入密码",onfocus:"密码应该为6-20位之间"}).inputValidator({min:6,max:20,onerror:"密码应该为6-20位之间"});
 	$("#pwdconfirm").formValidator({onshow:"请输入确认密码",onfocus:"请输入两次密码不同。",oncorrect:"密码输入一致"}).compareValidator({desid:"password",operateor:"=",onerror:"请输入两次密码不同。"});
 	//$("#point").formValidator({tipid:"pointtip",onshow:"请输入积分点数，积分点数将影响会员用户组",onfocus:"积分点数应该为1-8位的数字"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"积分点数应该为1-8位的数字"});
-	$("#email").formValidator({onshow:"请输入邮箱",onfocus:"邮箱格式错误",oncorrect:"邮箱格式正确"}).inputValidator({min:2,max:32,onerror:"邮箱应该为2-32位之间"}).regexValidator({regexp:"email",datatype:"enum",onerror:"邮箱格式错误"}).ajaxValidator({
-	    type : "get",
-		url : "",
-		data :"m=member&c=member&a=public_checkemail_ajax",
-		datatype : "html",
-		async:'false',
-		success : function(data){	
+//	$("#email").formValidator({onshow:"请输入邮箱",onfocus:"邮箱格式错误",oncorrect:"邮箱格式正确"}).inputValidator({min:2,max:32,onerror:"邮箱应该为2-32位之间"}).regexValidator({regexp:"email",datatype:"enum",onerror:"邮箱格式错误"}).ajaxValidator({
+//	    type : "get",
+//		url : "",
+//		data :"m=member&c=member&a=public_checkemail_ajax",
+//		datatype : "html",
+//		async:'false',
+//		success : function(data){
+//            if( data == "1" ) {
+//                return true;
+//			} else {
+//                return false;
+//			}
+//		},
+//		buttons: $("#dosubmit"),
+//		onerror : "禁止注册或邮箱已存在",
+//		onwait : "请稍候..."
+//	});
+    $("#mobile").formValidator({onshow:"请输入手机号码",onfocus:"手机号码应该为11位"}).inputValidator({min:11,max:11,onerror:"手机号码应该为11位"}).ajaxValidator({
+        type : "get",
+        url : "",
+        data :"m=zymember&c=index&a=public_checkmobile_ajax",
+        datatype : "html",
+        async:'false',
+        success : function(data){
+            console.log(data);
+            console.log('123');
             if( data == "1" ) {
                 return true;
-			} else {
+            } else {
                 return false;
-			}
-		},
-		buttons: $("#dosubmit"),
-		onerror : "禁止注册或邮箱已存在",
-		onwait : "请稍候..."
-	});
+            }
+        },
+        buttons: $("#dosubmit"),
+        onerror : "手机号码已经存在",
+        onwait : "请稍候..."
+    })
 	$("#nickname").formValidator({onshow:"请输入昵称",onfocus:"昵称应该为2-20位之间"}).inputValidator({min:2,max:20,onerror:"昵称应该为2-20位之间"}).regexValidator({regexp:"ps_username",datatype:"enum",onerror:"昵称格式错误"}).ajaxValidator({
 	    type : "get",
 		url : "",
@@ -99,28 +118,34 @@ $(function(){
 		<tr>
 			<td>手机号码</td>
 			<td>
-			<input type="text" name="info[mobile]" value="<?php echo $memberinfo['mobile']?>" class="input-text" id="mobile" size="15"></input>
+			<input type="text" name="info[mobile]" value="13" class="input-text" id="mobile" size="15"></input>
 			</td>
 		</tr>
+        <tr>
+            <td>真实名字</td>
+            <td>
+                <input type="text" name="info[realname]" value="小号" class="input-text" id="realname" size="15"></input>
+            </td>
+        </tr>
+        <tr>
+            <td>身份证号</td>
+            <td>
+                <input type="text" name="info[idcard]" value="1" class="input-text" id="idcard" size="15"></input>
+            </td>
+        </tr>
+        <tr>
+            <td>虚拟金额</td>
+            <td>
+                <input type="text" name="info[amount]" value="100000" class="input-text" id="amount" size="15"></input>
+            </td>
+        </tr>
 		<tr>
 			<td>会员组</td>
 			<td>
 			<?php echo form::select($grouplist, '2', 'name="info[groupid]"', '');?>
 			</td>
 		</tr>
-		<tr>
-			<td>积分点数</td>
-			<td>
-			<input type="text" name="info[point]" value="" class="input-text" id="point" size="10"></input>
-			</td>
-		</tr>
-		<tr>
-			<td>vip会员</td>
-			<td>
-			是否为vip会员 <input type="checkbox" name="info[vip]" value=1 />
-			过期时间 <?php echo form::date('info[overduedate]', '', 1)?>
-			</td>
-		</tr>
+
 	</table>
 </fieldset>
 
