@@ -27,7 +27,7 @@ class index extends foreground {
 	 */
 	public function public_checkmobile_ajax()
 	{
-		$userid = $_GET['userid'];
+		//$userid = $_GET['userid'];
 		$mobile = $_GET['mobile'];
 		if ($this->member_db->get_one(['mobile'=>$mobile])) {
 			echo '0';
