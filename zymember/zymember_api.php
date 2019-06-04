@@ -18,7 +18,8 @@ class zymember_api{
 		$this->zyfxmoney_db=pc_base::load_model("zyfxmoney_model");
 		//聊天记录
 		$this->online_talk_record_db = pc_base::load_model('online_talk_record_model');
-
+		//订单
+		$this->order_db = pc_base::load_model('zy_order_model');
 		$this->_userid=param::get_cookie('_userid');
 	}
 
@@ -174,6 +175,12 @@ class zymember_api{
 		$data['WTXmoney']= $zyfxmoney['WTXmoney'];
 		//客服信息
 		$data['unlook']=$this->online_talk_record_db->count(array('to_user'=>$userid,'records_id'=>$userid,'status'=>0));
+		//订单红点
+		$sql='SELECT COUNT(*) AS num,`status` FROM zy_zy_order WHERE `userid`='.$userid.' GROUP BY `status` ';
+		$res=$this->order_db->spcSql($sql,1,1);
+		foreach($res as $v){
+			$data['order_count'][$v['status']]=$v['num'];
+		}
 		$result = [
 			'status'=>'success',
 			'code'=>200,
