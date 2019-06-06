@@ -553,12 +553,16 @@
 					<i class="icon iconfont icon-comment" style="font-size: 0.2rem;line-height: 0.275rem;"></i>
 					<p style="font-size: 0.11rem;line-height: 0.125rem;">客服</p>
 				</div>-->
-				<a href="{APP_PATH}index.php?m=hpshop&c=index&a=goodscart" class="d-b p-r" style="width: 50%;float:left;text-align: center; padding: 0;">
-					<span class="layui-badge-dot p-a" style="top: 0.05rem;right: 0.15rem;"></span>
+				<a href="{APP_PATH}index.php?m=hpshop&c=index&a=goodscart" class="d-b p-r" style="width: 33.3%;float:left;text-align: center; padding: 0;">
+					<span class="layui-badge-dot p-a" style="top: 0.05rem;right: 0.1rem;"></span>
 					<i class="layui-icon layui-icon-cart" style="font-size: 0.2rem;line-height: 0.275rem;"></i>
 					<p style="font-size: 0.11rem;line-height: 0.125rem;">购物车</p>
 				</a>
-				<div style="width: 50%;float:left;text-align: center;" @click="Collect($event)">
+                <a href="{APP_PATH}index.php?m=zyim&c=index&a=im_talk" class="d-b p-r" style="width: 33.3%;float:left;text-align: center; padding: 0;">
+                    <i class="layui-icon layui-icon-dialogue" style="font-size: 0.2rem;line-height: 0.275rem;"></i>
+                    <p style="font-size: 0.11rem;line-height: 0.125rem;">客服</p>
+                </a>
+				<div style="width: 33.3%;float:left;text-align: center;" @click="Collect($event)">
 					<template v-if="collect">
 					<i class="icon fa fa-heart" style="font-size: 0.2rem;line-height: 0.275rem;color:#D10C0F"></i>
 					<p style="font-size: 0.11rem;line-height: 0.125rem;color:#E10101">已收藏</p>
