@@ -46,6 +46,29 @@
 	.layui-btn{ line-height: 0.38rem; height: 0.38rem; font-size: .14rem;}
 	.cart-count .layui-form-checkbox[lay-skin=primary] span{line-height: 0.17rem; height: 0.17rem; font-size: 0.15rem;}
 	.index-footer{ box-shadow: none;}
+	.tjtitle{
+		border-top: 2px dashed #ed722d;
+		width: 2rem;
+		margin: auto;
+		text-align: center;
+		position: relative;
+		margin-bottom: 0.5rem;
+	}
+	.tjtitle p{
+		background-color: #f5f5f5;
+		color: #ed722d;
+		line-height: 0.5rem;
+		position: absolute;
+		left: 50%;
+		margin-left: -0.75rem;
+		top: -0.25rem;
+		width: 1.5rem;
+	}
+	.tjtitle p i{
+		font-size: 0.22rem;
+		vertical-align: middle;
+		margin-right: 5px;
+	}
 	</style>
 	<script>
 	$(function(){
@@ -81,7 +104,7 @@
 							</div>
 							<div class="h1"></div>
 							<div class="h35 lh35">
-								<div class=""><span class="c-fff lg-fs">共{{ d.data.carts.length }}件宝贝</span></div>
+								<!--<div class=""><span class="c-fff lg-fs">共{{ d.data.carts.length }}件宝贝</span></div>-->
 							</div>
 							<div class="h1"></div>
 
@@ -159,7 +182,7 @@
 								</li>
 								{{#  }); }}
 							</div>
-							<div class="h2"></div>
+							<div class="h3"></div>
 							{{#  }); }}
 							{{#  if(d.data.carts.length === 0){ }}
 
@@ -167,6 +190,7 @@
 
 
 							</script>
+
 							<div id="cart-box"></div>
 
 							<!--<div class="radius1 hidden bg-fff pt1 pb1 pl05 pr05">
@@ -269,8 +293,14 @@
 					</div>
 					<div class="clear"></div>
 				</div>
+				<h3 class="tjtitle">
+					<p>
+						<i class="iconfont icon-round_like_fill"></i>您可能还喜欢
+					</p>
+				</h3>
 
 				<div class="h4"></div>
+				
 				<div class="h5"></div>
 				<div class="pl1 pr1 bg-fff cart-count" >
 					<li class="pt05 pb05">
