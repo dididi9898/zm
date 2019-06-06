@@ -2,9 +2,6 @@
 	defined('IN_ADMIN') or exit('No permission resources.');
 	include $this->admin_tpl('header','admin');
 ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo APP_PATH?>statics/public/layui-v2.4.5/layui/css/layui.css">
-    <script src="<?php echo APP_PATH?>statics/public/layui-v2.4.5/layui/layui.all.js"></script>
-    <script type="text/javascript" src="<?php echo APP_PATH?>statics/public/js/ajax.js"></script>
 	<style>
 		.btn { display: inline-block; padding: 0px 5px; margin-bottom: 0; font-size: 12px; font-weight: 400; line-height: 1.32857143; text-align: center; white-space: nowrap; vertical-align: middle; -ms-touch-action: manipulation; touch-action: manipulation; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; margin-left: 5px;}
 		.btn-info { background-image: -webkit-linear-gradient(top,#5bc0de 0,#2aabd2 100%); background-image: -o-linear-gradient(top,#5bc0de 0,#2aabd2 100%); background-image: -webkit-gradient(linear,left top,left bottom,from(#5bc0de),to(#2aabd2)); background-image: linear-gradient(to bottom,#5bc0de 0,#2aabd2 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2aabd2', GradientType=0); filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); background-repeat: repeat-x; border-color: #28a4c9;}
@@ -55,7 +52,7 @@
 
 <input type="hidden" value="zyorder" name="m">
 <input type="hidden" value="order" name="c">
-<input type="hidden" value="order_list" name="a">
+<input type="hidden" value="try_order_list" name="a">
 <input type="hidden" value="" name="page" id="page">
 <div class="explain-col search-form">
 <?php echo '订单编号'?>  <input type="text" value="<?php echo $_GET['ordersn']?>" class="input-text" name="ordersn">
@@ -70,13 +67,13 @@
         <?php }?>
     <?php }?>
 </select>
-<?php echo '申请日期'?>
+<?php echo '下单日期'?>
 <?php echo form::date('start_addtime',$_GET['start_addtime'])?>
 <?php echo L('to')?>
 <?php echo form::date('end_addtime',$_GET['end_addtime'])?>
 <select name="status">
     <option  value="">商品状态</option>
-    <?php foreach(self::$statusType as $key=>$value ){?>
+    <?php foreach(self::$tryStatusType as $key=>$value ){?>
         <?php if($key == $status) {?>
             <option  selected="selected" value=<?php echo intval($key)?>><?php echo $value?></option>
         <?php }else{?>
@@ -101,23 +98,23 @@
 <form name="myform" id="myform" action="?m=zyman&c=zyfunds&a=funs_record_del" method="post" onsubmit="checkuid();return false;" >
 
 
-<div class="table-list" >
+<div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
 			<th width="35" align="center"><input type="checkbox" value="" id="check_box" onclick="selectall('id[]');"></th>
             <th align="center"><strong>id</strong></th>
             <th align="center"><strong>订单编号</strong></th>
-            <th align="center"><strong>购买者</strong></th>
+            <th align="center"><strong>试穿者</strong></th>
             <th align="center"><strong>联系方式</strong></th>
             <th align="center"><strong>商品名称</strong></th>
-            <th align="center"><strong>申请时间</strong></th>
+            <th align="center"><strong>当前状态</strong></th>
+            <th align="center"><strong>下单时间</strong></th>
             <th align="center"><strong>发货时间</strong></th>
             <th align="center"><strong>完成时间</strong></th>
             <th align="center"><strong>快递单号</strong></th>
             <th align="center"><strong>地址详情</strong></th>
             <th align="center"><strong>备注</strong></th>
-            <th align="center"><strong>状态</strong></th>
             <th align="center"><strong>操作</strong></th>
 		</tr>
 	</thead>
@@ -134,6 +131,8 @@
                 查看商品
                 <a href="javascript:void(0);" onclick="view_shop('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
             </td>
+			<td align="center"><?php echo self::$tryStatusType[$row["status"]];?></td>
+
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["addtime"])?></td>
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["deltime"])?></td>
 			<td align="center"><?php echo date("Y-m-d H:i:s", $row["overtime"])?></td>
@@ -141,25 +140,18 @@
 
 			<td align="center">
                 <?php echo $row['province'].$row["city"]?>
-                <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
-            </td>
+                <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
             <td align="center"><?php echo $row["usernote"];?></td>
-            <td align="center"><?php echo self::$statusType[$row["status"]];?></td>
             <td align="center">
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
-                <?php }elseif($row["status"] == "11"){?>
+                <?php }elseif($row["status"] == "2"){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('发货')?></a>
-                <?php }elseif($row["status"] == '3'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('修改快递单')?></a>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
-                <?php }elseif($row["status"] == '4' || $row["status"] == '5'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == "7"){?>
-                    <span class="btn btn-info btn-sm" onclick="checkTry('<?php echo $row['ordersn']?>')"><?php echo L('通过')?></span>
-                <?php }elseif($row["status"] == '8' || $row["status"] == '10'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
-                    <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="checkAfterSale('<?php echo $row['order_id']?>')"><?php echo L('售后商品')?></a>
+                    <span class="btn btn-info btn-sm"><?php echo L('待审核')?></span>
+                <?php }else{?>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('修改快递单')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('订单详情')?></a>
                 <?php }?>
                 <a href="javascript:confirmurl('?m=zyorder&c=order&a=dropOrder&order_id=<?php echo $row['order_id']?>', '<?php echo L('确定删除此订单吗，删除后无法恢复。')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
             </td>
@@ -168,7 +160,7 @@
 
 	</tbody>
 </table>
-    <div >
+    <div>
 
         <!-- 页码 -->
         <div class="page">
@@ -195,14 +187,6 @@
 
 <script type="text/javascript">
 <!--
-;
-! function () {
-    var layer = layui.layer,
-        form = layui.form,
-        $ = layui.jquery,
-        upload = layui.upload,
-        table = layui.table;
-}();
 function checkuid() {
 	var ids='';
 	$("input[name='id[]']:checked").each(function(i, n){
@@ -254,28 +238,17 @@ function deliver(id)
             height:'250',
             lock:true
         },
-        function(){
+        function () {
             var d = window.top.art.dialog({id:'deliver'}).data.iframe;
             var form = d.document.getElementById('dosubmit');
             form.click();
             return false;
         },
         function(){
-            window.top.art.dialog({id:'deliver'}).close();
+            window.top.art.dialog({id:'edit'}).close();
         });
     void(0);
 
-}
-function checkTry(id)
-{
-    layer.confirm("确定审核通过吗",{icon:3, title:"提示"},function(index) {
-        aj.post("index.php?m=zyorder&c=order&a=passTryAjax&pc_hash=<?php echo $_GET["pc_hash"]?>", {ordersn: id}, function (data) {
-            if (data.code == '1') {
-                window.location.reload();
-            }
-        });
-        layer.close(index);
-    });
 }
 function check(id)
 {
@@ -287,24 +260,14 @@ function check(id)
             height:'800',
             lock:true
         },
-        function(){
-            window.top.art.dialog({id:'check'}).close();
-        });
-    void(0);
-}
-function checkAfterSale(id)
-{
-    window.top.art.dialog({
-            id:"checkAfterSale",
-            iframe:"?m=zyorder&c=order&a=checkAfterSale&XDEBUG_SESSION_START=18804&order_id="+id,
-            title:'售后信息',
-            width:'800',
-            height:'500',
-            lock:true
+        function () {
+            var d = window.top.art.dialog({id:'deliver'}).data.iframe;
+            var form = d.document.getElementById('dosubmit');
+            form.click();
+            return false;
         },
-
         function(){
-            window.top.art.dialog({id:'checkAfterSale'}).close();
+            window.top.art.dialog({id:'edit'}).close();
         });
     void(0);
 }

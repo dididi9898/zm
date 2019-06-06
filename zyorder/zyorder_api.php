@@ -322,7 +322,7 @@ class zyorder_api{
 		if($_GET['status']==1){
 			$where.= ' AND status=1';
 		}else if($_GET['status']==2){
-			$where.= ' AND status=2';
+			$where.= ' AND (status=2 OR status=11) ';
 		}else if($_GET['status']==3){
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
@@ -367,7 +367,7 @@ class zyorder_api{
         	$snamarr[$vs['userid']] = $vs;
         }
 
-        $where.=' AND status <= 10 ';
+        $where.=' AND status <= 11 ';
 		$order = ' order_id DESC ';
 		//$page = $pageindex ? $pageindex : '1';
 		$orders = $this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
@@ -679,7 +679,7 @@ class zyorder_api{
 
 			$newdata = $data;
 			$newdata['storeid'] = $vs['shopid'];
-			$newdata['ordersn'] = time() + mt_rand(100,999);
+			$newdata['ordersn'] = time() + mt_rand(1000,9999);
 			$newdata['totalprice'] = $vs['stprice'];
 			$newdata['couponid'] = $coupon_user_id;
 			$id = $this->order_db->insert($newdata,true);
