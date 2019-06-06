@@ -115,7 +115,7 @@
 		height: 100%;
 		width: 75%;
 		background-color: #fff;
-		padding: 0.24rem;
+		/*padding: 0.24rem;*/
 		overflow-y: scroll;
 	}
 	.fl-con2 .banner img{
@@ -182,26 +182,28 @@
 							<img :src="allcat.img">
 						</div>
 						<div>
-						<template v-for="k in goods">
-						<div class="fl-ban">
-							<div class="index-sp">
-								<div class="fl-ban" style="height: auto;">
-									<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+							<template v-for="k in goods">
+								<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''">
+									<div class="fl-ban">
+										<div class="index-sp">
+											<div class="fl-ban" style="height: auto;">
+												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
 
-								</div>
-								<div class="pl1">
-									<h3 style="width: 100%">{{k.goods_name}}</h3>
-									<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
-									<p>折扣价：<span>￥{{k.shop_price}}</span></p>
-									<div class="sp-yj">
-										<s>原价：￥{{k.market_price}}</s>
-										<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+											</div>
+											<div class="pl1">
+												<h3 style="width: 100%">{{k.goods_name}}</h3>
+												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+												<div class="sp-yj">
+													<s>原价：￥{{k.market_price}}</s>
+													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
+											</div>
+										</div>
+										<div class="bt10"></div>
 									</div>
-								</div>
-							</div>
-							<div class="bt10"></div>
-						</div>
-						</template>
+								</a>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -229,6 +231,7 @@
 							</ul>
 							<div>
 								<template v-for="k in goods">
+									<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''">
 									<div class="fl-ban">
 										<div class="index-sp">
 											<div class="fl-ban" style="height: auto;">
@@ -247,6 +250,7 @@
 										</div>
 										<div class="bt10"></div>
 									</div>
+									</a>
 								</template>
 							</div>
 						</div>
@@ -276,24 +280,26 @@
 						</div>
 						<div>
 							<template v-for="k in goods">
-								<div class="fl-ban">
-									<div class="index-sp">
-										<div class="fl-ban" style="height: auto;">
-											<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+								<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''">
+									<div class="fl-ban">
+										<div class="index-sp">
+											<div class="fl-ban" style="height: auto;">
+												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
 
-										</div>
-										<div class="pl1">
-											<h3 style="width: 100%">{{k.goods_name}}</h3>
-											<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
-											<p>折扣价：<span>￥{{k.shop_price}}</span></p>
-											<div class="sp-yj">
-												<s>原价：￥{{k.market_price}}</s>
-												<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+											</div>
+											<div class="pl1">
+												<h3 style="width: 100%">{{k.goods_name}}</h3>
+												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+												<div class="sp-yj">
+													<s>原价：￥{{k.market_price}}</s>
+													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
 											</div>
 										</div>
+										<div class="bt10"></div>
 									</div>
-									<div class="bt10"></div>
-								</div>
+								</a>
 							</template>
 						</div>
 					</div>
@@ -322,24 +328,26 @@
 							</ul>
 							<div>
 								<template v-for="k in goods">
-									<div class="fl-ban">
-										<div class="index-sp">
-											<div class="fl-ban" style="height: auto;">
-												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+									<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''">
+										<div class="fl-ban">
+											<div class="index-sp">
+												<div class="fl-ban" style="height: auto;">
+													<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
 
-											</div>
-											<div class="pl1">
-												<h3 style="width: 100%">{{k.goods_name}}</h3>
-												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
-												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
-												<div class="sp-yj">
-													<s>原价：￥{{k.market_price}}</s>
-													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
+												<div class="pl1">
+													<h3 style="width: 100%">{{k.goods_name}}</h3>
+													<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+													<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+													<div class="sp-yj">
+														<s>原价：￥{{k.market_price}}</s>
+														<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+													</div>
 												</div>
 											</div>
+											<div class="bt10"></div>
 										</div>
-										<div class="bt10"></div>
-									</div>
+									</a>
 								</template>
 							</div>
 						</div>
@@ -369,24 +377,26 @@
 						</div>
 						<div>
 							<template v-for="k in goods">
-								<div class="fl-ban">
-									<div class="index-sp">
-										<div class="fl-ban" style="height: auto;">
-											<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+								<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''">
+									<div class="fl-ban">
+										<div class="index-sp">
+											<div class="fl-ban" style="height: auto;">
+												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
 
-										</div>
-										<div class="pl1">
-											<h3 style="width: 100%">{{k.goods_name}}</h3>
-											<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
-											<p>折扣价：<span>￥{{k.shop_price}}</span></p>
-											<div class="sp-yj">
-												<s>原价：￥{{k.market_price}}</s>
-												<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+											</div>
+											<div class="pl1">
+												<h3 style="width: 100%">{{k.goods_name}}</h3>
+												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+												<div class="sp-yj">
+													<s>原价：￥{{k.market_price}}</s>
+													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
 											</div>
 										</div>
+										<div class="bt10"></div>
 									</div>
-									<div class="bt10"></div>
-								</div>
+								</a>
 							</template>
 						</div>
 					</div>
@@ -415,24 +425,26 @@
 							</ul>
 							<div>
 								<template v-for="k in goods">
-									<div class="fl-ban">
-										<div class="index-sp">
-											<div class="fl-ban" style="height: auto;">
-												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+									<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''">
+										<div class="fl-ban">
+											<div class="index-sp">
+												<div class="fl-ban" style="height: auto;">
+													<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
 
-											</div>
-											<div class="pl1">
-												<h3 style="width: 100%">{{k.goods_name}}</h3>
-												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
-												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
-												<div class="sp-yj">
-													<s>原价：￥{{k.market_price}}</s>
-													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
+												<div class="pl1">
+													<h3 style="width: 100%">{{k.goods_name}}</h3>
+													<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+													<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+													<div class="sp-yj">
+														<s>原价：￥{{k.market_price}}</s>
+														<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+													</div>
 												</div>
 											</div>
+											<div class="bt10"></div>
 										</div>
-										<div class="bt10"></div>
-									</div>
+									</a>
 								</template>
 							</div>
 						</div>
