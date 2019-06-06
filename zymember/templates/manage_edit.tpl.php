@@ -122,6 +122,12 @@ include $this->admin_tpl('header', 'admin');
 					<th>手机号码</th>
 					<td><input type="text" name="info[mobile]" value="<?php echo $member['mobile'] ?>" class="input-text" id="mobile" size="15"></td> 
 				</tr>
+                <tr>
+                    <td>虚拟金额</td>
+                    <td>
+                        <input type="text" name="info[amount]" value="100000" class="input-text" id="amount" size="15"></input>
+                    </td>
+                </tr>
                 <tr> 
 					<th>会员组</th>
 					<td>
@@ -132,17 +138,7 @@ include $this->admin_tpl('header', 'admin');
 					</select>
 					</td> 
 				</tr>
-                <tr> 
-					<th>积分点数</th>
-					<td><input type="text" name="info[point]" value="<?php echo $member['point'] ?>" class="input-text" id="point" size="8"></td> 
-				</tr>
-				<tr>
-					<td>vip会员</td>
-					<td>
-					是否为vip会员 <input type="checkbox" name="info[vip]" value=1 <?php if($member['vip']){?>checked<?php }?>/>
-					过期时间 <?php echo $form_overdudate?>
-					</td>
-				</tr>
+
 
 			</tbody>
 		</table>
