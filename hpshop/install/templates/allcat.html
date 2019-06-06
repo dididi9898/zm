@@ -1,245 +1,719 @@
-﻿{php $SEO['site_title'] = '分类'}
-{template "hpshop","top-head"}
-<style>
-	.index-sp .pl1 h3 {
-		font-size: 0.16rem;
+<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi,user-scalable=0;" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>分类</title>
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/swiper.min.css">
+    <link type="text/css" rel="stylesheet" href="{APP_PATH}statics/zm/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+	<link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/mescroll/mescroll/dist/mescroll.min.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_tluzjgimho8.css">
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/swiper.min.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
+
+</head>
+<style type="text/css">
+	.fl-search{
+		background-color: #fff;
+		line-height: 1rem;
+		border-bottom: 1px solid #e8e8e8;
+		padding: 0.2rem;
 	}
-	.sp-xl{
-		font-size: 0.12rem;
-	}
-	.index-sp .pl1 .sp-xl span {
-		color: #ff6700;
-		font-size: 0.16rem;
-	}
-	.index-sp .pl1 p {
-		font-size: 0.14rem;
-		color: #ff6700;
-		line-height: 0.14rem;
-	}
-	.index-sp .pl1 .sp-yj {
-		font-size: 0.14rem;
-		color: #999;
+	.fl-searcj-n{
 		overflow: hidden;
+		border-radius: 5px;
+		background: #dde5eb;
 	}
-	.index-sp .pl1 .sp-yj button {
-		float: right;
-		border-radius: 10rem;
+	.fl-searcj-n .iconfont{
+		float: left;
+		line-height: 0.75rem;
+		width: 0.75rem;
+		text-align: center;
+	}
+	.fl-searcj-n input{
+		float: left;
+		width: calc(100% - 0.75rem);
+		line-height: 0.75rem;
 		border-style: none;
-		line-height: 0.2rem;
-		background-color: #f5222d;
-		color: #fff;
-		padding: 0 0.248rem;
+		font-size: 0.35rem;
+		background: #f1f1f1;
+	}
+	.fl-nav{
+		background-color: #fff;
+	    overflow-x: scroll;
+	    overflow-y: hidden;
+	    width: 100%;
+	    height: 1rem;
+	    white-space: nowrap;
+		/*border-bottom: 1px solid #f0ad4e;*/
+	}
+	.fl-nav::-webkit-scrollbar,.fl-nav2::-webkit-scrollbar,.fl-con2::-webkit-scrollbar{
+	    display: none;
+	}
+	.fl-nav span{
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+		padding: 0 0.5rem;
+		line-height: 1rem;
+		text-align: center;
+		font-size: 0.35rem;
+	}
+	.fl-nav span.on:after{
+		content: '';
+		position: absolute;
+		background-color: #55acef;
+		height: 2px;
+		width: 1.5rem;
+		left: 50%;
+		bottom: 0;
+		margin-left: -25px;
+	}
+	.fl-con{
+		display: none;
+		position: absolute;
+		left: 0;
+		top: 2.2rem;
+		width: 100%;
+		height: calc(100% - 2.2rem - 1.2rem)
+	}
+	.fl-nav2{
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 25%;
+		overflow-y: scroll;
+	}
+	.fl-nav2 li{
+		position: relative;
+		line-height: 1rem;
+		text-align: center;
+		font-size: 0.38rem;
+		color: #555;
+	}
+	.fl-nav2 li.on{
+		background-color:#fff;
+	}
+	.fl-nav2 li.on:after{
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 3px;
+		height: 100%;
+		background-color: #55acef;
+	}
+	.fl-con2{
+		display: none;
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
+		width: 75%;
+		background-color: #fff;
+		padding: 0.24rem;
+		overflow-y: scroll;
+	}
+	.fl-con2 .banner img{
+		width: 100%;
+		height: 3rem;
+		object-fit: cover;
+		border-radius: 0.2rem;;
+	}
+	.fl-con2 ul{margin-top: 0.24rem;}
+	.fl-con2 ul li{
+		float: left;
+		width: 33.333%;
+		text-align: center;
+	}
+	.fl-con2 ul li img{width: 60%;}
+</style>
+<style>
+	/*vue*/
+	[v-cloak] {
+		display: none;
+	}
+	.index-sp .pl1 {
+		float: left;
+		width: calc(100%);
+	}
+	/*mescroll滚动的区域*/
+	.mescroll{
 	}
 </style>
-
-<body class="bg-f4f4f4" >
-	<div id="allcat" style="width: 100vw; overflow: hidden;">
-		<div class="personal-head" style="height: 0.6rem;">
-			<div class="index-search">
-				<div @click="open" class="search-box" style="color: #8a8a8a;"><template v-if="data.search != ''">{{ data.search }}</template><template v-else>搜索商品</template></div>
-			</div>
-		</div>
-		<div class="layui-container search-fl" style="height:100vh;" >
-			<div class="layui-row">
-				<ul class="fl-nav">
-					<template v-for="(allcat,index) in data">
-						<li v-if="catid == ''&& index==0" class="fl-nav-on"  @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</li>
-						<li v-else-if="catid==allcat.id" class="fl-nav-on"  @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</li>
-						<li v-else   @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</li>
+<body style="background-color: #f1f1f1">
+    <!-- 搜索 -->
+    <div class="fl-search">
+    	<div class="fl-searcj-n">
+    		<div class="iconfont icon-search1"></div>
+    		<input type="text" placeholder="输入关键字" onclick="openSearch()">
+    		<div class="clear"></div>
+    	</div>
+    </div>
+	<div id="allcat">
+	<!--一级导航-->
+    <div class="fl-nav" >
+			<template v-for="(allcat,index) in data">
+				<span v-if="catid == ''&& index==0" class="on"  @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</span>
+				<span v-else-if="catid==allcat.id" class="on"  @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</span>
+				<span v-else   @click="choice($event)" :data-id="allcat.id">{{ allcat.name }}</span>
+			</template>
+    	<div class="clear"></div>
+    </div>
+	<!--一级导航-->
+    <div class="fl-cont" v-for="(allcat,index) in data">
+		<template v-if="catid == ''&& index==0">
+			<div class="fl-con dis-b">
+				<!--二级导航-->
+				<ul class="fl-nav2">
+					<li class="on" @click="choice2($event)" :data-id="allcat.id">全部商品</li>
+					<template v-for="(childrens,index) in allcat.children">
+						<li @click="choice2($event)" :data-id="childrens.id">{{childrens.name}}</li>
 					</template>
 				</ul>
-
-				<div class="fl-con" v-for="(allcat,index) in data">
-					<!--<div class="fl-ban">-->
-						<!--<img src="{APP_PATH}statics/public/images/fl.png">-->
-					<!--</div>-->
-					<div class="h05"></div>
-					<template v-for="k in goods.data">
+				<!--二级导航-->
+				<div class="fl-con2 dis-b">
+					<div :id="changeId('mescroll',allcat.id)" class="mescroll" >
+						<div class="banner">
+							<img :src="allcat.img">
+						</div>
+						<div>
+						<template v-for="k in goods">
 						<div class="fl-ban">
-						<div class="index-sp">
-							<div class="fl-ban" style="height: auto;">
-								<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+							<div class="index-sp">
+								<div class="fl-ban" style="height: auto;">
+									<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
 
-							</div>
-							<div class="pl1">
-								<h3>{{k.goods_name}}</h3>
-								<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
-								<p>折扣价：<span>￥{{k.shop_price}}</span></p>
-								<div class="sp-yj">
-									<s>原价：￥{{k.market_price}}</s>
-									<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" ><button>立即购买</button></a>
+								</div>
+								<div class="pl1">
+									<h3 style="width: 100%">{{k.goods_name}}</h3>
+									<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+									<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+									<div class="sp-yj">
+										<s>原价：￥{{k.market_price}}</s>
+										<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+									</div>
 								</div>
 							</div>
+							<div class="bt10"></div>
 						</div>
-						<div class="bt10"></div>
-						</div>
-					</template>
-					<template v-for="(childrens,index) in allcat.children">
-						<div class="pl1 lg-fs"><a :href="'{APP_PATH}index.php?m=hpshop&c=index&a=cgoodslist&catid='+childrens.id" class="d-b">{{ childrens.name }}</a></div>
-						<div class="h05"></div>
-						<ul>
-						   <!--<li v-for="goods in childrens.children" class="layui-col-xs4 layui-col-sm4 layui-col-md4" @click="children_search($event)">-->
-						   <li v-for="goods in childrens.children" class="layui-col-xs4 layui-col-sm4 layui-col-md4" >
-						   	   <a :href="'{APP_PATH}index.php?m=hpshop&c=index&a=cgoodslist&catid='+goods.id" class="d-b">
-								   <div class="fl-img" style="margin-bottom: 0.05rem;">
-									   <img :src="goods.img">
-								   </div>
-								   <p>{{ goods.name }}</p>
-							   
-							   </a>
-						   </li> 
-						   <div class="clear"></div>
-						</ul>
-					</template>
-				</div>
-				<!-- 搜索页-隐藏 -->
-				<div class="fl-search"pl1 lg-fs>
-					<div class="personal-head" style="height: 0.6rem;">
-						<div class="index-search2">
-							<input type="text" placeholder="商品搜索" v-model="data.search">
-							<button @click="submit_search">搜索</button>
+						</template>
 						</div>
 					</div>
-					<div class="fl-tj" style="position: relative;">
-						<!--<div class="h05"></div>
-						<div class="lg-fs c-afafaf">热门搜索</div>
-						<div class="h1"></div>
-						<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-							<a>热搜一</a>
-						</div>
-						<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-							<a>热搜二</a>
-						</div>
-						<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-							<a>热搜三</a>
-						</div>
-						<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-							<a>热搜四</a>
-						</div>
-						<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-							<a>热搜五</a>
-						</div>
-						<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
-							<a>热搜六</a>
-						</div>-->
-						<div class="h1 clear"></div>
-						<div class="lg-fs c-afafaf">搜索历史</div>
-						<div class="lg-fs c-afafaf" style="position: absolute;bottom: 0.5rem;width: 95%;text-align: center;z-index: 200" @click="close">关闭搜索</div>
-					</div>
 				</div>
+				<template v-for="(childrens,index) in allcat.children">
+					<div class="fl-con2" >
+
+						<!--<div class="banner">-->
+						<!--<img src="{APP_PATH}statics/zm/images/banner1.jpg">-->
+						<!--</div>-->
+
+						<div :id="changeId('mescroll',childrens.id)" class="mescroll" >
+							<div class="banner">
+								<img :src="childrens.img">
+							</div>
+							<ul>
+								<template v-for="(childrenss,index) in childrens.children">
+									<li>
+										<a href="#" class="dis-b">
+											<img :src="childrenss.img">
+											<p>{{childrenss.name}}</p>
+										</a>
+									</li>
+								</template>
+								<div class="clear"></div>
+							</ul>
+							<div>
+								<template v-for="k in goods">
+									<div class="fl-ban">
+										<div class="index-sp">
+											<div class="fl-ban" style="height: auto;">
+												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+
+											</div>
+											<div class="pl1">
+												<h3 style="width: 100%">{{k.goods_name}}</h3>
+												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+												<div class="sp-yj">
+													<s>原价：￥{{k.market_price}}</s>
+													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
+											</div>
+										</div>
+										<div class="bt10"></div>
+									</div>
+								</template>
+							</div>
+						</div>
+					</div>
+				</template>
+				<div class="h05"></div>
+
+				<!--<div class="fl-con2">-->
+				<!--1-2-->
+				<!--</div>-->
 			</div>
-		</div>
+		</template>
+		<template v-else-if="catid==allcat.id">
+			<div class="fl-con dis-b">
+				<!--二级导航-->
+				<ul class="fl-nav2">
+					<li class="on" @click="choice2($event)" :data-id="allcat.id">全部商品</li>
+					<template v-for="(childrens,index) in allcat.children">
+						<li @click="choice2($event)" :data-id="childrens.id">{{childrens.name}}</li>
+					</template>
+				</ul>
+				<!--二级导航-->
+				<div class="fl-con2 dis-b">
+					<div :id="changeId('mescroll',allcat.id)" class="mescroll" >
+						<div class="banner">
+							<img :src="allcat.img">
+						</div>
+						<div>
+							<template v-for="k in goods">
+								<div class="fl-ban">
+									<div class="index-sp">
+										<div class="fl-ban" style="height: auto;">
+											<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+
+										</div>
+										<div class="pl1">
+											<h3 style="width: 100%">{{k.goods_name}}</h3>
+											<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+											<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+											<div class="sp-yj">
+												<s>原价：￥{{k.market_price}}</s>
+												<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+											</div>
+										</div>
+									</div>
+									<div class="bt10"></div>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+				<template v-for="(childrens,index) in allcat.children">
+					<div class="fl-con2" >
+
+						<!--<div class="banner">-->
+						<!--<img src="{APP_PATH}statics/zm/images/banner1.jpg">-->
+						<!--</div>-->
+
+						<div :id="changeId('mescroll',childrens.id)" class="mescroll" >
+							<div class="banner">
+								<img :src="childrens.img">
+							</div>
+							<ul>
+								<template v-for="(childrenss,index) in childrens.children">
+									<li>
+										<a href="#" class="dis-b">
+											<img :src="childrenss.img">
+											<p>{{childrenss.name}}</p>
+										</a>
+									</li>
+								</template>
+								<div class="clear"></div>
+							</ul>
+							<div>
+								<template v-for="k in goods">
+									<div class="fl-ban">
+										<div class="index-sp">
+											<div class="fl-ban" style="height: auto;">
+												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+
+											</div>
+											<div class="pl1">
+												<h3 style="width: 100%">{{k.goods_name}}</h3>
+												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+												<div class="sp-yj">
+													<s>原价：￥{{k.market_price}}</s>
+													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
+											</div>
+										</div>
+										<div class="bt10"></div>
+									</div>
+								</template>
+							</div>
+						</div>
+					</div>
+				</template>
+				<div class="h05"></div>
+
+				<!--<div class="fl-con2">-->
+				<!--1-2-->
+				<!--</div>-->
+			</div>
+		</template>
+		<template v-else>
+			<div class="fl-con">
+				<!--二级导航-->
+				<ul class="fl-nav2">
+					<li class="on" @click="choice2($event)" :data-id="allcat.id">全部商品</li>
+					<template v-for="(childrens,index) in allcat.children">
+						<li @click="choice2($event)" :data-id="childrens.id">{{childrens.name}}</li>
+					</template>
+				</ul>
+				<!--二级导航-->
+				<div class="fl-con2 dis-b">
+					<div :id="changeId('mescroll',allcat.id)" class="mescroll" >
+						<div class="banner">
+							<img :src="allcat.img">
+						</div>
+						<div>
+							<template v-for="k in goods">
+								<div class="fl-ban">
+									<div class="index-sp">
+										<div class="fl-ban" style="height: auto;">
+											<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+
+										</div>
+										<div class="pl1">
+											<h3 style="width: 100%">{{k.goods_name}}</h3>
+											<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+											<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+											<div class="sp-yj">
+												<s>原价：￥{{k.market_price}}</s>
+												<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+											</div>
+										</div>
+									</div>
+									<div class="bt10"></div>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+				<template v-for="(childrens,index) in allcat.children">
+					<div class="fl-con2" >
+
+						<!--<div class="banner">-->
+						<!--<img src="{APP_PATH}statics/zm/images/banner1.jpg">-->
+						<!--</div>-->
+
+						<div :id="changeId('mescroll',childrens.id)" class="mescroll" >
+							<div class="banner">
+								<img :src="childrens.img">
+							</div>
+							<ul>
+								<template v-for="(childrenss,index) in childrens.children">
+									<li>
+										<a href="#" class="dis-b">
+											<img :src="childrenss.img">
+											<p>{{childrenss.name}}</p>
+										</a>
+									</li>
+								</template>
+								<div class="clear"></div>
+							</ul>
+							<div>
+								<template v-for="k in goods">
+									<div class="fl-ban">
+										<div class="index-sp">
+											<div class="fl-ban" style="height: auto;">
+												<img :src="k.thumb" onerror="this.src='{APP_PATH}statics/images/nopic.gif'">
+
+											</div>
+											<div class="pl1">
+												<h3 style="width: 100%">{{k.goods_name}}</h3>
+												<div class="sp-xl">销量<span>{{k.salesnum}}</span>件</div>
+												<p>折扣价：<span>￥{{k.shop_price}}</span></p>
+												<div class="sp-yj">
+													<s>原价：￥{{k.market_price}}</s>
+													<a :href="'index.php?m=hpshop&c=index&a=goodsinfo&id='+ k.id +''" class="fr"><button>立即购买</button></a>
+												</div>
+											</div>
+										</div>
+										<div class="bt10"></div>
+									</div>
+								</template>
+							</div>
+						</div>
+					</div>
+				</template>
+				<div class="h05"></div>
+
+				<!--<div class="fl-con2">-->
+				<!--1-2-->
+				<!--</div>-->
+			</div>
+		</template>
 	</div>
+	</div>
+    <!--head_fod-->
 	{template "hpshop","bottom-footer"}
-    {template "hpshop","footer"}
+	{template "hpshop","footer"}
+	<script type="text/javascript" src="{APP_PATH}statics/zm/mescroll/mescroll/dist/mescroll.js"></script>
+    <!--head_food_end-->
+	<script>
+		//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+		$(document).ready(function(){
+			console.log('屏幕高度：'+$(window).height());
+			$(".mescroll").height($(".fl-con").height());
+		});
+		;
+		! function () {
 
-
-
-    <script>
-        //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
-        ;
-        ! function () {
-
-            var layer = layui.layer,
-                form = layui.form,
-                $ = layui.jquery,
-                upload = layui.upload,
-                table = layui.table;
+			var layer = layui.layer,
+					form = layui.form,
+					$ = layui.jquery,
+					upload = layui.upload,
+					table = layui.table;
 
 			var catid='{$_GET[catid]}';
-				aj.get('index.php?m=hpshop&c=goods_api&a=allcat','', function (data) {
-					if(data.status == "success"){
-						data.search = '';
-						console.log(data);
-						var allcat =  new Vue({
-				    		el: '#allcat',
-							data:{
-								data:data.data,
-								goods:"",
-								catid:catid
-							},
-							beforeCreate:function(){
-								var _self=this;
-								console.log(data.data[0].id);
-								if(catid=='') {
-									catid = data.data[0].id;
-								}
-								aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
-									console.log(data);
-									_self.goods=data;
-								})
-							},
-							methods:{
-								//分类选项卡
+			var index=0;
+			var mescrollArr=[];
 
-								choice:function(event){
-									var catid=event.srcElement.dataset.id;
-									console.log(event.srcElement.dataset.id);
-									$('.fl-nav .fl-nav-on').removeClass('fl-nav-on')
-									$('.fl-con').each(function(){
-										$('.fl-con').hide();
-									})
-									$('.fl-nav li').eq($(event.target).index()).addClass('fl-nav-on')
-									$('.fl-con').eq($(event.target).index()).show()
-									var _self=this;
-									aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
-										console.log(data);
-										_self.goods=data;
-									})
-								},
-								//打开搜索
-								open:function(){
-									$('.fl-tj').height($(window).height()-$('.search-fl .personal-head').height())
-									layer.open({
-									  type: 1,
-									  area: ['100%', 'auto'],
-									  offset: 't',
-									  closeBtn: 0,
-									  anim: 2,
-									  title: false, //不显示标题
-									  shadeClose: true,
-									  isOutAnim: false,
-									  scrollbar: false,
-									  content: $('.fl-search'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-									});
-									
-								},
-								//关闭搜索
-								close:function(){
-									layer.closeAll()
-								},
-								submit_search:function(){
-									if(this.data.search){
-										aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.data.search},function(data){
-											console.log(data);
-											
-										});
-										
-									}else{
-										layer.msg('搜索内容不能为空');
-									}
-									//console.log(this.search);
-									window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+this.data.search;
-								},
-								children_search:function(event){
-									var chuan;
-									if( $(event.target).html()=='' ){
-										chuan = $(event.target).parent().next().html();
-										
-									}else{
-										chuan = $(event.target).html();
-									};
-									window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+chuan;
-									
-								}
+			aj.get('index.php?m=hpshop&c=goods_api&a=allcat','', function (data) {
+				if(data.status == "success"){
+					data.search = '';
+					console.log(data);
+					var allcat =  new Vue({
+						el: '#allcat',
+						data:{
+							data:data.data,
+							mescroll: null,
+							goods:[],
+							catid:catid,
+							index:index
+						},
+						beforeCreate:function(){
+							var _self=this;
+//							console.log(data.data[0].id);
+							if(catid=='') {
+								catid = data.data[0].id;
 							}
-						});
-					}else{
-						layer.msg(data.message);
+//							aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
+//								console.log(data);
+//								_self.goods=data;
+//							})
+						},
+						mounted: function() {
+							//创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
+							//解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
+							var self = this;
+							var mescrollId=$('.fl-cont .fl-con:eq('+index+') .fl-con2.dis-b .mescroll').attr("id");
+							console.log(mescrollId);
+							self.mescroll = new MeScroll(mescrollId, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+								//上拉加载的配置项
+								up: {
+									callback: self.upCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
+									isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+									noMoreSize: 4, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看; 默认5
+									empty: {
+										icon: "../res/img/mescroll-empty.png", //图标,默认null
+										tip: "暂无相关数据~", //提示
+										btntext: "去逛逛 >", //按钮,默认""
+										btnClick: function(){//点击按钮的回调,默认null
+											alert("点击了按钮,具体逻辑自行实现");
+										}
+									},
+									lazyLoad: {
+										use: true // 是否开启懒加载,默认false
+									}
+								}
+							});
+							mescrollArr[catid]=self.mescroll;
+						},
+						methods:{
+							//上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
+							upCallback: function(page) {
+								//联网加载数据
+								var self = this;
+								aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid , 'page':page.num},function(data){
+									console.log(data);
+									if(data.status=='success'&&data.data!=null) {
+										var curPageData = data; // 模拟数据: ../res/pdlist1.js
+										//curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
+										var totalPage = curPageData.page.totalpage; // 接口返回的总页数 (比如列表有26个数据,每页10条,共3页; 则totalPage值为3)
+										var totalSize = curPageData.page.totalnum; // 接口返回的总数据量(比如列表有26个数据,每页10条,共3页; 则totalSize值为26)
+										var curPageData = curPageData.data; // 接口返回的当前页数据列表
+
+										//var hasNext = data.xxx; // 接口返回的是否有下一页 (true/false)
+										//如果是第一页需手动制空列表 (代替clearId和clearEmptyId的配置)
+										if (page.num == 1) self.goods = [];
+
+										//更新列表数据
+										//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+										//mescrollArr[catid].resetUpScroll();
+										self.goods = self.goods.concat(curPageData);
+
+										//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+										//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+										console.log("page.num=" + page.num + ", page.size=" + page.size + ", curNavIndex="+catid+ ", curPageData.length=" + curPageData.length + ", self.goods.length==" + self.goods.length);
+
+										//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+										mescrollArr[catid].endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+
+										//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+										//self.mescroll.endBySize(curPageData.data.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+
+										//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+										//self.mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+
+										//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+										//self.mescroll.endSuccess(curPageData.length);
+
+										//提示:curPageData.length必传的原因:
+										// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+										// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+										// 3.使配置的noMoreSize生效
+									}else {
+										mescrollArr[catid].endErr();
+										self.goods=null;
+									}
+								});
+							},
+							//分类选项卡
+							choice:function(event){
+								catid=event.srcElement.dataset.id;
+								index=$(event.target).index();
+								console.log(event.srcElement.dataset.id);
+								console.log($(event.target).index());
+								$('.fl-nav .on').removeClass('on');
+								$(".fl-cont .fl-con.dis-b").removeClass('dis-b');
+								$('.fl-nav span').eq($(event.target).index()).addClass('on');
+								$(".fl-cont .fl-con").eq($(event.target).index()).addClass('dis-b');
+
+								catid=$('.fl-cont .fl-con:eq('+index+') .fl-nav2 .on').attr("data-id");
+								var mescrollId=$('.fl-cont .fl-con:eq('+index+') .fl-con2.dis-b .mescroll').attr("id");
+								var _self=this;
+//								aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':cid},function(data){
+//									console.log(data);
+//									_self.goods=data;
+//								})
+								if(mescrollArr[catid]==null){
+									mescrollArr[catid]=_self.initMescroll(mescrollId);
+									mescrollArr[catid].resetUpScroll();
+									console.log('create'+mescrollArr[catid]);
+								}else {
+									mescrollArr[catid].resetUpScroll();
+								}
+							},
+							choice2:function(event){
+								catid=event.srcElement.dataset.id;
+								console.log(index);
+								console.log(event.srcElement.dataset.id);
+								console.log($(event.target).index());
+
+								$('.fl-cont .fl-con:eq('+index+') .fl-nav2 .on').removeClass('on');
+								$('.fl-cont .fl-con:eq('+index+') .fl-con2.dis-b').removeClass('dis-b');
+								$('.fl-cont .fl-con:eq('+index+') .fl-nav2 li').eq($(event.target).index()).addClass('on');
+								$('.fl-cont .fl-con:eq('+index+') .fl-con2').eq($(event.target).index()).addClass('dis-b');
+
+								var _self=this;
+								var mescrollId=$('.fl-cont .fl-con:eq('+index+') .fl-con2.dis-b .mescroll').attr("id");
+//								aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
+//									console.log(data);
+//									_self.goods=data;
+//								})
+								if(mescrollArr[catid]==null){
+									mescrollArr[catid]=_self.initMescroll(mescrollId);
+									mescrollArr[catid].resetUpScroll();
+									console.log('create'+mescrollArr[catid]);
+								}else {
+									mescrollArr[catid].resetUpScroll();
+								}
+							},
+							changeId:function(str,index){
+								return str+index;
+							},
+							changeName:function(str, index, name){
+								return str+'['+index+']'+'['+name+']';
+							},
+							initMescroll:function(mescrollId){
+								//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,刷新列表数据;
+								var self=this;
+								console.log(mescrollId);
+								self.mescroll = new MeScroll(mescrollId, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+									//上拉加载的配置项
+									up: {
+										callback: self.upCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
+										isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+										noMoreSize: 4, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看; 默认5
+										empty: {
+											icon: "../res/img/mescroll-empty.png", //图标,默认null
+											tip: "暂无相关数据~", //提示
+											btntext: "去逛逛 >", //按钮,默认""
+											btnClick: function(){//点击按钮的回调,默认null
+												alert("点击了按钮,具体逻辑自行实现");
+											}
+										},
+										lazyLoad: {
+											use: true // 是否开启懒加载,默认false
+										}
+									}
+								});
+								return self.mescroll;
+							}
+						}
+					});
+				}else{
+					layer.msg(data.message);
+				}
+			});
+		}();
+		/*创建MeScroll对象*/
+		function initMescroll(mescrollId){
+			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,刷新列表数据;
+			console.log(mescrollId);
+			var mescroll = new MeScroll(mescrollId, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+				//上拉加载的配置项
+				up: {
+					callback: self.upCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
+					isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+					noMoreSize: 4, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看; 默认5
+					lazyLoad: {
+						use: true // 是否开启懒加载,默认false
 					}
-				});
-        }();
+				}
+			});
+		}
+		function getListDataFromNet(catid,pageNum,pageSize) {
+			//延时一秒,模拟联网
+			aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid , 'page':pageNum},function(data){
+				console.log(data.data);
+//				_self.goods=data;
+				var data=data; // 模拟数据: ../res/pdlist1.js
+				successCallback&&successCallback(data);//成功回调
+			})
+		}
+		function get_goods(catid){
+			var _self=this;
+			aj.get('index.php?m=hpshop&c=goods_api&a=catgoods',{'catid':catid},function(data){
+				console.log(data);
+				_self.goods=data;
+			})
+		}
+	</script>
+    <script type="text/javascript">
+//    	var index3 = 1
+//    	$(".fl-nav span").click(function(){
+//
+//    		var index = $(".fl-nav span").index(this)
+//    		index3 = index + 1
+//    		$(".fl-nav span.on").removeClass('on')
+//    		$(".fl-cont .fl-con.dis-b").removeClass('dis-b')
+//    		$(".fl-nav span").eq(index).addClass('on')
+//    		$(".fl-cont .fl-con").eq(index).addClass('dis-b')
+//    	})
+//    	$(".fl-con .fl-nav2 li").click(function(){
+//    		var index2 = $(".fl-cont .fl-con:nth-child("+ index3 +") .fl-nav2 li").index(this)
+//    		$(".fl-cont .fl-con:nth-child("+ index3 +") .fl-nav2 .on").removeClass('on')
+//    		$(".fl-cont .fl-con:nth-child("+ index3 +") .fl-con2.dis-b").removeClass('dis-b')
+//    		$(".fl-cont .fl-con:nth-child("+ index3 +") .fl-nav2 li").eq(index2).addClass('on')
+//    		$(".fl-cont .fl-con:nth-child("+ index3 +") .fl-con2").eq(index2).addClass('dis-b')
+//    	})
+		function openSearch(){
+			setTimeout("javascript:location.href='index.php?m=hpshop&c=index&a=all_search'", 0);
+		}
     </script>
 </body>
-
 </html>
