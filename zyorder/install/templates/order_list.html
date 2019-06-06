@@ -105,6 +105,7 @@
 					flow = layui.flow;
 				
 				var status = '{$_GET[status]}';
+				var status1 = '{$_GET[status]}';
 						flow.load({
 							elem: '#order_list' //指定列表容器
 							,mb:'10'
@@ -113,7 +114,7 @@
 								var lis = [];	
 								console.log(page);
 								  //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-								aj.get('index.php?m=zyorder&c=zyorder_api&a=order_list&page='+page,{status:status},function(data){
+								aj.get('index.php?m=zyorder&c=zyorder_api&a=order_list&page='+page,{status:status1},function(data){
 									console.log(data);
 									if(data.code==207){
 										layer.msg('登录超时');
@@ -163,15 +164,18 @@
 
 										})
 										var store_total = '<div class="order-div-h"><p class="order-div-total"><span>共<span class="c-ff0000">'+ item.goodsinfo.length +'</span>件商品</span>&nbsp;&nbsp;&nbsp;<span>合计：￥<span class="c-ff0000">'+ item.totalprice +'</span></span></p></div>';
-										var botton ;
+										var botton = '';
 										if(item.status == 1){
-											botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton><a href="{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+item.id+'&sn='+item.ordersn+'" class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment" style="border: 1px solid red;color:red;">付款</a>';
-										}else if(item.status == 2){
+											botton += '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton>';
+                                            if(item.try_status == '1')
+                                                botton += '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看详情</button>';
+											botton += '<a href="{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+item.id+'&sn='+item.ordersn+'" class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment" style="border: 1px solid red;color:red;">付款</a>';
+										}else if(item.status == 2 || item.status == 11){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel remind">提醒发货</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button>';
 											//<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel tk" data-id="'+item.id+'">申请退款</button>
 										
 										}else if(item.status == 3){
-											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment sh" style="border: 1px solid red;color:red;" data-id="'+item.id+'" data-sn="'+item.ordersn+'">确认收货</button>';
+											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs payment sh" style="border: 1px solid red;color:red;" data-id="'+item.id+'" data-try_status="'+item.try_status+'" data-sn="'+item.ordersn+'">确认收货</button>';
 										
 										}else if(item.status == 4|| (item.status == 10 && status == 4)){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看订单</button><button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">评价</button>';
@@ -289,19 +293,23 @@
 				$('#order_list').on('click','.sh',function(){
 					var id = $(this).data('id');
 					var sn = $(this).data('sn');
+					var try_status = $(this).data('try_status');
 					console.log(id);
 					layer.confirm('您确认收货吗？', {
 					  btn: ['确定','取消'] //按钮
 						,offset: '2.5rem'
 					}, function(){
-						aj.post('index.php?m=zyorder&c=zyorder_api&a=order_qrsh',{id:id},function(data){
+						aj.post('index.php?m=zyorder&c=zyorder_api&a=order_qrsh',{id:id, try_status:try_status},function(data){
 							console.log(data);
 							if(data.status == 'success'){
 								layer.msg('收货成功',{
 									offset: '3rem'
 								});
 								//评价页
-								setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=evaluate&order_id='+id}, 10);
+								if(try_status == "0")
+									setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=evaluate&order_id='+id}, 10);
+								else if(try_status == "1")
+                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1'", 1000);
 								//setTimeout("window.location.reload()", 1000);
 							}else{
 								layer.msg(data.message,{

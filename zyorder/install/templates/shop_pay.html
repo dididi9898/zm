@@ -236,8 +236,10 @@
                                                             if (data.status == 'success') {
                                                                 layer.close(index);
                                                                 layer.msg('购买成功');
-
-                                                                setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=" + data.userid + "&status=2'", 1000);
+                                                                if(data.try_status == '1')
+                                                                    setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=evaluate&order_id='+data.id}, 10);
+                                                                else if(data.try_status == '0')
+                                                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&userid=" + data.userid + "&status=2'", 1000);
                                                             } else {
                                                                 layer.close(index);
                                                                 layer.msg(data.message);

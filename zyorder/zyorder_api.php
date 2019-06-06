@@ -322,7 +322,7 @@ class zyorder_api{
 		if($_GET['status']==1){
 			$where.= ' AND status=1';
 		}else if($_GET['status']==2){
-			$where.= ' AND status=2';
+			$where.= ' AND (status=2 OR status=11) ';
 		}else if($_GET['status']==3){
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
@@ -367,7 +367,7 @@ class zyorder_api{
         	$snamarr[$vs['userid']] = $vs;
         }
 
-        $where.=' AND status <= 10 ';
+        $where.=' AND status <= 11 ';
 		$order = ' order_id DESC ';
 		//$page = $pageindex ? $pageindex : '1';
 		$orders = $this->order_db->listinfo($where,$order,$page,$pagesize); //读取数据库里的字段
@@ -679,7 +679,7 @@ class zyorder_api{
 
 			$newdata = $data;
 			$newdata['storeid'] = $vs['shopid'];
-			$newdata['ordersn'] = time() + mt_rand(100,999);
+			$newdata['ordersn'] = time() + mt_rand(1000,9999);
 			$newdata['totalprice'] = $vs['stprice'];
 			$newdata['couponid'] = $coupon_user_id;
 			$id = $this->order_db->insert($newdata,true);
@@ -859,7 +859,7 @@ class zyorder_api{
 		$data = [
 					"status"=>'error',
 					"code"=>204,
-					"message"=>'订单与商户，订单状态不匹配',
+					"message"=>'订单状态不匹配',
 					"data"=>''
 		];
 		exit( json_encode($data));
@@ -964,7 +964,7 @@ class zyorder_api{
 		    ];
 		    $url = APP_PATH.'index.php?m=zymember&c=zymember_api&a=zyshop_nickname';
 		    $return = json_decode($this->_crul_post($url,$data),true);
-			if($this->check_uid_status($id,$uid,array("3", "4", "5", "8", "9", "10"))){
+			if($this->check_uid_status($id,$uid,array("1","3", "4", "5", "8", "9", "10"))){
 //			  $KdApi = pc_base::load_app_class('KdApiSearch');
 //			  $KdApi = new KdApiSearch();
 //			  $order = $this->order_db->get_one(array('order_id'=>$id,'userid'=>$uid));
@@ -1295,12 +1295,19 @@ class zyorder_api{
 	//确认收货
 	public function order_qrsh(){
 		$id = $_POST['id'];
+        $try_status = $_POST['try_status'];
 		$_userid = $_POST['userid']? $_POST['userid']: param::get_cookie('_userid');
 		if($_userid == null){
 			$this->empty_userid();
 		}
-		if($this->check_uid_status($id,$_userid,array('3'))){
-			$result = $this->order_db->update(array('status'=>4, 'overtime'=>time()),array('order_id'=>$id));
+        $order = $this->order_db->get_one(array('order_id' => $id), "try_status");
+
+		if($this->check_uid_status($id,$_userid,array('3'), "`try_status`=".$try_status) && ($order["try_status"] == $try_status)){
+
+		    if($order["try_status"]  == '0')
+			    $result = $this->order_db->update(array('status'=>4, 'overtime'=>time()),array('order_id'=>$id, "try_status" => "0"));
+		    elseif ($order["try_status"]  == "1")
+                $result = $this->order_db->update(array('status'=>1),array('order_id'=>$id, "try_status" => "1"));
 			if($result){
 				$this->caozuo_success("确认收货");
 			}else{
@@ -1734,7 +1741,7 @@ class zyorder_api{
 
 		if($return['code']=='200'){
 			//$where = ' id in ('.$oid.') and userid = '.$uid;
-			$sql = ' SELECT SUM(totalprice) as tprcie from zy_zy_order where '.$where;
+			$sql = ' SELECT SUM(totalprice) as tprcie, `try_status` from zy_zy_order where '.$where;
 			$rs = $this->order_db->query($sql);
 			$res = $this->order_db->fetch_array($rs);//zy_order表
 			$tprice = $res[0]['tprcie'];
@@ -1789,12 +1796,17 @@ class zyorder_api{
 				$return = json_decode($this->_crul_post($url,$data),true);
 
 				if( $return['code']=='200' ) {
-					$result =  $this->order_db->update(array('status'=>2),$where);
+				    if($res[0]["try_status"] == "0")
+					    $result =  $this->order_db->update(array('status'=>2),$where);
+				    else if($res[0]["try_status"] == "1")
+                        $result =  $this->order_db->update(array('status'=>4),$where);
 					$result = [
 						'status' => 'success',
 						'code' => 1,
 						'message' => 'OK',
-						'userid'=>$uid
+						'userid'=>$uid,
+                        'try_status'=>$res[0]["try_status"],
+                        'id'=>$oids
 					];
 					exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 				}

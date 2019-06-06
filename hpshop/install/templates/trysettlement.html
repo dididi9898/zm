@@ -189,7 +189,7 @@
 								//console.log(orderid,sn);
 								layer.msg('申请成功，请耐心等待审核！');
 								//console.log('{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+orderid+'&sn='+sn);
-								setTimeout("javascript:location.href='{APP_PATH}index.php?m=hpshop&c=index&a=search'", 1000);
+								setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5'", 1000);
 							}
 						}else{
 							layer.msg(data.message);
