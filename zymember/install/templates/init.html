@@ -44,6 +44,12 @@
         right:-0.2em;
         position:absolute;
     }
+    .per-head .iconfont {
+        font-size: 0.6rem;
+    }
+    .per-head .tb-dw {
+        margin-right: 0.2rem;
+    }
 </style>
 <body style="background: #f1f1f1;">
 
@@ -149,7 +155,7 @@
                         </li>
                         <li class="p-r">
                             <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=4">
-                                <div class="iconfont icon-message"><span class="huizhang p-a" v-if="order_count[4]!=null||order_count[10]!=null">{{order_count[4]+order_count[10]}}</span></div>
+                                <div class="iconfont icon-message"><span class="huizhang p-a" v-if="order_count[4]!=null">{{order_count[4]}}</span></div>
                                 <p>评价</p>
                             </a>
                         </li>
@@ -266,6 +272,16 @@
                     setTimeout("javascript:location.href='" + data.forward + "'", 1000);
                 } else {
                     uid=data.data.userid;
+                    if(data.data.order_count[4]!=null)
+                    {
+                        if(data.data.order_count[10]!=null) {
+                            data.data.order_count[4] = Number(data.data.order_count[4])+Number(data.data.order_count[10]);
+                        }
+                    }else {
+                        if(data.data.order_count[10]!=null) {
+                            data.data.order_count[4] = data.data.order_count[10];
+                        }
+                    }
                     var info = new Vue({
                         el: '.info',
                         data: data.data,
