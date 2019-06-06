@@ -173,7 +173,7 @@ class goods_api{
 			}
 		}
 
-		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,salesnum FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,`salesnum` + `virtualSaleNum`as salesnum FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 		$sqls = 'SELECT COUNT(*) as num FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
