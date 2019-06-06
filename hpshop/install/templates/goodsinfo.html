@@ -263,6 +263,35 @@
 		height: 100%;
 		object-fit: cover;
     }
+    .tsinfo{
+		background-color: #fff;
+    }
+    .tsinfo .info {
+    	padding: 0.1rem 0.15rem;
+    }
+    .tsinfo .info .iconfont{
+		float: left;
+		text-align: center;
+		border: 1px solid #ed722d;
+		border-radius: 50%;
+		width: 30px;
+		font-size: 20px;
+		line-height: 30px;
+		color: #ed722d;
+    }
+    .tsinfo .info .text{
+    	float: left;
+    	width: calc(100% - 67px);
+    	padding-left:15px;
+    }
+    .tsinfo .info .text h3{
+		line-height: 30px;
+		font-size: 0.18rem;
+    }
+    .tsinfo .info .text p{
+    	font-size: 0.15rem;
+    	color: #999;
+    }
 </style>
 
 <body class="bg-f4f4f4">
@@ -360,6 +389,77 @@
                         <img :src="thumbs.url">
                     </div>
                 </div>
+            </div>
+            <div class="tsinfo">
+            	<div class="info">
+            		<div class="iconfont icon-deliver"></div>
+            		<div class="text">
+            			<h3>关于发货</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
+
+            	<div class="info">
+            		<div class="iconfont icon-cart"></div>
+            		<div class="text">
+            			<h3>关于购买</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
+
+            	<div class="info">
+            		<div class="iconfont icon-send"></div>
+            		<div class="text">
+            			<h3>关于寄回</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
+
+            	<div class="info">
+            		<div class="iconfont icon-kefu"></div>
+            		<div class="text">
+            			<h3>贴心客服</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
+				
+            	<div class="info">
+            		<div class="iconfont icon-repair"></div>
+            		<div class="text">
+            			<h3>关于售后</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
+
+            	<div class="info">
+            		<div class="iconfont icon-safe"></div>
+            		<div class="text">
+            			<h3>质量说明</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
+
+            	<div class="info">
+            		<div class="iconfont icon-jiage1"></div>
+            		<div class="text">
+            			<h3>价格说明</h3>
+            			<p>物流公司：百世/韵达</p>
+            			<p>预计发货时间：48小时 预计到货时间：2-4天</p>
+            		</div>
+            		<div class="clear"></div>
+            	</div>
             </div>
             <!-- 商品评价-隐藏 -->
             <div class="goods-pjw">
@@ -487,6 +587,7 @@
 			<div class="clear"></div>
 		</ul>
 	</div>
+	<div class="h4"></div>
 
     {template "hpshop","footer"}
 
@@ -571,11 +672,11 @@
 				goodsinfo = data.data;
 				if(goodsinfo.isspec == '1')
                 {
-//                    goodsinfo.salesnum = 0;
+                    //goodsinfo.salesnum = 0;
                     goodsinfo.stock = 0;
                     for(x in goodsinfo.specdata)
                     {
-//                        goodsinfo.salesnum += Number(goodsinfo.specdata[x].salenum);
+                        //goodsinfo.salesnum += Number(goodsinfo.specdata[x].salenum);
                         goodsinfo.stock += Number(goodsinfo.specdata[x].specstock);
 //                        console.log(y);
                     }
