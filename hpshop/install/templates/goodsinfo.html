@@ -329,7 +329,7 @@
         	<!-- 价格标题 -->
         	<div class="goods-tp bg-fff" v-cloak>
         		<div class="h1"></div>
-        		<div class="pl1 bg-fs c-eb3c3c">￥{{ shop_price }}<span class="pl05 sm-fs c-afafaf">￥{{ market_price }}</span></div>
+        		<div class="pl1 bg-fs c-eb3c3c">￥{{ shop_price }}<span class="pl05 sm-fs c-afafaf">￥{{ market_price }}</span><a class="layui-badge  fr" style="margin-right: 0.2rem;clear: both;">赚￥{{ zhuan }}</a></div>
         		<div class="h05"></div>
         		<h3 class="pl1"><!--<span class="goods-tag1">热销</span><span class="goods-tag2">店长推荐</span>-->{{ goods_name }}</h3>
         		<div class="h1"></div>
@@ -546,7 +546,7 @@
         
     </div>
 
-	<div class="index-footer3" id="goods_footer" style=" box-shadow: 0px 0px 5px #ddd;">
+	<div class="index-footer3" id="goods_footer" style=" box-shadow: 0px 0px 5px #ddd;" v-cloak>
 		<ul>
 			<li class="fl">
 				<!--<div style="width: 50%;float:left;text-align: center;">
@@ -579,12 +579,13 @@
             <!--<li class="fl" style="background: #ff5722; line-height: 0.4rem; text-align: center; color: #fff;" @click="try">-->
                 <!--加入购物车-->
             <!--</li>-->
-            <li class="fl" style="background: #ffaf44;line-height: 0.4rem;text-align: center;color: #fff;" @click="trynow">
-                立即试穿
+            <li class="fl" style="background: #ff5722;line-height: 0.4rem;text-align: center;color: #fff;" @click="add">
+                加入购物车
             </li>
-			<li class="fl" style="background: #ff5722;line-height: 0.4rem;text-align: center;color: #fff;" @click="add">
-				加入购物车
-			</li>
+            <li class="fl" style="background: #ffaf44;height: 0.4rem; line-height: 0.12rem;text-align: center;color: #fff;padding-top: 0.08rem" @click="trynow">
+                <span style="font-size: 0.12rem">￥</span>{{shop_price}} <br>
+                <span style="font-size: 0.12rem">赚￥{{zhuan}}</span>
+            </li>
 			<li class="fl" style="background: #ff0000;line-height: 0.4rem;text-align: center;color: #fff;" @click="buy">
 				立即购买
 			</li>
@@ -689,6 +690,7 @@
 				goodsinfo.collect = false;
 				goodsinfo.type_info = 1;
 				goodsinfo.on = 'pj-tag-on';
+				goodsinfo.zhuan = (goodsinfo.shop_price*goodsinfo.trialAwardNumber[1]/100).toFixed(2);
 				var goods = new Vue({
 				    el: '#goods',
 				    data: goodsinfo,
@@ -1067,7 +1069,9 @@
 				var goods_footer = new Vue({
 					el: '#goods_footer',
 					data: {
-						collect:goodsinfo.collect
+						collect:goodsinfo.collect,
+                        shop_price:goodsinfo.shop_price,
+                        zhuan:goodsinfo.zhuan
 					},
 					methods:{
 						// 选择套餐
