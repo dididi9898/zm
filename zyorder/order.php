@@ -209,6 +209,13 @@ class order extends admin {
         $this->order_db->delete($info);
         showmessage(L('operation_success'), 'index.php?m=zyorder&c=order&a=order_list', '5', '');
     }
+    function passTryAjax()
+    {
+        $neadArg = ["ordersn"=>[true,0]];
+        $info = checkArgBcak($neadArg, "POST");
+        $this->order_db->update(["status"=>"11"], $info);
+        returnAjaxData("1", "成功");
+    }
     //*******************************************************************************************************************
     //*******************************************************************************************************************
     //*******************************************************************************************************************
