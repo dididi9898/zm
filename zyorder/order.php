@@ -91,7 +91,7 @@ class order extends admin {
         if(!empty($end_addtime))
             $where .= " AND `addtime` < '$end_addtime' ";
 		if($_GET['ordersn']){
-			$where .= " and B1.userid ='".$_GET['ordersn']."' ";
+			$where .= " and ordersn ='".$_GET['ordersn']."' ";
 		}
 		if($_GET['pay_type']){
 			//1 .余额 
