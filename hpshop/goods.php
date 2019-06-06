@@ -147,6 +147,7 @@ class goods extends admin {
 				'point_sy_value'=>$_POST["point_sy_value"],
 				'trialAwardNumber'=>$trialAwardNumber,
 				'awardNumber'=>$awardNumber,
+				'virtualSaleNum'=>$_POST["virtualSaleNum"]
             ];
         	
         	$results=$this->goods_db->insert($data,true);
@@ -347,7 +348,7 @@ class goods extends admin {
                 'point_sy_value'=>$_POST["point_sy_value"],
                 'trialAwardNumber'=>$trialAwardNumber,
                 'awardNumber'=>$awardNumber,
-				"salesnum"=>$_POST["salesnum"]
+				"virtualSaleNum"=>$_POST["virtualSaleNum"]
         	];
 
         	

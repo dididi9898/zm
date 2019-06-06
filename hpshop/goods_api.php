@@ -94,7 +94,7 @@ class goods_api{
 		}
 
 		$where = 'a.id = b.goodsid and b.pos_id = '.$rid;
-        $sql ='SELECT a.id,a.goods_name,a.thumb,a.summary,a.market_price,a.shop_price,a.salesnum FROM phpcms_goods a,phpcms_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
+        $sql ='SELECT a.id,a.goods_name,a.thumb,a.summary,a.market_price,a.shop_price,(a.`salesnum`+a.`virtualSaleNum`) as salesnum  FROM phpcms_goods a,phpcms_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
         $page = $_GET['page'] ? $_GET['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 
@@ -363,7 +363,7 @@ class goods_api{
                 break;
 			}
 
-		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,salesnum FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
+		$sql = 'SELECT id,goods_name,thumb,summary,market_price,shop_price,`salesnum`+`virtualSaleNum` as salesnum FROM phpcms_goods WHERE '.$where.'ORDER BY'.$order;
         $page = $_POST['page'] ? $_POST['page'] : '1';
         $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
 		//$pages = $this->goods_db->pages;
@@ -1894,6 +1894,8 @@ class goods_api{
 
 		$where =' id = '.$gid.' and isok = 1 and on_sale = 1 ';
 		$info = $this->goods_db->get_one($where);
+		$info['salesnum'] = $info['salesnum'] + $info["virtualSaleNum"];
+		unset($info["virtualSaleNum"]);
 		if ( count($info) == 0 ) {
 			$result = [
 				'status' => 'error',
@@ -1909,7 +1911,7 @@ class goods_api{
 		unset($info['content']);
 		if ( $info['isspec'] == 1) {
 			$where = ' goodsid = '.$gid;
-			$sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status,salenum','',$order = ' id ASC ');
+			$sinfo = $this->goods_specs_db->select($where,'id,specid,specids,specprice,specstock,status, salenum','',$order = ' id ASC ');
 			$info['specdata'] = $sinfo;
 		}
 		$result = [

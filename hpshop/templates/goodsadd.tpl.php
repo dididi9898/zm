@@ -98,7 +98,10 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 					<th width="125">商品简述</th>  
 					<td><textarea rows="4" cols="60" name="summary" style="resize: vertical;"></textarea></td>
 				</tr>
-
+                <tr>
+                    <th width="125">虚拟销量</th>
+                    <td><input type="text" name="virtualSaleNum" class="input-text" value="<?php echo $info['virtualSaleNum'];?>" required="required"></input>(前台销量=虚拟销量+实际销量)</td>
+                </tr>
 				<tr>
 					<th width="125">所属栏目</th>  
 					<td>
