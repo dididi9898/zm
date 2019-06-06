@@ -130,26 +130,29 @@
 				<template v-if="status == 2">
 				<span style="font-weight:700;">待卖家发货</span>
 				</template>
-				<template v-if="status == 3">
+				<template v-else-if="status == 1">
+					<span style="font-weight:700;">试穿商品</span>
+				</template>
+				<template v-else-if="status == 3">
 				<span style="font-weight:700;">卖家已发货</span>
 				</template>
-				<template v-if="status == 4">
+				<template v-else-if="status == 4">
 				<span style="font-weight:700;">已完成，待评价</span>
 				<!--<br>还剩余10天12小时50秒-->
 				</template>
-				<template v-if="status == 5">
+				<template v-else-if="status == 5">
 				<span style="font-weight:700;">已完成</span>
 				</template>
-				<template v-if="status == 6">
+				<template v-else-if="status == 6">
 				<span style="font-weight:700;">已取消</span>
 				</template>
-				<template v-if="status == 8">
+				<template v-else-if="status == 8">
 				<span style="font-weight:700;">申请退款</span>
 				</template>
-				<template v-if="status == 9">
+				<template v-else-if="status == 9">
 					<span style="font-weight:700;">已退款</span>
 				</template>
-				<template v-if="status == 10">
+				<template v-else-if="status == 10">
 					<span style="font-weight:700;">部分商品申请退款</span>
 				</template>
 			</div>
@@ -221,13 +224,21 @@
 				</div>
 				<div class="clear"></div>
 				</a>
-				<template v-if="status==4 || status == 10">
+				<template v-if="status==4 || status == 10 ">
 
 					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
 						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
 					</template>
 
 				<div class="clear"></div>
+				</template>
+				<template v-else-if="(status == 1 && try_status == 1)">
+
+					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
+						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请退货</button></div>
+					</template>
+
+					<div class="clear"></div>
 				</template>
 			</div>
 			<!--合计-->
