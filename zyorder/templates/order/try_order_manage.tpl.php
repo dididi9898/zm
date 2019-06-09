@@ -76,7 +76,7 @@
 <?php echo form::date('end_addtime',$_GET['end_addtime'])?>
 <select name="status">
     <option  value="">商品状态</option>
-    <?php foreach(self::$statusType as $key=>$value ){?>
+    <?php foreach(self::$tryStatusType as $key=>$value ){?>
         <?php if($key == $status) {?>
             <option  selected="selected" value=<?php echo intval($key)?>><?php echo $value?></option>
         <?php }else{?>
@@ -144,7 +144,7 @@
                 <a href="javascript:void(0);" onclick="view_address('<?php echo $row['order_id']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
             </td>
             <td align="center"><?php echo $row["usernote"];?></td>
-            <td align="center"><?php echo self::$statusType[$row["status"]];?></td>
+            <td align="center"><?php echo self::$tryStatusType[$row["status"]];?></td>
             <td align="center">
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
@@ -157,9 +157,12 @@
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == "7"){?>
                     <span class="btn btn-info btn-sm" onclick="checkTry('<?php echo $row['ordersn']?>')"><?php echo L('通过')?></span>
+                    <span class="btn btn-danger btn-sm" onclick="checkNoTry('<?php echo $row['ordersn']?>')"><?php echo L('不通过')?></span>
                 <?php }elseif($row["status"] == '8' || $row["status"] == '10'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                     <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="checkAfterSale('<?php echo $row['order_id']?>')"><?php echo L('售后商品')?></a>
+                <?php }elseif($row["status"] == '12'){?>
+                    <span class="btn btn-danger btn-sm"><?php echo L('未通过')?></span>
                 <?php }?>
                 <a href="javascript:confirmurl('?m=zyorder&c=order&a=dropOrder&order_id=<?php echo $row['order_id']?>', '<?php echo L('确定删除此订单吗，删除后无法恢复。')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
             </td>
@@ -270,6 +273,17 @@ function checkTry(id)
 {
     layer.confirm("确定审核通过吗",{icon:3, title:"提示"},function(index) {
         aj.post("index.php?m=zyorder&c=order&a=passTryAjax&pc_hash=<?php echo $_GET["pc_hash"]?>", {ordersn: id}, function (data) {
+            if (data.code == '1') {
+                window.location.reload();
+            }
+        });
+        layer.close(index);
+    });
+}
+function checkNoTry(id)
+{
+    layer.confirm("确定审核不通过吗",{icon:3, title:"提示"},function(index) {
+        aj.post("index.php?m=zyorder&c=order&a=notPassTryAjax&pc_hash=<?php echo $_GET["pc_hash"]?>", {ordersn: id}, function (data) {
             if (data.code == '1') {
                 window.location.reload();
             }
