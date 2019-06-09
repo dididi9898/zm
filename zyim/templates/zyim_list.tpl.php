@@ -5,6 +5,27 @@
 <link rel="stylesheet" type="text/css" href="<?php echo APP_PATH?>statics/zymessagesys/layui/css/layui.css">
 <script src="<?php echo APP_PATH?>statics/zymessagesys/layui/layui.all.js"></script>
 
+    <form name="searchform" action="" method="get" >
+        <input type="hidden" value="zyim" name="m">
+        <input type="hidden" value="zyim" name="c">
+        <input type="hidden" value="zyim_list" name="a">
+        <div class="explain-col search-form">
+            <select name="type" >
+                <option >请选择</option>
+                <option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>>昵称</option>
+            </select>
+            <input type="text" value="<?php echo $_GET['q']?>" class="input-text" name="q">
+
+            <select name="isunlook">
+                <option value="" selected="">全部</option>
+                <option value="1" <?php if ($_GET['isunlook']==1) {?>selected<?php }?>>未读</option>
+                <option value="2" <?php if ($_GET['isunlook']==2) {?>selected<?php }?>>已读</option>
+            </select>
+
+            <input type="submit" value="<?php echo L('search')?>" name="dosubmit" class="layui-btn layui-btn-sm" style="padding: 0 10px;">
+        </div>
+    </form>
+
 <div class="pad_10">
     <div class="table-list">
         <form name="myform" id="myform" action="?m=zyim&c=zyim&a=del" method="post" onsubmit="checkuid();return false;" >
