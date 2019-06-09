@@ -34,6 +34,23 @@ class zyim extends admin
 	public function zyim_list()
 	{
 		$where = 'records_id in (select records_id from zy_online_talk_record group by records_id HAVING count(*)>0)';
+		if($_GET['type']){
+			if($_GET['q']){
+				if($_GET['type'] == 1){
+					$where .= " and talk_from_name like '%".$_GET['q']."%' ";
+				}
+			}
+		}
+		//未读/已读
+		if($_GET['isunlook']){
+			if($_GET['isunlook'] == 1){
+				$where .= " and records_id in (select records_id from zy_online_talk_record WHERE `status`=0 group by records_id HAVING count(*)>0)";
+			}
+			if($_GET['isunlook'] == 2){
+				$where .= " and records_id in (SELECT records_id from zy_online_talk_record WHERE records_id not in( select records_id from zy_online_talk_record WHERE `status`=0   group by records_id HAVING COUNT(*)>0) GROUP BY records_id)";
+			}
+		}
+
 		$order = 'id DESC';
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$info=$this->online_talk_list_db->listinfo( $where,$order,$page,20);
