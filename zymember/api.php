@@ -98,7 +98,35 @@ class api{
 		}
 	}
 
-
+	public function is_identification_api()
+	{
+		$userid=$_POST['userid'];
+		if($userid) {
+			$bool = $this->member_db->get_one(array('userid' => $userid));
+			if ($bool['realname'] && $bool['idcard'] && $bool['accountNo']) {
+				$result = [
+					'status'=>'success',
+					'code'=>200,
+					'message'=>'已绑定',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			} else {
+				$result = [
+					'status'=>'success',
+					'code'=>0,
+					'message'=>'未绑定',
+				];
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			}
+		}else{
+			$result = [
+				'status'=>'error',
+				'code'=>-1,
+				'message'=>'参数错误',
+			];
+			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		}
+	}
 
 	/**
 	* 会员注册协议
