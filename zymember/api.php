@@ -39,12 +39,12 @@ class api{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 		}
 		$host = "https://b4bankcard.market.alicloudapi.com";
-		$path = "/IDCard";
+		$path = "/bank4Check";
 		$method = "GET";
 		$appcode = "bcbbc6dcdd3a4fabb99b616233897b93";
 		$headers = array();
 		array_push($headers, "Authorization:APPCODE " . $appcode);
-		$querys = "idCard=".$_POST['idCard']."&name=".$_POST['name'];
+		$querys = "accountNo=".$_POST['accountNo']."&idCard=".$_POST['idCard']."&mobile=".$_POST['mobile']."&name=".$_POST['name'];
 		$bodys = "";
 		$url = $host . $path . "?" . $querys;
 
@@ -72,6 +72,7 @@ class api{
 			$member_data = [
 				'realname'=>$arr['name'],
 				'idcard'=>$arr['idCard'],
+				'accountNo'=>$arr['accountNo'],
 				'lastdate'=>time(),
 			];
 			$this->member_db->update($member_data,array('userid'=>$userid));
@@ -90,7 +91,7 @@ class api{
 	public function is_identification($userid)
 	{
 		$bool=$this->member_db->get_one(array('userid'=>$userid));
-		if($bool['realname']&&$bool['idcard']){
+		if($bool['realname']&&$bool['idcard']&&$bool['accountNo']){
 			return true;
 		}else {
 			return false;
@@ -302,9 +303,6 @@ class api{
 			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
 			_crul_get($url);
 
-			if(!$this->is_identification($memberinfo['userid'])){
-				$forward=APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';
-			}
 			$result = [ 
 				'status'=>'success',
 				'code'=>200,
@@ -438,9 +436,9 @@ class api{
 			$url = "http://localhost/zm/index.php?m=zyfx&c=frontApi&a=updateMemberLoginTime&userid=".$memberinfo['userid'];
 			_crul_get($url);
 
-			if(!$this->is_identification($memberinfo['userid'])){
-				$forward=APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';
-			}
+//			if(!$this->is_identification($memberinfo['userid'])){
+//				$forward=APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';
+//			}
 			$result = [
 				'status'=>'success',
 				'code'=>200,
@@ -474,7 +472,7 @@ class api{
 		$password = $_POST['password'];	//密码
 		$type = $_POST['type'];	//类型：1web端、2APP端
 		$token = $_POST['token'];	//类型：1web端、2APP端
-		$forward = $_POST['forward'] ? urldecode($_POST['forward']) : APP_PATH.'index.php?m=zymember&c=index&a=idCard_confirm';	//接下来该跳转的页面链接
+		$forward = $_POST['forward'] ? urldecode($_POST['forward']) : APP_PATH.'index.php';	//接下来该跳转的页面链接
 
 		//用手机号码查出用户账号
 		$memberinfo = $this->member_db->get_one(array('mobile'=>$mobile));
