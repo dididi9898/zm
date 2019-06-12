@@ -276,7 +276,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 			      <td><input name="goodsimg" type="hidden" value="1">
 					<fieldset class="blue pad-10">
 					<legend>图片列表</legend>
-			        <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张</div>双击输入框查看大图</center><div id="goodsimg" class="picList">
+			        <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>50</font> 张</div>双击输入框查看大图</center><div id="goodsimg" class="picList">
                                 <?php foreach($alinfo as $key=>$value){  ?>
                                     <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
                                         <img src="<?php echo $value['url'];?>" height="40" width='60'/>
@@ -293,7 +293,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
 
 					</fieldset>
 					<div class="bk10"></div>
-					<script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','6','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+					<script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'50,gif|jpg|jpeg|png|bmp,0','content','6','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
 
 			    </tr>
                 <tr>
@@ -301,7 +301,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                     <td><input name="goodsimg_infos" type="hidden" value="1">
                         <fieldset class="blue pad-10">
                             <legend>图片列表</legend>
-                            <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张、双击输入框查看大图</div></center><div id="goodsimg_infos" class="picList">
+                            <center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>50</font> 张、双击输入框查看大图</div></center><div id="goodsimg_infos" class="picList">
                                 <?php foreach($blinfo as $key=>$value){  ?>
                                     <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
                                         <img src="<?php echo $value['url'];?>" height="40" width='60'/>
@@ -315,7 +315,7 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                             </div>
                         </fieldset>
                         <div class="bk10"></div>
-                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg_infos',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg_infos',change_images,'50,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
                 </tr>
                 <tr>
 					<th>上架</th>  

@@ -177,19 +177,19 @@ input[type="radio"] { position: absolute; clip: rect(0, 0, 0, 0);}
                     <th width="80">商品轮播图</th>
                     <td><input name="goodsimg" type="hidden" value="1">
                         <fieldset class="blue pad-10">
-                            <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张、双击输入框查看大图</div></center><div id="goodsimg" class="picList"></div>
+                            <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>50</font> 张、双击输入框查看大图</div></center><div id="goodsimg" class="picList"></div>
                         </fieldset>
                         <div class="bk10"></div>
-                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg',change_images,'50,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
                 </tr>
                 <tr>
                     <th width="80">商品详情图</th>
                     <td><input name="goodsimg_infos" type="hidden" value="1">
                         <fieldset class="blue pad-10">
-                            <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张、双击输入框查看大图</div></center><div id="goodsimg_infos" class="picList"></div>
+                            <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>50</font> 张、双击输入框查看大图</div></center><div id="goodsimg_infos" class="picList"></div>
                         </fieldset>
                         <div class="bk10"></div>
-                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg_infos',change_images,'10,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
+                        <script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script><div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('goodsimg_images', '附件上传','goodsimg_infos',change_images,'50,gif|jpg|jpeg|png|bmp,0','content','0','<?php echo $authkeys;?>')"/> 选择图片 </a></div>  </td>
                 </tr>
 			   
                 <tr>
