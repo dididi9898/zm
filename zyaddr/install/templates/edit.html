@@ -37,6 +37,7 @@
 	</div>
 	<script>
 		$('#wz').focus(function(){
+            document.activeElement.blur();
 			var picker = new mui.PopPicker({
 				layer: 3
 			});

@@ -1,13 +1,15 @@
-{template 'zyaddr','indexHeader'}
+{template 'zyaddr','shop_payHeader'}
 <div class="address">
 	<form class="layui-form" action="">
 		{loop $lists $data}
 		<div class="list">
-			<div class="top">
-				<div class="fl">{$data['name']}</div>
-				<div class="fr" style="text-align:right;">{$data['phone']}</div>
+			<div  onclick="turn({$data['id']})">
+				<div class="top">
+					<div class="fl">{$data['name']}</div>
+					<div class="fr" style="text-align:right;">{$data['phone']}</div>
+				</div>
+				<div class="addr">{$data['province']}{$data['city']}{$data['district']}{$data['address']}</div>
 			</div>
-			<div class="addr">{$data['province']}{$data['city']}{$data['district']}{$data['address']}</div>
 			<div class="bom">
 				<div class="layui-form-item" pane="">
 					{if $data['default']==1}
@@ -17,13 +19,13 @@
 					{/if}
 				</div>
 				<div class="action">
-					<a href="index.php?m=zyaddr&c=index&a=edit&id={$data['id']}&xx=1"><i class="icon-post iconfont"></i>编辑</a>
+					<a href="index.php?m=zyaddr&c=index&a=shop_payedit&id={$data['id']}&xx=2"><i class="icon-post iconfont"></i>编辑</a>
 					<a href="javascript:;" onclick="del({$data['id']},this)"><i class="icon-delete iconfont"></i>删除</a>
 				</div>
 			</div>
 		</div>
 		{/loop}
-		<a href="index.php?m=zyaddr&c=index&a=add&xx=1" class="layui-btn layui-btn-warm layui-btn-sm address-btn">添加地址</a>
+		<a href="index.php?m=zyaddr&c=index&a=add&xx=2" class="layui-btn layui-btn-warm layui-btn-sm address-btn">添加地址</a>
 	</form>
 </div>
 <script>
@@ -64,6 +66,12 @@
             })
 
 		}
+	function turn(id)
+	{
+      	window.parent.changeAddr(id);
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
 
+	}
 
 </script>
