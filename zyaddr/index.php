@@ -24,6 +24,14 @@ class index{
 		$lists = $data['data'];
 		include template('zyaddr',"index");
 	}
+    public function shop_payAddr(){
+        $url = $this->zyconfig_db->get_one(array('key'=>"zyaddr1"));
+        $params = array('userid'=>$this->userid);
+        $paramstring = http_build_query($params);
+        $data = json_decode($this->juhecurl($url['url'],$paramstring),true);
+        $lists = $data['data'];
+        include template('zyaddr',"shop_payAddr");
+    }
 
 	/*
 	 * 地址添加
@@ -53,6 +61,10 @@ class index{
 		$lists = $this->zyaddr_db->get_one(array('id'=>$_GET['id']));
 		include template('zyaddr',"edit");
 	}
+    public function shop_payedit(){
+        $lists = $this->zyaddr_db->get_one(array('id'=>$_GET['id']));
+        include template('zyaddr',"shop_payedit");
+    }
 
 	/*
 	 * 地址编辑

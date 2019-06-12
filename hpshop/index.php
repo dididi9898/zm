@@ -37,7 +37,7 @@ class index{
 		$this->zyconfig_db = pc_base::load_model('zyconfig_model');
 		$this->module_db = pc_base::load_model('module_model');
 		$this->config = $this->zyconfig_db->get_one('','url');
-
+        $this->userid = param::get_cookie('_userid'); // 模拟数据
 		
 		//登录后方可操作
 		// $_userid = param::get_cookie('_userid');
@@ -136,7 +136,11 @@ class index{
      */
 	public function settlement(){
 
-		
+        $url = $this->zyconfig_db->get_one(array('key'=>"zyaddr1"));
+        $params = array('userid'=>$this->userid);
+        $paramstring = http_build_query($params);
+        $data = json_decode($this->juhecurl($url['url'],$paramstring),true);
+        $lists = $data['data'];
 		include template('hpshop', 'settlement');
 	}
 
@@ -157,10 +161,45 @@ class index{
 
 		
 		include template('hpshop', 'goodscart');
-	}   
-	
+	}
 
 
+    public function juhecurl($url,$params=false,$ispost=0){
+        $httpInfo = array();
+        $ch = curl_init();
+
+        curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
+        curl_setopt( $ch, CURLOPT_USERAGENT , 'JuheData' );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 60 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT , 60);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        if( $ispost )
+        {
+            curl_setopt( $ch , CURLOPT_POST , true );
+            curl_setopt( $ch , CURLOPT_POSTFIELDS , $params );
+            curl_setopt( $ch , CURLOPT_URL , $url );
+        }
+        else
+        {
+            if($params){
+                curl_setopt( $ch , CURLOPT_URL , $url.'&'.$params );
+            }else{
+                curl_setopt( $ch , CURLOPT_URL , $url);
+            }
+        }
+        $response = curl_exec( $ch );
+
+        if ($response === FALSE) {
+            //echo "cURL Error: " . curl_error($ch);
+            return false;
+        }
+        $httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+        $httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
+        curl_close( $ch );
+        return $response;
+    }
 
 }
 ?>

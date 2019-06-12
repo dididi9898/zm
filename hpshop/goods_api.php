@@ -92,11 +92,14 @@ class goods_api{
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
-
+        if($rid == "1" || $rid == "2")
+            $pagesize = 5;
+		else
+            $pagesize = 10;
 		$where = 'a.id = b.goodsid and b.pos_id = '.$rid;
         $sql ='SELECT a.id,a.goods_name,a.thumb,a.summary,a.market_price,a.shop_price,(a.`salesnum`+a.`virtualSaleNum`) as salesnum  FROM phpcms_goods a,phpcms_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
         $page = $_GET['page'] ? $_GET['page'] : '1';
-        $info = $this->get_db->multi_listinfo($sql,$page,$pagesize = 10);
+        $info = $this->get_db->multi_listinfo($sql,$page,$pagesize);
 
   //       $sqls = 'SELECT COUNT(*) as num FROM phpcms_goods a,phpcms_goodspositem b WHERE '.$where.' ORDER BY a.addtime DESC';
   //       $res = $this->goods_db->query($sqls);

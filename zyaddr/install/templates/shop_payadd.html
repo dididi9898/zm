@@ -68,7 +68,7 @@
 				success: function(res){
 					if(res.code==200){
 						mui.toast(res.message);
-						window.location.href = "index.php?m=zyaddr&c=index&a=init";
+                        window.history.go(-1);
 					}else{
 						mui.toast(res.message);
 					}

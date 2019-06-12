@@ -10,7 +10,7 @@ class order extends admin {
 	*构造函数，初始化
 	*/
     public static $statusType = ["1"=>"待付款","2"=>"待发货","3"=>"待收货","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款","10"=>"部分商品售后"];
-    public static $tryStatusType = ["7"=>"待审核","2"=>"待发货","3"=>"待收货","1"=> "待付款","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款","10"=>"部分商品售后"];
+    public static $tryStatusType = ["7"=>"待审核","2"=>"待发货","3"=>"待收货","1"=> "待付款","4"=>"待评价","5"=>"已评价","6"=>"以取消","8"=>"售后", "9"=>"退款","10"=>"部分商品售后", "11"=>"试穿订单通过", "12"=>"试穿订单不通过"];
     public static $pay_type = ["1"=>"余额","2"=>"支付宝", "3"=>"微信"];
 
 	public function __construct()
@@ -214,6 +214,13 @@ class order extends admin {
         $neadArg = ["ordersn"=>[true,0]];
         $info = checkArgBcak($neadArg, "POST");
         $this->order_db->update(["status"=>"11"], $info);
+        returnAjaxData("1", "成功");
+    }
+    function notPassTryAjax()
+    {
+        $neadArg = ["ordersn"=>[true,0]];
+        $info = checkArgBcak($neadArg, "POST");
+        $this->order_db->update(["status"=>"12"], $info);
         returnAjaxData("1", "成功");
     }
     //*******************************************************************************************************************
