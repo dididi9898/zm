@@ -55,7 +55,7 @@
 
 <input type="hidden" value="zyorder" name="m">
 <input type="hidden" value="order" name="c">
-<input type="hidden" value="order_list" name="a">
+<input type="hidden" value="try_order_list" name="a">
 <input type="hidden" value="" name="page" id="page">
 <div class="explain-col search-form">
 <?php echo '订单编号'?>  <input type="text" value="<?php echo $_GET['ordersn']?>" class="input-text" name="ordersn">
