@@ -1,4 +1,4 @@
-{template 'zyaddr','header'}
+{template 'zyaddr','shop_addheader'}
 <link href="{CSS_PATH}mui.picker.css" rel="stylesheet" />
 <link href="{CSS_PATH}mui.poppicker.css" rel="stylesheet" />
 <script src="{JS_PATH}mui.picker.js"></script>
@@ -68,7 +68,7 @@
 				success: function(res){
 					if(res.code==200){
 						mui.toast(res.message);
-                        window.history.go(-1);
+                        window.location.href = document.referrer;
 					}else{
 						mui.toast(res.message);
 					}

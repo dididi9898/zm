@@ -39,6 +39,9 @@ class index{
 	public function add(){
 		include template('zyaddr',"add");
 	}
+    public function shop_payadd(){
+        include template('zyaddr',"shop_payadd");
+    }
 
 	/*
 	 * 地址添加
