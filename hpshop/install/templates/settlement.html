@@ -121,10 +121,10 @@
 
         <!--商品其他-->
         <div class="ware-other">
-			<div class="freight coupon">
+			<div class="freight coupon" >
 
 				<div class="fl tit">优惠券</div>
-				<a href=""><div class="fr con" id="coupon"><i class="layui-icon layui-icon-right"></i></div></a>
+				<a><div class="fr con" id="coupon"><i class="layui-icon layui-icon-right"></i></div></a>
 				<div class="clear"></div>
 
 			</div>
@@ -197,9 +197,11 @@
 
 			//表单
 			if(met == 1){
+                console.log(addressid)
 				aj_data(met,'', addressid);
 			}else{
 				if(carts){
+                    console.log(addressid)
 					aj_data('',carts, addressid)
 				}else{
 					layer.msg('操作失败，无结算订单');
@@ -271,7 +273,7 @@
                         data : data.data
                     }
                     //console.log(data.data.uid);
-                    if(addressid){
+                    if(addressid && addressid !='ss'){
                         //console.log(addressid);
                         //获取选择地址
                         $.ajax({
@@ -304,7 +306,7 @@
                                 }
                             }
                         });
-                    }else{
+                    }else if(addressid !='ss'){
                         //获取默认地址
                         $.ajax({
                             url:'index.php?m=zyaddr&c=zyaddr_api&a=getdefault',
@@ -338,7 +340,7 @@
                         //获取选择可用优惠券数量
                         var catid=new Array();
                         var total=new Array();
-                        var userid=data.data.uid
+                        var userid=data.data.uid;
                         console.log(data.data.shops[0].cartinfo);
                         for(var i in data.data.shops[0].cartinfo){
                             catid[i] =data.data.shops[0].cartinfo[i].catid;
@@ -362,13 +364,17 @@
                                 if(data.status == 'success'){
                                     if(data.code == 200) {
                                         coupon_num = data.data[0].num;
-                                        $("#coupon").prepend('<span style="color: red;font-size: small">' + coupon_num + '个可用优惠券</span>');
-                                        $("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total);
+                                        var addr1 = '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total;
+                                        $("#coupon").children("span").remove();
+                                        $("#coupon").prepend('<span style="color: red;font-size: small" onclick="click_coupon(\''+addr1+'\')">' + coupon_num + '个可用优惠券</span>');
+//                                        $("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total);
                                     }else {
                                         cut_num=data.data[0].minus;
                                         cu_id=data.data[0].id;
-                                        $("#coupon").prepend('<span style="color: red;font-size: small">-￥' + cut_num + '</span>');
-                                        $("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total+ '&id=' + cu_id);
+                                        var addr1 = '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total+ '&id=' + cu_id;
+                                        $("#coupon").children("span").remove();
+                                        $("#coupon").prepend('<span style="color: red;font-size: small" onclick="click_coupon(\''+addr1+'\')">-￥' + cut_num + '</span>');
+//                                        $("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total+ '&id=' + cu_id);
                                     }
                                 }else{
                                     if(data.code==-200){
@@ -448,6 +454,22 @@
 
         });
     }
+        function click_coupon(url)
+        {
+            console.log(2222);
+            layer.open({
+                type: 2,
+                content: url,
+                area: ['100%', '100%'],
+                offset: 't',
+                anim: 2,
+                title: "收获地址", //不显示标题
+                shadeClose: true,
+                isOutAnim: false,
+                scrollbar: false,
+
+            });
+        }
 
     </script>   
 </body>
