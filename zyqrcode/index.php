@@ -33,5 +33,12 @@ class index{
 		include template('zyqrcode','index');
 	}
 
+	/*
+	 * 输入邀请码
+	 * */
+	public function invite()
+	{
+		include template('zyqrcode','invite');
+	}
 }
 ?>

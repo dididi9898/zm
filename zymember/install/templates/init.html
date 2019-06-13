@@ -272,13 +272,12 @@
                     setTimeout("javascript:location.href='" + data.forward + "'", 1000);
                 } else {
                     uid=data.data.userid;
-                    if(data.data.order_count[4]!=null)
-                    {
-                        if(data.data.order_count[10]!=null) {
-                            data.data.order_count[4] = Number(data.data.order_count[4])+Number(data.data.order_count[10]);
+                    if (data.data.order_count[4] != null) {
+                        if (data.data.order_count[10] != null) {
+                            data.data.order_count[4] = Number(data.data.order_count[4]) + Number(data.data.order_count[10]);
                         }
-                    }else {
-                        if(data.data.order_count[10]!=null) {
+                    } else {
+                        if (data.data.order_count[10] != null) {
                             data.data.order_count[4] = data.data.order_count[10];
                         }
                     }

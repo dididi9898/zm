@@ -69,7 +69,7 @@ class index extends foreground {
 	public function is_identification($userid)
 	{
 		$bool=$this->member_db->get_one(array('userid'=>$userid));
-		if($bool['realname']&&$bool['idcard']){
+		if($bool['realname']&&$bool['idcard']&&$bool['accountNo']){
 			return true;
 		}else {
 			return false;

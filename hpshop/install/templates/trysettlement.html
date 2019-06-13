@@ -3,7 +3,7 @@
 
 <body class="bg-f4f4f4">
     <div class="personal-head">
-        <a onClick="javascript :history.back(-1);">
+        <a onclick="set_none()">
             <div class="fl head-icon">
                 <i class="layui-icon layui-icon-left"></i>
             </div>
@@ -25,7 +25,7 @@
     <!--地址-->
     <script id="form1" type="text/html">
     <form class="layui-form" >
-        <div class="choose-address">
+        <div class="choose-address"  onclick="clickAddr()">
 		{{# if(d.data.address){ }}
             <div class="address">
                 <div class="Consignee">
@@ -87,6 +87,12 @@
 
         <!--商品其他-->
         <div class="ware-other">
+			<div class="freight coupon">
+				<div class="fl tit">优惠券</div>
+				<a href=""><div class="fr con" id="coupon"><i class="layui-icon layui-icon-right"></i></div></a>
+				<div class="clear"></div>
+			</div>
+
             <div class="freight">
                 <div class="fl tit">运费</div>
                 <div class="fr con">￥<span>0.00</span></div>
@@ -108,7 +114,8 @@
 
         <div class="Pay-footer-fixd">
             <div class="fl">合计：<span>￥&nbsp;{{ d.data.totalprice }}</span></div>
-            <div class="fr"><botton lay-submit lay-filter="submit">试穿申请</botton></div>
+            <div class="fr" style="position: absolute;right: 30%"><botton lay-submit lay-filter="submit2">立即购买</botton></div>
+            <div class="fr"><botton lay-submit lay-filter="submit">申请试穿</botton></div>
         </div>
     </form>
 	</script>
@@ -117,7 +124,7 @@
 
  	<style>
 	.Pay-footer-fixd .fr botton {
-    padding: 0.05rem 0.4rem;
+    padding: 0.05rem 0.2rem;
     border-radius: 0.03rem;
     line-height: 0.3rem;
     height: 0.3rem;
@@ -129,33 +136,38 @@
 }
 	</style>
     <script>
+		var s = history.length;
+		var layer = layui.layer,
+				form = layui.form,
+				$ = layui.jquery,
+				upload = layui.upload,
+				laytpl  = layui.laytpl ,
+				table = layui.table;
+
+		var met = '{$_GET[met]}';
+		var carts = '{$_GET[carts]}';
+		var address;
+		var addressid = '{$_GET[address]}';
+		var istruename = false;
+		var cu_id=0;//优惠卷id
 	$(function(){
         //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
         ;
         ! function () {
-            var layer = layui.layer,
-                form = layui.form,
-                $ = layui.jquery,
-                upload = layui.upload,
-                laytpl  = layui.laytpl ,
-                table = layui.table;      
 
-			var met = '{$_GET[met]}';				
-			var carts = '{$_GET[carts]}';
-			var address;
-			var addressid = '{$_GET[address]}';
 			//表单
 			if(met == 1){
-				aj_data(met,'');
+				aj_data(met,'', addressid);
 			}else{
 				if(carts){
-					aj_data('',carts)
+					aj_data('',carts, addressid)
 				}else{
 					layer.msg('操作失败，无结算订单');
 				}
 			}
 			//监听提交
 			form.on('submit(submit)', function(data){
+				console.log('申请试穿');
 				data.field.met = met;
 				console.log(met);
 				console.log(carts);
@@ -171,8 +183,63 @@
 				}else{
 					layer.msg('请选择收货地址');
 				}
+				if(!istruename){
+					layer.msg('请先实名认证后，可以使用试穿功能');
+					//console.log('{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+orderid+'&sn='+sn);
+					setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=idCard_confirm'", 1000);
+				}else {
+					if ((data.field.address && carts ) || (data.field.address && met )) {
+						aj.post('index.php?m=hpshop&c=goods_api&a=tryMakeOrder', data.field, function (datacc) {
+							console.log(datacc.data);
+							if (datacc.status == 'success') {
+								var orderid = [];
+								var sn = [];
+								$.each(datacc.data, function (index, val) {
+									console.log(index, val);
+									orderid.push(val.oid);
+									sn.push(val.order_sn);
+								})
+								//console.log(orderid,sn);
+								if (sn.length == orderid.length && sn.length > 0 && orderid.length > 0) {
+									orderid = orderid.join(',');
+									sn = sn.join(',');
+									//console.log(orderid,sn);
+									layer.msg('申请成功，请耐心等待审核！');
+									//console.log('{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+orderid+'&sn='+sn);
+									setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5'", 1000);
+								}
+							} else {
+								layer.msg(data.message);
+								//setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5'", 1000);
+							}
+						})
+						/*layer.alert(JSON.stringify(data.field), {
+						title: '最终的提交信息'
+					})*/
+					}
+					return false;
+					}
+			});
+
+			//监听提交
+			form.on('submit(submit2)', function(data){
+				console.log('立即购买');
+				data.field.met = met;
+				data.field._coupon_user_id = cu_id;
+				if(carts){
+					data.field.cids = carts;
+				}else{
+					if(met){
+						layer.msg('订单信息错误');
+					}
+				}
+				if(address){
+					data.field.address = address.id;
+				}else{
+					layer.msg('请选择收货地址');
+				}
 				if( (data.field.address && carts ) || (data.field.address && met )){
-					aj.post('index.php?m=hpshop&c=goods_api&a=tryMakeOrder',data.field,function(datacc){
+					aj.post('index.php?m=hpshop&c=goods_api&a=sureMakeOrder',data.field,function(datacc){
 						console.log(datacc.data);
 						if(datacc.status == 'success'){
 							var orderid = [];
@@ -187,33 +254,42 @@
 								orderid = orderid.join(',');
 								sn = sn.join(',');
 								//console.log(orderid,sn);
-								layer.msg('申请成功，请耐心等待审核！');
+								//layer.msg('下单成功，选择支付方式');
 								//console.log('{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+orderid+'&sn='+sn);
-								setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5'", 1000);
+								setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=shop_pay&orderid='+orderid+'&sn='+sn}, 10);
 							}
 						}else{
-							layer.msg(data.message);
+							layer.msg(datacc.message);
 						}
 					})
 					/*layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})*/
+					 title: '最终的提交信息'
+					 })*/
 				}
 				return false;
 			});
 			
-			function  aj_data(m,c){
-				//console.log({met:m,cids:c});
-				aj.post('index.php?m=hpshop&c=goods_api&a=settlement',{met:m,cids:c,uid:1},function(data){
-					if(data.status == 'success'){
-						var data1 = { //数据
-						   data : data.data
-						}
-						//console.log(data.data.uid);
-						if(addressid){
-							//console.log(addressid);
-							//获取选择地址
-							$.ajax({
+
+			
+//			$('#view').on('click','.choose-address',function(){
+//				//console.log('选择地址');
+//				javascript:location.href='{APP_PATH}index.php?m=zyaddr&c=index&a=init&met='+met+'&carts='+carts;
+//
+//			})
+			
+		}();
+	})
+		function  aj_data(m,c, addressid){
+			//console.log({met:m,cids:c});
+			aj.post('index.php?m=hpshop&c=goods_api&a=settlement',{met:m,cids:c,uid:1},function(data){
+				if(data.status == 'success'){
+					var data1 = { //数据
+						data : data.data
+					}
+					//console.log(data.data.uid);
+					if(addressid){
+						//获取选择地址
+						$.ajax({
 							url:'index.php?m=zyaddr&c=zyaddr_api&a=getaddr',
 							type:'POST', //GET
 							async:false,    //或true,是否同步
@@ -226,26 +302,26 @@
 								//console.log(data);
 								if(data.status == 'success'){
 									address = data.data;
-									
+
 									data1.data.address = address;
 									//console.log(data1);
 									var getTpl = form1.innerHTML
-									,view = document.getElementById('view');
+											,view = document.getElementById('view');
 									laytpl(getTpl).render(data1, function(html){
 										view.innerHTML = html;
 										form.render(); //更新全部
 									});
-									
-									
-									
+
+
+
 								}else{
 									layer.msg('该地址不存在，请重新选择');
 								}
 							}
-							});
-						}else{
-							//获取默认地址
-							$.ajax({
+						});
+					}else{
+						//获取默认地址
+						$.ajax({
 							url:'index.php?m=zyaddr&c=zyaddr_api&a=getdefault',
 							type:'POST', //GET
 							async:false,    //或true,是否同步
@@ -261,7 +337,7 @@
 									data1.data.address = address;
 									//console.log(data1);
 									var getTpl = form1.innerHTML
-									,view = document.getElementById('view');
+											,view = document.getElementById('view');
 									laytpl(getTpl).render(data1, function(html){
 										view.innerHTML = html;
 										form.render(); //更新全部
@@ -272,25 +348,145 @@
 							}
 						});
 					}
-					
-					}else{
-						layer.msg(data.message);
-						if(data.code == 0){
-							setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
-						}
+
+					if(!istruename){
+						$.ajax({
+							url:'index.php?m=zymember&c=api&a=is_identification_api',
+							type:'POST', //GET
+							async:false,    //或true,是否同步
+							data:{
+								userid:data.data.uid
+							},
+							timeout:5000,    //超时时间
+							dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+							success:function(data){
+								if(data.status == 'success'){
+									if(data.code==200){
+										istruename = true;
+									}
+								}else{
+									layer.msg(data.message);
+								}
+							}
+						});
 					}
-				})
-				
-			}
-			
-			$('#view').on('click','.choose-address',function(){
-				//console.log('选择地址');
-				javascript:location.href='{APP_PATH}index.php?m=zyaddr&c=index&a=init&met='+met+'&carts='+carts;
-				
+
+					if(met){
+						//获取选择可用优惠券数量
+						var catid=new Array();
+						var total=new Array();
+						var userid=data.data.uid
+						console.log(data.data.shops[0].cartinfo);
+						for(var i in data.data.shops[0].cartinfo){
+							catid[i] =data.data.shops[0].cartinfo[i].catid;
+							total[i] =data.data.shops[0].cartinfo[i].goodsprice*data.data.shops[0].cartinfo[i].cartnum;
+						}
+						console.log(catid+'---'+total);
+
+						$.ajax({
+							url:'index.php?m=zycoupon&c=api&a=order_coupon_count',
+							type:'POST', //GET
+							async:true,    //或true,是否同步
+							data:{
+								_userid:userid,
+								_catid:catid,
+								_total:total,
+							},
+							timeout:5000,    //超时时间
+							dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+							success:function(data){
+								console.log(data.data[0]);
+								if(data.status == 'success'){
+									if(data.code == 200) {
+										coupon_num = data.data[0].num;
+										$("#coupon").prepend('<span style="color: red;font-size: small">' + coupon_num + '个可用优惠券</span>');
+										$("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total);
+									}else {
+										cut_num=data.data[0].minus;
+										cu_id=data.data[0].id;
+										$("#coupon").prepend('<span style="color: red;font-size: small">-￥' + cut_num + '</span>');
+										$("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total+ '&id=' + cu_id);
+									}
+								}else{
+									if(data.code==-200){
+										$("#coupon").prepend('<span style="color: grey;font-size: small">'+data.message+'</span>');
+									}else{
+										layer.msg(data.message);
+									}
+								}
+							}
+						});
+					}
+
+				}else{
+					layer.msg(data.message);
+					if(data.code == 0){
+						setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+					}
+				}
 			})
-			
-		}();
-	})
+
+		}
+	//取消优惠券选择
+	function set_none() { // 声明一个函数
+		$.ajax({
+			url:'index.php?m=zycoupon&c=api&a=api_coupon_select',
+			type:'POST', //GET
+			async:false,    //或true,是否同步
+			data:{
+				_coupon_user_id:0
+			},
+			timeout:5000,    //超时时间
+			dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+			success:function(data){
+				if(data.status == 'success'){
+					var d = s-history.length - 1 ;
+					console.log(d);
+					if(d < -1)
+						window.history.go(d);
+					else
+						window.history.back(-1);
+				}else{
+					if(data.code==-1){
+						layer.msg(data.message);
+						setTimeout("javascript:location.href='{APP_PATH}index.php?m=zymember&c=index&a=login'", 1000);
+					}else {
+						layer.msg(data.message);
+					}
+				}
+			}
+		});
+	}
+		function changeAddr(addressid)
+		{
+			var met = '{$_GET[met]}';
+			var carts = '{$_GET[carts]}';
+			//表单
+			if(met == 1){
+				aj_data(met,'', addressid);
+			}else{
+				if(carts){
+					aj_data('',carts, addressid)
+				}else{
+					layer.msg('操作失败，无结算订单');
+				}
+			}
+		}
+		function clickAddr()
+		{
+			layer.open({
+				type: 2,
+				content: 'index.php?m=zyaddr&c=index&a=shop_payAddr',
+				area: ['100%', '100%'],
+				offset: 't',
+				anim: 2,
+				title: "收获地址", //不显示标题
+				shadeClose: true,
+				isOutAnim: false,
+				scrollbar: false,
+
+			});
+		}
     </script>   
 </body>
 </html>

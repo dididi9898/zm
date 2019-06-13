@@ -23,6 +23,7 @@ class modelList implements model_List
             case "zyfxconfig": return pc_base::load_model("zyfxconfig_model");
             case "zygradetitle": return pc_base::load_model("zyfxgradetitle_model");
             case "zyfxmoney": return pc_base::load_model("zyfxmoney_model");
+            case "member": return pc_base::load_model('member_model');
         }
         // TODO: Implement getModel() method.
     }

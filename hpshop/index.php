@@ -149,7 +149,11 @@ class index{
 	 */
 	public function trysettlement(){
 
-
+		if(!$this->is_identification($this->userid)){
+			$istruename=true;
+		}else{
+			$istruename=false;
+		}
 		include template('hpshop', 'trysettlement');
 	}
 
@@ -200,6 +204,16 @@ class index{
         curl_close( $ch );
         return $response;
     }
+
+	public function is_identification($userid)
+	{
+		$bool=$this->member_db->get_one(array('userid'=>$userid));
+		if($bool['realname']&&$bool['idcard']&&$bool['accountNo']){
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 }
 ?>
