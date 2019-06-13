@@ -78,11 +78,11 @@ class ali {
         require_once 'classes/alipay/wap/config.php';
 
 		$arr=$_GET;
-        //var_dump($_GET);
+//        var_dump($_GET);
         unset($arr["m"]);
         unset($arr["c"]);
         unset($arr["a"]);
-        //unset($arr["XDEBUG_SESSION_START"]);
+//        unset($arr["XDEBUG_SESSION_START"]);
 		$alipaySevice = new AlipayTradeService($config);
 		$result = $alipaySevice->check($arr);
 
@@ -100,15 +100,10 @@ class ali {
 			
 			//——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
 		    //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
-            $order_db = pc_base::load_model('zy_order_model');
-			//商户订单号
-			$out_trade_no = htmlspecialchars($_GET['out_trade_no']);
 
+			//商户订单号
 			//支付宝交易号
-			$trade_no = htmlspecialchars($_GET['trade_no']);
-				
 			//echo "验证成功<br />支付宝交易号：".$trade_no;
-            $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no), array("ordersn"=>$out_trade_no));
             include template('zyorder', 'order_list');
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
 			
@@ -116,7 +111,7 @@ class ali {
 		}
 		else {
 		    //验证失败
-		    echo "验证失败";
+            include template('zyorder', 'order_list');
 		}
 	}
 
@@ -139,8 +134,9 @@ class ali {
 		 * 如果没有收到该页面返回的 success 信息，支付宝会在24小时内按一定的时间策略重发通知
 		 */
 
-		require_once 'classes/alipay/page/config.php';
-		require_once 'classes/alipay/page/pagepay/service/AlipayTradeService.php';
+        require_once 'classes/alipay/wap/wappay/service/AlipayTradeService.php';
+        require_once 'classes/alipay/wap/wappay/buildermodel/AlipayTradeWapPayContentBuilder.php';
+        require_once 'classes/alipay/wap/config.php';
 
 
 		$arr=$_POST;
@@ -148,7 +144,7 @@ class ali {
         unset($arr["m"]);
         unset($arr["c"]);
         unset($arr["a"]);
-        //unset($arr["XDEBUG_SESSION_START"]);
+//        unset($arr["XDEBUG_SESSION_START"]);
 		$alipaySevice = new AlipayTradeService($config);
         $arr['fund_bill_list'] = str_replace('\\','',$arr['fund_bill_list']);
         $alipaySevice->writeLog(var_export($_POST,true));
@@ -192,12 +188,12 @@ class ali {
 				//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
 		    }
 		    else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-				//判断该笔订单是否在商户网站中已经做过处理
-					//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-					//请务必判断请求时的total_amount与通知时获取的total_fee为一致的
-					//如果有做过处理，不执行商户的业务程序			
-				//注意：
-				//付款完成后，支付宝系统发送该交易状态通知
+                $order_db = pc_base::load_model('zy_order_model');
+                $info = $order_db->get_one(array("ordersn"=>$out_trade_no));
+                if($info["try_status"] == 0)
+                    $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no, "status"=>'2'), array("ordersn"=>$out_trade_no));
+                else
+                    $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no, "status"=>'4'), array("ordersn"=>$out_trade_no));
 		    }
 			//——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
             //write_log('支付宝支付异步回调：'.json_encode($_POST));
@@ -533,6 +529,7 @@ class ali {
 			require_once 'classes/alipay/wap/config.php';
 			if (!empty($_POST['WIDout_trade_no']) || !empty($_POST['WIDtrade_no'])){
 
+			    exit(1);
 			    //商户订单号和支付宝交易号不能同时为空。 trade_no、  out_trade_no如果同时存在优先取trade_no
 			    //商户订单号，和支付宝交易号二选一
 			    $out_trade_no = trim($_POST['WIDout_trade_no']);
