@@ -67,6 +67,21 @@ class frontApi
         Res::AssertOk($this->member->addchild($userid, $pid) ,"2");
         returnAjaxData("1", "添加成功");
     }
+    function addchild_yqm()//添加下级队员
+    {
+        $neadArg = ["userid"=>[true, 1], "yqm"=>[true, 0]];
+        $info = checkArg($neadArg,'POST');
+        $userid["userid"] = $info["userid"];
+        $s = $this->member->getMemberInfo($userid);
+        if($s["pid"] != 0)
+            returnAjaxData("-2", "已经存在上级,请勿重复添加");
+        $member = $this->member->getMember($info);
+        $pid["pid"] = $member["userid"];
+        if($userid["userid"] == $pid["pid"])
+            returnAjaxData("-1", "无法添加自己为上级");
+        Res::AssertOk($this->member->addchild($userid, $pid) ,"2");
+        returnAjaxData("1", "添加成功");
+    }
     function awardMoney()//奖励钱****
     {
         $neadArg = ["userid"=>[true, 1], "shopprice"=>[false, 1]];
