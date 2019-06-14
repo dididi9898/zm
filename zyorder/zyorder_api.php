@@ -457,15 +457,16 @@ class zyorder_api{
         {
             list($orderData, $count) = $this->ordergoods_db->moreTableSelect(array("zy_order_goods"=>array("*"),"zy_order_aftersale"=>array("*"),"zy_zy_order"=>array("*") ), array("id", "order_id"), "B2.`afterSaleid`=".$where["afterSaleid"],"", "", 0);
 
-
-            if($orderData["pay_type"] == '1')
+            if($orderData["pay_type"] == '1' && $orderData["number"] != 0)
             {
                 $html = APP_PATH."index.php?m=zypay&c=ali&a=wap_refund";
                 $curl = [
                 'WIDout_trade_no'=>$orderData["ordersn"],
                 'WIDtrade_no'=>$orderData["aliTradeNo"],
-                'WIDrefund_amount'=>0.01,
-//                'WIDrefund_amount'=>$orderData["final_price"],
+                'WIDrefund_amount'=>0.05 ,
+//                'WIDrefund_amount'=>$orderData["goods_price"]*$orderData["number"],
+                "WIDout_request_no"=>time() + mt_rand(100,999),
+
                 ];
                 $sms_verify = _crul_post($html,$curl);
                 $sms_verify=json_decode($sms_verify,true);

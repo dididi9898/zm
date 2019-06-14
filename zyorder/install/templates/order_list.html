@@ -11,7 +11,7 @@
 			-webkit-overflow-scrolling: touch;
 			padding-bottom: 25px;}
 		::-webkit-scrollbar {color:transparent;}
-     
+
 		#pic_list
 		{
 			display:block;
@@ -61,9 +61,9 @@
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1">
                     <li {if $_GET[status]== 1} class="on" {/if}>待付款</li>
                 </a>
-				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">
-					<li {if $_GET[status]== 5} class="on" {/if}>待审核</li>
-				</a>
+				<!--<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">-->
+					<!--<li {if $_GET[status]== 5} class="on" {/if}>待审核</li>-->
+				<!--</a>-->
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=2">
                     <li {if $_GET[status]== 2} class="on" {/if}>待发货</li>
                 </a>
@@ -114,7 +114,7 @@
 								var lis = [];	
 								console.log(page);
 								  //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-								aj.get('index.php?m=zyorder&c=zyorder_api&a=order_list&page='+page,{status:status1},function(data){
+								aj.get('index.php?m=zyorder&c=zyorder_api&a=order_list&page='+page,{status:status1,try_status:0},function(data){
 									console.log(data);
 									if(data.code==207){
 										layer.msg('登录超时');
@@ -187,12 +187,9 @@
 
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button>'+
                                                 '<botton class="layui-btn layui-btn-radius layui-btn-disabled layui-btn-xs"  data-id="'+item.id+'">交易关闭</botton>';
-										}else if(item.status == 7) {
-                                            botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="' + item.id + '">取消订单</botton>' +
-                                                '<botton class="layui-btn layui-btn-radius layui-btn-disabled layui-btn-xs"  data-id="' + item.id + '">审核中</botton>';
-                                        }else if(item.status == 12){
-                                            botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button>'+
-                                                '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs" style="color: red"  data-id="' + item.id + '">审核不通过</botton>';
+										}else if(item.status == 7){
+											botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton>' +
+													'<botton class="layui-btn layui-btn-radius layui-btn-disabled layui-btn-xs"  data-id="'+item.id+'">审核中</botton>';
 										}else if(item.status == 8||item.status == 9 || (item.status == 10 && status == 6)){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看详情</button>';
 //													'<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">售后评价</button>';
