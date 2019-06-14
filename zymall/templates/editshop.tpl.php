@@ -110,7 +110,7 @@ include $this->admin_tpl('header', 'admin');
                             <th width="80"> 商品内容轮播图	  </th>
                             <td><input name="info[pictureurls]" type="hidden" value="1">
                                 <fieldset class="blue pad-10">
-                                    <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张 注：双击地址框查看图片,第二个为图片排序框</div></center>
+                                    <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>50</font> 张 注：双击地址框查看图片,第二个为图片排序框</div></center>
                                     <div id="shopPictureurls" class="picList">
                                         <?php foreach($shopPicture as $key=>$value){  ?>
                                             <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
@@ -124,14 +124,14 @@ include $this->admin_tpl('header', 'admin');
                                 </fieldset>
 
                                 <div class="bk10"></div>
-                                <div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('pictureurls_images', '附件上传','shopPictureurls',change_images,'10,jpg|jpeg|gif|png|bmp,1,,,0','content','6','<?php echo $authkey_1;?>')"/> 选择图片 </a></div>  </td>
+                                <div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('pictureurls_images', '附件上传','shopPictureurls',change_images,'50,jpg|jpeg|gif|png|bmp,1,,,0','content','6','<?php echo $authkey_1;?>')"/> 选择图片 </a></div>  </td>
 
                         </tr>
                         <tr>
                             <th width="80"> 商品内容详细图	  </th>
                             <td><input name="info[pictureurls]" type="hidden" value="1">
                                 <fieldset class="blue pad-10">
-                                    <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>10</font> 张 注：双击地址框查看图片,第二个为图片排序框</div></center>
+                                    <legend>图片列表</legend><center><div class='onShow' id='nameTip'>您最多可以同时上传 <font color='red'>50</font> 张 注：双击地址框查看图片,第二个为图片排序框</div></center>
                                     <div id="pictureurls" class="picList">
                                         <?php foreach($picture as $key=>$value){  ?>
                                             <li id="image<?php $num= mt_rand(1, 10000); echo $num; ?>">
@@ -145,7 +145,7 @@ include $this->admin_tpl('header', 'admin');
                             </fieldset>
 
                             <div class="bk10"></div>
-                            <div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('pictureurls_images', '附件上传','pictureurls',change_images,'10,jpg|jpeg|gif|png|bmp,1,,,0','content','6','<?php echo $authkey_1;?>')"/> 选择图片 </a></div>  </td>
+                            <div class='picBut cu'><a href='javascript:void(0);' onclick="javascript:flashupload('pictureurls_images', '附件上传','pictureurls',change_images,'50,jpg|jpeg|gif|png|bmp,1,,,0','content','6','<?php echo $authkey_1;?>')"/> 选择图片 </a></div>  </td>
 
                         </tr>
                         </tbody>

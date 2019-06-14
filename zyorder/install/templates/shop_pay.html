@@ -5,6 +5,12 @@
     }
 </style>
 <body>
+    <form method="post" action="index.php?m=zypay&c=ali&a=wap_pay" target="_blank">
+        <input type="hidden" name="sn" value="{$_GET[sn]}">
+        <input type="hidden" name="orderid" value="{$_GET[orderid]}">
+        <button type="submit" id="sub"></button>
+    </form>
+
     <div class='personal-head'>
         <a onClick='javascript :history.back(-1);'>
             <div class='fl head-icon'>
@@ -261,8 +267,7 @@
                                                 layer.msg('微信支付待开放');
                                                 console.log('微信支付');
                                             }else if(this.pay_type == '3'){
-                                                layer.msg('支付宝支付待开放');
-                                                console.log('支付宝支付');
+                                                    $("#sub").click();
                                             }
 								}
 							}

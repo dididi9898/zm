@@ -13,7 +13,8 @@ include $this->admin_tpl('header', 'admin');
 
 <form name="myform" id="myform" action="?m=zyorder&c=order&a=addEX" method="post">
 <div class="pad-10">
-<input type="hidden" name="ordersn" value=<?php echo $info["ordersn"] ?> >
+<input type="hidden" name="order_id" value=<?php echo $info["order_id"] ?> >
+<input type="hidden" name="status" value=<?php echo $_GET["status"] ?> >
 <div class="common-form">
 	<div id="div_setting_2" class="contentList">
     

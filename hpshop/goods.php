@@ -197,12 +197,12 @@ class goods extends admin {
 			$watermark = '0';
 			$authkey = upload_key("1,$upload_allowext,$isselectimage,$images_width,$images_height,$watermark");
 
-			$upload_number = '10';
+			$upload_number = '50';
 			$upload_allowext = 'gif|jpg|jpeg|png|bmp'; 
 			$isselectimage = '0';
 			$authkeys = upload_key("$upload_number,$upload_allowext,$isselectimage");
 
-			$allowuploadnum = '10';
+			$allowuploadnum = '50';
 			$alowuploadexts = '';
 			$allowbrowser = 1;
 			$authkeyss = upload_key("$allowuploadnum,$alowuploadexts,$allowbrowser");
@@ -462,12 +462,12 @@ class goods extends admin {
 			$watermark = '0';
 			$authkey = upload_key("1,$upload_allowext,$isselectimage,$images_width,$images_height,$watermark");
 
-			$upload_number = '10';
+			$upload_number = '50';
 			$upload_allowext = 'gif|jpg|jpeg|png|bmp'; 
 			$isselectimage = '0';
 			$authkeys = upload_key("$upload_number,$upload_allowext,$isselectimage");
 
-			$allowuploadnum = '10';
+			$allowuploadnum = '50';
 			$alowuploadexts = '';
 			$allowbrowser = 1;
 			$authkeyss = upload_key("$allowuploadnum,$alowuploadexts,$allowbrowser");

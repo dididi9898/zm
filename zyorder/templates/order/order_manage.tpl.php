@@ -146,14 +146,18 @@
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
                 <?php }elseif($row["status"] == "2"){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('发货')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['order_id']?>', <?php echo $row["status"]?>)"><?php echo L('发货')?></a>
                 <?php }elseif($row["status"] == '3'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('修改快递单')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['order_id']?>', <?php echo $row["status"]?>)"><?php echo L('修改快递单')?></a>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == '4' || $row["status"] == '5'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == '8' || $row["status"] == '10'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
+                    <?php if(!empty($row["deltime"])){?>
+                        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
+                    <?php }else{ ?>
+                        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['order_id']?>', <?php echo $row["status"]?>)"><?php echo L('发货')?></a>
+                    <?php }?>
                     <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="checkAfterSale('<?php echo $row['order_id']?>')"><?php echo L('售后商品')?></a>
                 <?php }?>
                 <a href="javascript:confirmurl('?m=zyorder&c=order&a=dropOrder&order_id=<?php echo $row['order_id']?>', '<?php echo L('确定删除此订单吗，删除后无法恢复。')?>')" class="btn btn-danger btn-sm"><?php echo L('删除')?></a>
@@ -231,11 +235,11 @@ function view_address(id) {
         });
     void(0);
 }
-function deliver(id)
+function deliver(id, status)
 {
     window.top.art.dialog({
         id:"deliver",
-        iframe:"?m=zyorder&c=order&a=addEX&ordersn="+id,
+        iframe:"?m=zyorder&c=order&a=addEX&order_id="+id+ "&status="+status,
             title:'填写快递信息',
             width:'500',
             height:'250',
@@ -272,7 +276,7 @@ function checkAfterSale(id)
 {
     window.top.art.dialog({
             id:"checkAfterSale",
-            iframe:"?m=zyorder&c=order&a=checkAfterSale&XDEBUG_SESSION_START=18804&order_id="+id,
+            iframe:"?m=zyorder&c=order&a=checkAfterSale&order_id="+id,
             title:'售后信息',
             width:'800',
             height:'500',

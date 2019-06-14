@@ -458,6 +458,25 @@ class zyorder_api{
         $info = checkArgBcak($neadArg, "POST");
         $info["isDeal"] = $info["isDeal"] == "同意"? 2:3;
         $where["afterSaleid"] = array_pop($info);
+        if($info["isDeal"] == 2)
+        {
+            list($orderData, $count) = $this->ordergoods_db->moreTableSelect(array("zy_order_goods"=>array("*"),"zy_order_aftersale"=>array("*"),"zy_zy_order"=>array("*") ), array("id", "order_id"), "B2.`afterSaleid`=".$where["afterSaleid"],"", "", 0);
+
+
+            if($orderData["pay_type"] == '1')
+            {
+                $html = APP_PATH."index.php?m=zypay&c=ali&a=wap_refund";
+                $curl = [
+                'WIDout_trade_no'=>$orderData["ordersn"],
+                'WIDtrade_no'=>$orderData["aliTradeNo"],
+                'WIDrefund_amount'=>0.01,
+//                'WIDrefund_amount'=>$orderData["final_price"],
+                ];
+                $sms_verify = _crul_post($html,$curl);
+                $sms_verify=json_decode($sms_verify,true);
+            }
+
+        }
         $this->order_aftersale->update($info, $where);
         returnAjaxData("1", "成功");
     }
