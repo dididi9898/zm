@@ -11,7 +11,7 @@
 			-webkit-overflow-scrolling: touch;
 			padding-bottom: 25px;}
 		::-webkit-scrollbar {color:transparent;}
-     
+
 		#pic_list
 		{
 			display:block;
@@ -190,6 +190,9 @@
 										}else if(item.status == 7){
 											botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton>' +
 													'<botton class="layui-btn layui-btn-radius layui-btn-disabled layui-btn-xs"  data-id="'+item.id+'">审核中</botton>';
+										}else if(item.status == 12){
+											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button>'+
+													'<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs" style="color: red"  data-id="' + item.id + '">审核不通过</botton>';
 										}else if(item.status == 8||item.status == 9 || (item.status == 10 && status == 6)){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看详情</button>';
 //													'<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">售后评价</button>';

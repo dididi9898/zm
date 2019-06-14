@@ -184,12 +184,15 @@ class zymember_api{
 		$res=$this->order_db->spcSql($sql,1,1);
 		if($res) {
 			foreach ($res as $v) {
-				if($v)
-				$data['order_count'][$v['status']] = $v['num'];
-				//$data['order_count'][$v['status']] = $v['num'];
+				if($v['try_status']==0) {
+					$data['order_count'][$v['status']] = $v['num'];
+				}elseif($v['try_status']==1){
+					$data['try_order_count'][$v['status']] = $v['num'];
+				}
 			}
 		}else{
 			$data['order_count']=[];
+			$data['try_order_count']=[];
 		}
 		$result = [
 			'status'=>'success',

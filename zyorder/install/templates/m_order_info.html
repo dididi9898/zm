@@ -226,7 +226,7 @@
 				</a>
 				<template v-if="(status == 2) && try_status == 0">
 					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
-						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请退款</button></div>
+						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id,2)" >申请退款</button></div>
 					</template>
 
 					<div class="clear"></div>
@@ -242,7 +242,7 @@
 				<template v-else-if="(status == 1 && try_status == 1)">
 
 					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
-						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请退货</button></div>
+						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id,1)" >申请退货</button></div>
 					</template>
 
 					<div class="clear"></div>
@@ -323,9 +323,17 @@
 							data: data.data,
 							methods:{
 								//申请售后
-								afterSale(id){
+								afterSale(id,goods_status){
 									console.log(id);
-									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id="+id+"'",0);
+									console.log(goods_status);
+									if(goods_status){
+										if(goods_status==2)
+											setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=tuikuan&order_goods_id=" + id + "&status="+goods_status+"'", 0);
+										else if(goods_status==1)
+											setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=tuihuo&order_goods_id=" + id + "&status="+goods_status+"'", 0);
+									}else {
+										setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id=" + id + "'", 0);
+									}
 								}
 							}
 						});

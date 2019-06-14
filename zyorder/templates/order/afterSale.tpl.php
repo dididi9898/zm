@@ -86,7 +86,7 @@ include $this->admin_tpl('header', 'admin');
                             <td colspan="2"><?php echo $data["reason"]?></td>
 
                             <td >货物状态：</td>
-                            <td colspan="1"><?php if($data["isDeliver"] == '1')echo "未发货"; else  echo"以发货"?> </td>
+                            <td colspan="1"><?php if($data["isDeliver"] == '1')echo "已收到货"; else  echo"未收到货"?> </td>
                         </tr>
                         <!--                    <tr>-->
                         <!--                        <td>商品简述：</td>-->

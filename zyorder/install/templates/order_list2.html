@@ -58,9 +58,6 @@
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2">
                     <li {if !$_GET[status]} class="on" {/if}>全部</li>
                 </a>
-                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=1">
-                    <li {if $_GET[status]== 1} class="on" {/if}>待付款</li>
-                </a>
 				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=5">
 					<li {if $_GET[status]== 5} class="on" {/if}>待审核</li>
 				</a>
@@ -70,6 +67,9 @@
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=3">
                     <li {if $_GET[status]== 3} class="on" {/if}>待收货</li>
                 </a>
+				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=1">
+					<li {if $_GET[status]== 1} class="on" {/if}>待付款</li>
+				</a>
                 <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=4">
                     <li {if $_GET[status]== 4} class="on" {/if}>待评价</li>
                 </a>
@@ -88,7 +88,7 @@
 	<script>
 		$(document).ready(function () {
 			//获取滚动条的位置
-			{if $_GET[status]== 6||$_GET[status]== 3||$_GET[status]== 4}
+			{if $_GET[status]== 6||$_GET[status]== 4||$_GET[status]== 1}
 				$("#pic_list").scrollLeft(1000);
 			{/if}
 		});
@@ -154,7 +154,7 @@
 										var goods_list = '';
 										$.each(item.goodsinfo,function(i,v){
 										    if(v.isDeal == 1)
-                                                goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p><p>退款中</p></div><div class="clear"></div></a></div>';
+                                                goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p><p>等待审核</p></div><div class="clear"></div></a></div>';
 										    else if(v.isDeal == 2)
                                                 goods_list+='<div class="order-content"><a href="index.php?m=hpshop&c=index&a=goodsinfo&id='+v.goods_id+'"><div class="fl order-shop-w1"><img  class="chickgoods_img" src="'+ v.goods_img +'"></div><div class="fl order-shop-w2"><p>'+ v.goods_name +'</p><p class="p2">'+ v.specid_name +'</p></div><div class="order-shop-w3"><p>￥'+ v.goods_price +'</p><p>x'+ v.goods_num +'</p><p style="color: green">同意退款</p></div><div class="clear"></div></a></div>';
 											else if(v.isDeal == 3)
@@ -190,6 +190,9 @@
 										}else if(item.status == 7){
 											botton = '<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs cancel abrogate" data-id="'+item.id+'">取消订单</botton>' +
 													'<botton class="layui-btn layui-btn-radius layui-btn-disabled layui-btn-xs"  data-id="'+item.id+'">审核中</botton>';
+										}else if(item.status == 12){
+											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs delete conceal" data-id="'+item.id+'">删除订单</button>'+
+													'<botton class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs" style="color: red"  data-id="' + item.id + '">审核不通过</botton>';
 										}else if(item.status == 8||item.status == 9 || (item.status == 10 && status == 6)){
 											botton = '<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs logistics check" data-id="'+item.id+'">查看详情</button>';
 //													'<button class="layui-btn layui-btn-radius layui-btn-primary layui-btn-xs evaluate" style="border: 1px solid red;color:red;" data-id="'+item.id+'">售后评价</button>';
