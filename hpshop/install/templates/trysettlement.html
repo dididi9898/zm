@@ -348,6 +348,32 @@
 								}
 							}
 						});
+					}else {
+						$.ajax({
+							url:'index.php?m=zyaddr&c=zyaddr_api&a=getdefault',
+							type:'POST', //GET
+							async:false,    //或true,是否同步
+							data:{
+								userid:data.data.uid
+							},
+							timeout:5000,    //超时时间
+							dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+							success:function(data){
+								if(data.status == 'success'){
+
+									data1.data.address = address;
+									//console.log(data1);
+									var getTpl = form1.innerHTML
+											,view = document.getElementById('view');
+									laytpl(getTpl).render(data1, function(html){
+										view.innerHTML = html;
+										form.render(); //更新全部
+									});
+								}else{
+									layer.msg('默认地址获取失败');
+								}
+							}
+						});
 					}
 
 					if(!istruename){

@@ -335,6 +335,33 @@
                             }
                         });
                     }
+                    else {
+                        $.ajax({
+                            url:'index.php?m=zyaddr&c=zyaddr_api&a=getdefault',
+                            type:'POST', //GET
+                            async:false,    //或true,是否同步
+                            data:{
+                                userid:data.data.uid
+                            },
+                            timeout:5000,    //超时时间
+                            dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                            success:function(data){
+                                if(data.status == 'success'){
+
+                                    data1.data.address = address;
+                                    //console.log(data1);
+                                    var getTpl = form1.innerHTML
+                                            ,view = document.getElementById('view');
+                                    laytpl(getTpl).render(data1, function(html){
+                                        view.innerHTML = html;
+                                        form.render(); //更新全部
+                                    });
+                                }else{
+                                    layer.msg('默认地址获取失败');
+                                }
+                            }
+                        });
+                    }
 
                     if(met){
                         //获取选择可用优惠券数量
@@ -368,6 +395,7 @@
                                         $("#coupon").children("span").remove();
                                         $("#coupon").prepend('<span style="color: red;font-size: small" onclick="click_coupon(\''+addr1+'\')">' + coupon_num + '个可用优惠券</span>');
 //                                        $("#coupon").parent().attr('href', '{APP_PATH}index.php?m=zycoupon&c=index&a=select_coupon&_catid=' + catid + '&_total=' + total);
+
                                     }else {
                                         cut_num=data.data[0].minus;
                                         cu_id=data.data[0].id;
