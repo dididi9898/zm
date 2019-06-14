@@ -285,6 +285,7 @@ function checkAfterSale(id)
 
         function(){
             window.top.art.dialog({id:'checkAfterSale'}).close();
+            window.location.reload();
         });
     void(0);
 }

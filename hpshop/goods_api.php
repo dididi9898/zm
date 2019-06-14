@@ -37,7 +37,7 @@ class goods_api{
 		$this->goodscarts_db = pc_base::load_model('goodscarts_model');
 		//商品搜索历史表
 		$this->goods_sh_db = pc_base::load_model('goods_sh_model');
-
+        $this->member_collect_db = pc_base::load_model('member_collect_model');
 		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
 		$this->zycoupon_user_db = pc_base::load_model('zycoupon_user_model');
 		$this->zycoupon_db = pc_base::load_model('zycoupon_model');
@@ -1907,6 +1907,25 @@ class goods_api{
 			];
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		}
+		$info["collect"] = false;
+        $_userid = param::get_cookie('_userid');
+		if(!empty($_userid))
+        {
+            $collect = $this->member_collect_db->get_one(array('pid'=>$gid,'userid'=>$_userid));
+            if(!empty($collect))
+            {
+                $info["collect"] = true;
+            }
+            $data=[
+                'id'=>$gid,
+                "type"=>2,
+                'userid'=>$_userid
+            ];
+
+            //更新积分 分销佣金
+            $url = APP_PATH."index.php?m=zymember&c=api&a=footprint_add";
+            $return = json_decode(_crul_post($url,$data),true);
+        }
 		$info['album'] = string2array($info['album']);
 		$info['goodsimg_infos'] = string2array($info['goodsimg_infos']);
 		$info['awardNumber'] = string2array($info['awardNumber']);

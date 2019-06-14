@@ -85,8 +85,28 @@
         $where = ' id in ('.$child.') ';
         $data = $goodscat_db->delete($where); 
    }
-    
-     
+
+    function _crul_post($url,$data){
+        //初始化curl
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        //post提交方式
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        //要求结果为字符串且输出到屏幕上
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        //运行curl
+        $result = curl_exec($curl);
+
+        //返回结果
+        if (curl_errno($curl)) {
+            return 'Errno'.curl_error($curl);
+        }
+        curl_close($curl);
+        return $result;
+    }
    /**
     *处理数组信息
     * @param $arr 原数组

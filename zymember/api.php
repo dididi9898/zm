@@ -18,6 +18,7 @@ class api{
 		$this->module_db = pc_base::load_model('module_model');
 		$this->member_collect_db = pc_base::load_model('member_collect_model');
 		$this->member_footprint_db = pc_base::load_model('member_footprint_model');
+        $this->goods_db = pc_base::load_model('goods_model');
 	}
 
 	/**
@@ -2146,7 +2147,7 @@ class api{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 		}
 		//调用商品接口
-		$commodity_info=@file_get_contents("http://pub.300c.cn/index.php?m=hpshop&c=goods_api&a=goodsinfo&gid=".$id);
+		$commodity_info=@file_get_contents(APP_PATH."index.php?m=hpshop&c=goods_api&a=goodsinfo&gid=".$id);
 		$cinfo = json_decode($commodity_info,true);
 		$exist = $this->member_collect_db->get_one(array('pid'=>$id,'userid'=>$userid));
 
@@ -2156,7 +2157,7 @@ class api{
 		if($cinfo['code'] == 1 && $exist_result)
 		{
 			//生成商品链接
-			$url = "http://pub.300c.cn/index.php?m=zymember&c=index&a=collect&gid=".$id;
+			$url = APP_PATH."index.php?m=zymember&c=index&a=collect&gid=".$id;
 		
 			$data = array(
 				'pid'=>$_POST['id'],
@@ -2389,35 +2390,35 @@ class api{
 		//如果当天同样的商品已存在，那么就删除；不然就添加进去。
 
 			//==================	获取其他接口-接口 START
-				$config = $this->zyconfig_db->get_one(array('key'=>'zyshop15'),"url");
-				$curl = [
-					'gid'=>$id,
-				];
-				$shop_data = _crul_get($config['url'],$curl);
-				$shop_data=json_decode($shop_data,true);
-
-				//==================	操作失败-验证 START
-					//gid参数空或异常
-					if ($shop_data['code']==0) {
-						$result = [
-							'status'=>'error',
-							'code'=>-1,
-							'message'=>'gid参数空或异常',
-						];
-					}
-					//商品不存在或已经下架
-					if ($shop_data['code']==-1) {
-						$result = [
-							'status'=>'error',
-							'code'=>-2,
-							'message'=>'商品不存在或已经下架',
-						];
-					}
+//				$config = $this->zyconfig_db->get_one(array('key'=>'zyshop15'),"url");
+//				$curl = [
+//					'gid'=>$id,
+//				];
+//				$shop_data = _crul_get($config['url'],$curl);
+//				$shop_data=json_decode($shop_data,true);
+//
+//				//==================	操作失败-验证 START
+//					//gid参数空或异常
+//					if ($shop_data['code']==0) {
+//						$result = [
+//							'status'=>'error',
+//							'code'=>-1,
+//							'message'=>'gid参数空或异常',
+//						];
+//					}
+//					//商品不存在或已经下架
+//					if ($shop_data['code']==-1) {
+//						$result = [
+//							'status'=>'error',
+//							'code'=>-2,
+//							'message'=>'商品不存在或已经下架',
+//						];
+//					}
 				//==================	操作失败-验证 END
 
 			//==================	获取其他接口-接口 END		
 
-
+			$shop_data =   $this->goods_db->get_one(array("id"=>$id));
 			$time = time();
 			//删除的是当天的
 			$del_where = "pid = ".$id." AND userid=".$userid;
@@ -2425,17 +2426,18 @@ class api{
 			$end_addtime = strtotime(date("Y-m-d 23:59:59"));
 			$del_where .= " and addtime >= '".$start_addtime."'";
 			$del_where .= " and addtime <= '".$end_addtime."'";
-			$this->member_footprint_db->delete($del_where);
 
+			$this->member_footprint_db->delete($del_where);
+        //$this->_return_status(-101);
 			$footprint_time = strtotime(date('y-m-d 01:00:00',$time));
 
 			$arr = [
-				'pid'=>$shop_data['data']['id'],
+				'pid'=>$shop_data['id'],
 				'catid'=>$shop_data['data']['id'],
-				'url'=>APP_PATH."index.php?m=hpshop&c=index&a=goodsinfo&id=".$shop_data['data']['id'],
-				'thumb'=>$shop_data['data']['thumb'],
-				'title'=>$shop_data['data']['goods_name'],
-				'price'=>$shop_data['data']['market_price'],
+				'url'=>APP_PATH."index.php?m=hpshop&c=index&a=goodsinfo&id=".$shop_data['id'],
+				'thumb'=>$shop_data['thumb'],
+				'title'=>$shop_data['goods_name'],
+				'price'=>$shop_data['shop_price'],
 				'userid'=>$memberinfo['userid'],
 				'addtime'=>$time,
 				'footprint_time'=>$footprint_time,
@@ -2443,7 +2445,7 @@ class api{
 
 			$result = $this->member_footprint_db->insert($arr,true);
 
-			$this->_return_status(200);
+			$this->_return_status('200');
 
 		//==================	操作成功-插入数据 END		
 		
