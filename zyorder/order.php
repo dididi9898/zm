@@ -137,9 +137,9 @@ class order extends admin {
     {
         if(isset($_POST["dosubmit"]))
         {
-            $neadArg = ["EXid"=>[true, 1], "logistics_order"=>[true, 0], "ordersn"=>[true,0]];
+            $neadArg = ["EXid"=>[true, 1], "logistics_order"=>[true, 0], "status"=>[false, 1],"order_id"=>[true,0]];
             $info = checkArgBcak($neadArg, "POST");
-            $where["ordersn"] = array_pop($info);
+            $where["order_id"] = array_pop($info);
             $info["status"] = "3";
             $info["deltime"] = time();
             $this->order_db->update($info, $where);
@@ -147,9 +147,16 @@ class order extends admin {
         }
         else
         {
-            $neadArg = ["ordersn"=>[true,0]];
+            $neadArg = ["order_id"=>[true,0]];
             $info = checkArgBcak($neadArg);
             $data = $this->logistics_company_db->select("isShow=1", "*");
+            //$orderData = $this->ordergoods_db->select("order_id=".$info["order_id"], "*");
+            list($orderData, $count) = $this->ordergoods_db->moreTableSelect(array("zy_order_goods"=>array("*"), "zy_order_aftersale"=>array("*")), array("id"), "B1.`order_id`=".$info["order_id"],"", "", 1);
+            foreach ($orderData as $key=>$value)
+            {
+               if($value["isAfterSale"] == "2" && $value["isDeal"] ==1)
+                   showmessage(L('请先处理退款商品'), '', '5', '');
+            }
             include $this->admin_tpl("order/addOrderEx");
         }
     }

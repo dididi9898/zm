@@ -185,9 +185,9 @@ include $this->admin_tpl('header', 'admin');
                     }
 
                 }
-            })
+            });
+            layer.close(index);
         });
-        layer.close(index);
 
     }
 </script>
