@@ -55,25 +55,25 @@
 
 		<div class="order-head"  id="pic_list">
             <ul>
-                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list">
+                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2">
                     <li {if !$_GET[status]} class="on" {/if}>全部</li>
                 </a>
-                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1">
+                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=1">
                     <li {if $_GET[status]== 1} class="on" {/if}>待付款</li>
                 </a>
-				<!--<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">-->
-					<!--<li {if $_GET[status]== 5} class="on" {/if}>待审核</li>-->
-				<!--</a>-->
-                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=2">
+				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=5">
+					<li {if $_GET[status]== 5} class="on" {/if}>待审核</li>
+				</a>
+                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=2">
                     <li {if $_GET[status]== 2} class="on" {/if}>待发货</li>
                 </a>
-                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=3">
+                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=3">
                     <li {if $_GET[status]== 3} class="on" {/if}>待收货</li>
                 </a>
-                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=4">
+                <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=4">
                     <li {if $_GET[status]== 4} class="on" {/if}>待评价</li>
                 </a>
-				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=6">
+				<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=6">
 					<li {if $_GET[status]== 6} class="on" {/if}>退款/售后</li>
 				</a>
 
@@ -114,7 +114,7 @@
 								var lis = [];	
 								console.log(page);
 								  //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-								aj.get('index.php?m=zyorder&c=zyorder_api&a=order_list&page='+page,{status:status1,try_status:0},function(data){
+								aj.get('index.php?m=zyorder&c=zyorder_api&a=order_list&page='+page,{status:status1,try_status:1},function(data){
 									console.log(data);
 									if(data.code==207){
 										layer.msg('登录超时');
@@ -309,7 +309,7 @@
 								if(try_status == "0")
 									setTimeout(function(){javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=evaluate&order_id='+id}, 10);
 								else if(try_status == "1")
-                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=1'", 1000);
+                                    setTimeout("javascript:location.href='{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=1'", 1000);
 								//setTimeout("window.location.reload()", 1000);
 							}else{
 								layer.msg(data.message,{

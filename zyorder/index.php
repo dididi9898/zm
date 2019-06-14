@@ -25,6 +25,9 @@ class index{
 	public function order_list(){
 		include template('zyorder', 'order_list');		
 	}
+	public function order_list2(){
+		include template('zyorder', 'order_list2');
+	}
 
 	public function commint()
     {
