@@ -224,7 +224,14 @@
 				</div>
 				<div class="clear"></div>
 				</a>
-				<template v-if="status==4 || status == 10 ">
+				<template v-if="(status == 2) && try_status == 0">
+					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
+						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请退款</button></div>
+					</template>
+
+					<div class="clear"></div>
+				</template>
+				<template v-else-if="status==4 || status == 10">
 
 					<template v-if="info.isDeal != 1 && info.isDeal != 2 && info.isDeal != 3 ">
 						<div style="display: inline-block;float: right;padding-right: 0.1rem"><button class=" layui-btn layui-btn-radius layui-btn-primary layui-btn-xs aftersale" @click="afterSale(info.id)" >申请售后</button></div>
