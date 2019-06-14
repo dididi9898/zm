@@ -72,7 +72,6 @@
 
 	<div class="sh_info">
 		<div class="sh-div" style="margin: 0; margin-top:0.1rem;">
-
 			<div class="order-content">
 				<a @click="tuikuan1(data[0].id)">
 					<div class="fl sh-item" >
@@ -105,21 +104,21 @@
 				</a>
 			</div>
 			<hr style="margin:0">
-			<div class="order-content">
-				<a @click="huanhuo(data[0].id)">
-					<div class="fl sh-item" >
-						<span class="iconfont icon-huanhuo"></span>
-					</div>
-				<div class="fl sh-item" >
-					<p >换货</p><br>
-					<p style="color: grey;">商品存在质量问题，联系卖家协商换货</p>
-				</div>
-				<div class="fr sh-item2" >
-					<span class="iconfont icon-icon-test3"></span>
-				</div>
-				<div class="clear"></div>
-				</a>
-			</div>
+			<!--<div class="order-content">-->
+				<!--<a @click="huanhuo(data[0].id)">-->
+					<!--<div class="fl sh-item" >-->
+						<!--<span class="iconfont icon-huanhuo"></span>-->
+					<!--</div>-->
+				<!--<div class="fl sh-item" >-->
+					<!--<p >换货</p><br>-->
+					<!--<p style="color: grey;">商品存在质量问题，联系卖家协商换货</p>-->
+				<!--</div>-->
+				<!--<div class="fr sh-item2" >-->
+					<!--<span class="iconfont icon-icon-test3"></span>-->
+				<!--</div>-->
+				<!--<div class="clear"></div>-->
+				<!--</a>-->
+			<!--</div>-->
 		</div>
 	</div>
     {template "hpshop","footer"}
@@ -135,6 +134,7 @@
 			if(id){
 				aj.post('index.php?m=zyorder&c=zyorder_api&a=one_goods_info',{order_goods_id:id},function(data){
 					if(data.status =='success'){
+						console.log(data);
 						var order_info = new Vue({
 							el: '.order_info',
 							data: data,
@@ -153,10 +153,7 @@
 								},
 								tuikuan2(id){
 									console.log(id);
-								},
-								huanhuo(id){
-									console.log(id);
-//									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=aftersale&order_goods_id="+id+"'",0);
+									setTimeout("javascript:location.href='index.php?m=zyorder&c=index&a=tuikuan&order_goods_id="+id+"&status=1'",0);
 								}
 							}
 						});

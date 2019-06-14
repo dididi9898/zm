@@ -84,17 +84,17 @@
 </style>
 <body style="background: #f1f1f1">
     <!--head_food-->
-    <div class='per-head'>
-        <div class='per-head-left'>
-            <a href='javascript:history.go(-1);'>
-                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
-            </a>
-        </div>
-        <a class='per-head-hd'>选择优惠券</a>
-        <div class='per-head-right'>
-        </div>
-        <div class='clear'></div>
-    </div>
+    <!--<div class='per-head'>-->
+        <!--<div class='per-head-left'>-->
+            <!--<a href='javascript:history.go(-1);'>-->
+                <!--<img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>-->
+            <!--</a>-->
+        <!--</div>-->
+        <!--<a class='per-head-hd'>选择优惠券</a>-->
+        <!--<div class='per-head-right'>-->
+        <!--</div>-->
+        <!--<div class='clear'></div>-->
+    <!--</div>-->
     <div  id="ky_coupon">
         <div class="bt10"></div>
         <div class="lh1 pl1 pr1 bg-fff md-fs">
@@ -214,7 +214,11 @@
                                                 layer.msg(data.message);
                                             }
                                         }else{
-                                                setTimeout("javascript:history.go(-1)", 0);
+                                                //setTimeout("javascript:history.go(-1);", 0);
+                                                //setTimeout("javascript:window.location.replace(document.referrer);", 0);
+                                                window.parent.changeAddr("ss");
+                                                var index = parent.layer.getFrameIndex(window.name);
+                                                parent.layer.close(index);
                                         }
                                     })
                                 }

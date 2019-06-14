@@ -211,7 +211,7 @@
 			<hr style="margin:0">
 			<div class="goods-content" @click="tuikuan()">
 				<div class="fl" >
-					<p >退款原因</p>
+					<p >退货原因</p>
 				</div>
 				<div class="fr" >
 					<span class="reason">请选择</span>
@@ -222,28 +222,7 @@
 			<hr style="margin:0">
 			<div class="goods-content">
 				<div class="fl" >
-					<p >退款金额</p>
-				</div>
-				<div class="fl" >
-					<span style="color: red">￥</span>
-					<span id="return_price"  style="color: red" >{{s_price}}</span>
-					<!--<input id="return_price" type="text" style="color: red" placeholder="填写金额" :value="data[0].goods_price*data[0].goods_num">-->
-				</div>
-				<div class="fr" >
-					<div class="goods-tcn-num">
-						<div class="goods-tcn-num-add">
-							<input type="hidden" :name="changeName('shop', order_goods_id, 'number')" :value="s_shuliang">
-							<span class="jian" v-on:click="jiannum">-</span>
-							<span style="background: #fff;font-size: 0.14rem">{{s_shuliang}}</span>
-							<span class="jia" v-on:click="jianum" >+</span>
-						</div>
-						<div class="clear"></div>
-					</div>
-				</div>
-				<div style="height: 0.3rem"></div>
-				<div class="clear"></div>
-				<div class="fl" >
-					<p >退款说明</p>
+					<p >退货说明</p>
 				</div>
 				<div class="fl	" >
 					<input type="text" :name="changeName('shop', order_goods_id, 'remark')" placeholder="选填">
@@ -335,7 +314,7 @@
 				parent.$('.status').css("color","black");
 				parent.$('.status').parent().append('<input type="hidden" name="shop['+id+'][goodsType]" value="已收到货">');
 				$('.status').parent().parent().hide();
-			}else if(status==2){
+			}if(status==2){
 				parent.$('.status').text('未收到货');
 				parent.$('.status').css("color","black");
 				parent.$('.status').parent().append('<input type="hidden" name="shop['+id+'][goodsType]" value="未收到货">');
@@ -394,7 +373,7 @@
 										if(goods_status=='已收到货'){
 
 											$('.select2').children().empty();
-											var content='<h5 style="text-align: center">退款原因</h5>';
+											var content='<h5 style="text-align: center">退货原因</h5>';
 											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">效果不好/不想要/不喜欢</span><input type="radio" name="tuikuan_reason" value="效果不好/不想要/不喜欢" title="效果不好/不想要/不喜欢" > </div> </div> <hr>';
 											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">材质不符</span><input type="radio" name="tuikuan_reason" value="材质不符" title="材质不符" > </div> </div> <hr>';
 											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">尺寸问题</span><input type="radio" name="tuikuan_reason" value="尺寸问题" title="尺寸问题" > </div> </div> <hr>';
@@ -404,7 +383,7 @@
 											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">配件破损</span><input type="radio" name="tuikuan_reason" value="配件破损" title="配件破损" > </div> </div> <hr>';
 											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">卖家发错货</span><input type="radio" name="tuikuan_reason" value="卖家发错货" title="卖家发错货" > </div> </div> <hr>';
 											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">假冒品牌</span><input type="radio" name="tuikuan_reason" value="假冒品牌" title="假冒品牌" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">其他</span><span class="none">请在说明处填写详细内容</span><input type="radio" name="tuikuan_reason" value="其他" title="其他" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">其他</span><input type="radio" name="tuikuan_reason" value="其他" title="其他" > </div> </div> <hr>';
 											content+='<div class="layui-form-item"> <div class="input-block fr">  </div> </div>';
 											$('.select2').children().append(content);
 											layer.open({
@@ -426,13 +405,13 @@
 											});
 										}else if(goods_status=='未收到货'){
 											$('.select2').children().empty();
-											var content='<h5 style="text-align: center">退款原因</h5>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">多拍/拍错/不想要</span><span class="none"></span><input type="radio" name="tuikuan_reason" value="多拍/拍错/不想要" title="多拍/拍错/不想要" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递一直未到</span><span class="none"></span><input type="radio" name="tuikuan_reason" value="快递一直未到" title="快递一直未到" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">未按约定时间发货</span><span class="none"></span><input type="radio" name="tuikuan_reason" value="未按约定时间发货" title="未按约定时间发货" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递无跟踪记录</span><span class="none"></span><input type="radio" name="tuikuan_reason" value="快递无跟踪记录" title="快递无跟踪记录" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">空包裹/少货</span><span class="none"></span><input type="radio" name="tuikuan_reason" value="空包裹/少货" title="空包裹/少货" > </div> </div> <hr>';
-											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">其他</span><span class="none">请在说明处填写详细内容</span><input type="radio" name="tuikuan_reason" value="其他" title="其他" > </div> </div><hr> ';
+											var content='<h5 style="text-align: center">退款货因</h5>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">多拍/拍错/不想要</span><span class="none">111</span></span><input type="radio" name="tuikuan_reason" value="多拍/拍错/不想要" title="多拍/拍错/不想要" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递一直未到</span><span class="none">222</span><input type="radio" name="tuikuan_reason" value="快递一直未到" title="快递一直未到" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">未按约定时间发货</span><span class="none">333</span><input type="radio" name="tuikuan_reason" value="未按约定时间发货" title="未按约定时间发货" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">快递无跟踪记录</span><span class="none">444</span><input type="radio" name="tuikuan_reason" value="快递无跟踪记录" title="快递无跟踪记录" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">空包裹/少货</span><span class="none">555</span><input type="radio" name="tuikuan_reason" value="空包裹/少货" title="空包裹/少货" > </div> </div> <hr>';
+											content+='<div class="layui-form-item"> <div class="input-block fr"> <span class="fl">其他</span><span class="none">666</span><input type="radio" name="tuikuan_reason" value="其他" title="其他" > </div> </div><hr> ';
 											content+='<div class="layui-form-item"> <div class="input-block fr">  </div> </div>';
 											$('.select2').children().append(content);
 											layer.open({
@@ -591,7 +570,7 @@
 
 			$("#dosubmit").click(function(){
 				if (($("input[name$='shop["+id+"][reason]']").val()==null)&&($("input[name$='shop["+id+"][reason]']").val()==null)){
-					layer.msg ("填写不完整！");
+					layer.msg ("请选择退货原因！");
 				}else
 				{
 					layer.msg  ("已提交申请");

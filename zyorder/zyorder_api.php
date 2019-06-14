@@ -334,6 +334,11 @@ class zyorder_api{
 		}else{
 			$where.= ' AND status<>8 AND status<>9 AND 1';
 		}
+		if($_GET['try_status']==0){
+			$where.= ' AND try_status=0';
+		}else if($_GET['try_status']==1){
+			$where.= ' AND try_status=1';
+		}
 
 		$sql = 'SELECT storeid from phpcms_zy_order WHERE userid = '.$_userid.' GROUP BY storeid';
 		$sqlrs = $this->order_db->query($sql);

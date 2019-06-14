@@ -180,14 +180,19 @@ class zymember_api{
 		//客服信息
 		$data['unlook']=$this->online_talk_record_db->count(array('to_user'=>$userid,'records_id'=>$userid,'status'=>0));
 		//订单红点
-		$sql='SELECT COUNT(*) AS num,`status` FROM zy_zy_order WHERE `userid`='.$userid.' GROUP BY `status` ';
+		$sql='SELECT COUNT(*) AS num,try_status,`status` FROM zy_zy_order WHERE `userid`='.$userid.' GROUP BY try_status,`status` ';
 		$res=$this->order_db->spcSql($sql,1,1);
 		if($res) {
 			foreach ($res as $v) {
-				$data['order_count'][$v['status']] = $v['num'];
+				if($v['try_status']==0) {
+					$data['order_count'][$v['status']] = $v['num'];
+				}elseif($v['try_status']==1){
+					$data['try_order_count'][$v['status']] = $v['num'];
+				}
 			}
 		}else{
 			$data['order_count']=[];
+			$data['try_order_count']=[];
 		}
 		$result = [
 			'status'=>'success',

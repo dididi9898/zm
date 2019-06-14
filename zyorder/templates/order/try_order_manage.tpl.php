@@ -149,9 +149,9 @@
                 <?php if($row["status"] == "1"){?>
                     <span class="btn btn-info btn-sm"><?php echo L('未付款')?></span>
                 <?php }elseif($row["status"] == "11"){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('发货')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['order_id']?>')"><?php echo L('发货')?></a>
                 <?php }elseif($row["status"] == '3'){?>
-                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['ordersn']?>')"><?php echo L('修改快递单')?></a>
+                    <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="deliver('<?php echo $row['order_id']?>')"><?php echo L('修改快递单')?></a>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
                 <?php }elseif($row["status"] == '4' || $row["status"] == '5'){?>
                     <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="check('<?php echo $row['ordersn']?>')"><?php echo L('快递详情')?></a>
@@ -251,7 +251,7 @@ function deliver(id)
 {
     window.top.art.dialog({
         id:"deliver",
-        iframe:"?m=zyorder&c=order&a=addEX&ordersn="+id,
+        iframe:"?m=zyorder&c=order&a=addEX&order_id="+id,
             title:'填写快递信息',
             width:'500',
             height:'250',
@@ -310,7 +310,7 @@ function checkAfterSale(id)
 {
     window.top.art.dialog({
             id:"checkAfterSale",
-            iframe:"?m=zyorder&c=order&a=checkAfterSale&XDEBUG_SESSION_START=18804&order_id="+id,
+            iframe:"?m=zyorder&c=order&a=checkAfterSale&order_id="+id,
             title:'售后信息',
             width:'800',
             height:'500',

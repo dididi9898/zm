@@ -165,13 +165,62 @@
                                 <p>退款/售后</p>
                             </a>
                         </li>
+                        <!--<li class="p-r">-->
+                            <!--<a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">-->
+                                <!--<div class="iconfont icon-attention"><span class="huizhang p-a" v-if="order_count[7]!=null">{{order_count[7]}}</span></div>-->
+
+                                <!--<p>待审核</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <div class="clear"></div>
+                    </ul>
+                </div>
+                <div class="bt10"></div>
+            </div>
+            <div class="bt10"></div>
+            <div class="user-list">
+                <div class="bt10"></div>
+                <div class="div3">
+                    <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list"><h3>试穿订单</h3></a>
+                    <ul>
                         <li class="p-r">
-                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list&status=5">
-                                <div class="iconfont icon-attention"><span class="huizhang p-a" v-if="order_count[7]!=null">{{order_count[7]}}</span></div>
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=5">
+                                <div class="iconfont icon-attention"><span class="huizhang p-a" v-if="try_order_count[7]!=null">{{try_order_count[7]}}</span></div>
 
                                 <p>待审核</p>
                             </a>
                         </li>
+                        <li class="p-r">
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=2">
+                                <div class="iconfont icon-send"><span class="huizhang p-a" v-if="try_order_count[11]!=null">{{try_order_count[11]}}</span></div>
+                                <p>待发货</p>
+                            </a>
+                        </li>
+                        <li class="p-r">
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=3">
+                                <div class="iconfont icon-deliver"><span class="huizhang p-a" v-if="try_order_count[3]!=null">{{try_order_count[3]}}</span></div>
+                                <p>待收货</p>
+                            </a>
+                        </li>
+                        <li class="p-r">
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=1">
+                                <div class="iconfont icon-pay"> <span class="huizhang p-a" v-if="try_order_count[1]!=null">{{try_order_count[1]}}</span></div>
+                                <p>待付款</p>
+                            </a>
+                        </li>
+                        <li class="p-r">
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=4">
+                                <div class="iconfont icon-message"><span class="huizhang p-a" v-if="try_order_count[4]!=null">{{try_order_count[4]}}</span></div>
+                                <p>评价</p>
+                            </a>
+                        </li>
+                        <li class="p-r">
+                            <a href="{APP_PATH}index.php?m=zyorder&c=index&a=order_list2&status=6">
+                                <div class="iconfont icon-transaction"><span class="huizhang p-a" v-if="try_order_count[8]!=null">{{try_order_count[8]}}</span></div>
+                                <p>退款/售后</p>
+                            </a>
+                        </li>
+
                         <div class="clear"></div>
                     </ul>
                 </div>
@@ -279,6 +328,34 @@
                     } else {
                         if (data.data.order_count[10] != null) {
                             data.data.order_count[4] = data.data.order_count[10];
+                        }
+                    }
+                    if (data.data.try_order_count[7] != null) {
+                        if (data.data.try_order_count[12] != null) {
+                            data.data.try_order_count[7] = Number(data.data.try_order_count[7]) + Number(data.data.try_order_count[12]);
+                        }
+                    } else {
+                        if (data.data.try_order_count[12] != null) {
+                            data.data.try_order_count[7] = data.data.try_order_count[12];
+                        }
+                    }
+                    if (data.data.order_count[8] != null) {
+                        if (data.data.order_count[9] != null) {
+                            data.data.order_count[8] = Number(data.data.order_count[8]) + Number(data.data.order_count[9]);
+                        }
+                        if (data.data.order_count[10] != null) {
+                            data.data.order_count[8] = Number(data.data.order_count[8]) + Number(data.data.order_count[10]);
+                        }
+                    } else {
+                        if (data.data.order_count[9] != null) {
+                            data.data.order_count[8] = data.data.order_count[9];
+                            if (data.data.order_count[10] != null) {
+                                data.data.order_count[8] = Number(data.data.order_count[8]) + Number(data.data.order_count[10]);
+                            }
+                        }else {
+                            if (data.data.order_count[10] != null) {
+                                data.data.order_count[8] = data.data.order_count[10];
+                            }
                         }
                     }
                     var info = new Vue({
