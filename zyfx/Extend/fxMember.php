@@ -92,7 +92,7 @@ class Fx
             if($pidData == null)
                 Error("没有用户ID为".$pid["pid"]."的信息");
             if($userData["pid"] != 0)
-                Error("已经存在上一级");
+                Error("已经存在上级");
             $this->zyfxmember->update($pid, $_userid);
             $info = $this->fxBeDec->returnAddChirdSQL(array("childID"=>$_userid["userid"]), "C=", ",");
             $this->zyfxmember->update($info, array("userid"=>$pid["pid"]));
@@ -178,6 +178,11 @@ class Fx
     public function updateLoginTime($info)
     {
         $this->zyfxmember->update(array("updateTime"=>time()), $info);
+    }
+    public function getMember($info)
+    {
+        $member = modelFactory::Create()->getModel("member");
+        return $member->get_one(array('username'=>$info['yqm']), "userid");
     }
 
     //****************************************************************************************************************

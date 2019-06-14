@@ -30,7 +30,7 @@
             <div class="bg-fff radius1 login-box ml2 mr2">
                 <div class="h2"></div>
                 <div style="text-align: center">
-                    {if !$bool} <span>身份证信息认证</span>{else}<span>身份证认证已通过</span><br><span style="color:#0E774A;">3 秒后自动跳转</span>{/if}
+                    {if !$bool} <span>实名信息认证</span>{else}<span>实名认证已通过</span><br><span style="color:#0E774A;">3 秒后自动跳转</span>{/if}
                 </div>
                 {if !$bool}
                 <div class="pl2 pr2">
@@ -39,6 +39,16 @@
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <form class="layui-form" action="">
+                                    <div class="layui-form-item p-r">
+                                        <span class="p-a br1-e6e6e6"><i class="layui-icon layui-icon-cellphone"></i></span>
+                                        <input type="text" name="mobile" lay-verify="required" autocomplete="off" placeholder="请输入手机号" class="layui-input  input-pl36 ">
+                                    </div>
+                                    <div class="h1"></div>
+                                    <div class="layui-form-item p-r">
+                                        <span class="p-a br1-e6e6e6"><i class="layui-icon layui-icon-fonts-strong"></i></span>
+                                        <input type="text" name="accountNo" lay-verify="required" autocomplete="off" placeholder="请输入银行卡号" class="layui-input  input-pl36 ">
+                                    </div>
+                                    <div class="h1"></div>
                                     <div class="layui-form-item p-r">
                                         <span class="p-a br1-e6e6e6"><i class="layui-icon layui-icon-username"></i></span>
                                         <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input  input-pl36 ">
@@ -84,14 +94,17 @@
 
             //监听提交
             form.on('submit(submit01)', function (data) {
-                if (data.field.name && data.field.idCard) {
+                if (data.field.name && data.field.idCard && data.field.mobile && data.field.accountNo) {
                     aj.post('index.php?m=zymember&c=api&a=idcard_approve', data.field, function (data) {
                         console.log(data);
                         if (data.status == 'error') {
                             layer.msg(data.message);
+                            if(data.code==-1){
+                                setTimeout("javascript:location.href='index.php?m=zymember&c=index&a=login'", 1000);
+                            }
                         } else {
                             layer.msg(data.message);
-                            setTimeout("javascript:location.href='index.php'", 1000);
+                            setTimeout("javascript :history.back(-1)", 1000);
                         }
                     });
                     console.log(data.field);

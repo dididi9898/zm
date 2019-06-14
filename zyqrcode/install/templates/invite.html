@@ -1,0 +1,76 @@
+﻿<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>推广二维码</title>
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/public/layui-v2.4.5/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_uc1z8j3m7d.css">
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
+</head>
+<style>
+    .btn{
+        border-radius: 0.1rem;
+        border-style: none;
+        line-height: 0.65rem;
+        background-color: #0E774A;
+        color: #fff;
+        padding: 0 0.248rem;
+    }
+    .ewm-kj{
+
+    }
+</style>
+<body style="background-color: #f1f1f1" >
+   
+    <div class='per-head'>
+        <div class='per-head-left'>
+            <a onclick="javascript:history.go(-1)" >
+                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
+            </a>
+        </div>
+        <a class='per-head-hd'>输入邀请码</a>
+        <div class='per-head-right'>
+        </div>
+        <div class='clear'></div>
+    </div>
+    <!-- 银行卡 -->
+    <div id="info">
+	<div class="bb2 ewm-kj" style="margin-top: 0.5rem">
+        <h1 style="text-align: center;font-size: 0.6rem;padding: 0.2rem">输入邀请码</h1>
+        <div style="line-height: 0.2rem;color: #CCCCCC;padding: 0.2rem;font-size: 0.3rem">只能输入一次邀请码，输入邀请码后可以成为团员</div>
+        <div>
+                <input type="text" name="yqm" required  lay-verify="required" placeholder="请输入邀请码" autocomplete="off" class="layui-input" style="margin-bottom: 1rem;margin-top: 0.2rem">
+                <button class="layui-btn layui-btn-fluid" onclick="invite()">确定</button>
+        </div>
+    </div>
+    </div>
+    {template "zymember","footer"}
+    <script>
+        var userid='{$_GET[uid]}';
+        function invite() {
+            var yqm=$("input[name$='yqm']").val();
+            if(yqm) {
+                console.log(yqm);
+                aj.post('index.php?m=zyfx&c=frontApi&a=addchild_yqm', {'userid': userid, 'yqm': yqm}, function (data) {
+                    console.log(data);
+                    if (data.status == 'error') {
+                        layer.msg(data.message);
+                    } else {
+                        layer.msg(data.message);
+                        setTimeout("javascript:history.go(-1)", 1000);
+                    }
+                });
+            }else {
+                layer.msg('邀请码不为空');
+            }
+        };
+
+    </script>
+
+</body>
+</html>

@@ -29,10 +29,10 @@ class foreground {
 		if(ROUTE_M =='zymember' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register','psd_back'))) {
 			if ($phpcms_auth) {
 
-				if($this->is_identification($phpcms_userid))
-					showmessage('登录成功', 'index.php?m=zymember&c=index');
-				else
-					showmessage('登录成功', 'index.php?m=zymember&c=index&a=idCard_confirm');
+				//if($this->is_identification($phpcms_userid))
+					showmessage('登录成功', 'index.php');
+				//else
+					//showmessage('登录成功', 'index.php?m=zymember&c=index&a=idCard_confirm');
 			} else {
 				return true;
 			}

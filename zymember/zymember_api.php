@@ -172,14 +172,22 @@ class zymember_api{
 		$data['coupon_count'] = $this->coupon_count($userid);
 		//未提现佣金
 		$zyfxmoney = $this->zyfxmoney_db->get_one(['userid'=>$userid]);
-		$data['WTXmoney']= $zyfxmoney['WTXmoney'];
+		if($zyfxmoney) {
+			$data['WTXmoney'] = $zyfxmoney['WTXmoney'];
+		}else{
+			$data['WTXmoney'] = 0.00;
+		}
 		//客服信息
 		$data['unlook']=$this->online_talk_record_db->count(array('to_user'=>$userid,'records_id'=>$userid,'status'=>0));
 		//订单红点
 		$sql='SELECT COUNT(*) AS num,`status` FROM zy_zy_order WHERE `userid`='.$userid.' GROUP BY `status` ';
 		$res=$this->order_db->spcSql($sql,1,1);
-		foreach($res as $v){
-			$data['order_count'][$v['status']]=$v['num'];
+		if($res) {
+			foreach ($res as $v) {
+				$data['order_count'][$v['status']] = $v['num'];
+			}
+		}else{
+			$data['order_count']=[];
 		}
 		$result = [
 			'status'=>'success',
