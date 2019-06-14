@@ -464,7 +464,8 @@ class zyorder_api{
                 $curl = [
                 'WIDout_trade_no'=>$orderData["ordersn"],
                 'WIDtrade_no'=>$orderData["aliTradeNo"],
-                'WIDrefund_amount'=>$orderData["final_price"],
+                'WIDrefund_amount'=>0.01,
+//                'WIDrefund_amount'=>$orderData["final_price"],
                 ];
                 $sms_verify = _crul_post($html,$curl);
                 $sms_verify=json_decode($sms_verify,true);
