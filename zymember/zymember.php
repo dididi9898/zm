@@ -285,7 +285,7 @@ class zymember extends admin {
             $userinfo["realname"] =  $_POST['info']['realname'];
             $userinfo["idcard"] = $_POST['info']['idcard'];
             $userinfo["amount"] = $_POST['info']['amount'];
-			
+			$userinfo["nickname"] = isset($_POST["info"]["nickname"])?$_POST["info"]["nickname"]:"未命名";
 			//传入phpsso为明文密码，加密后存入phpcms_v9
 			$password = $userinfo['password'];
 			$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);

@@ -86,8 +86,12 @@ include $this->admin_tpl('header', 'admin');
         <legend>基本信息</legend>
 		<table width="100%" class="table_form">
 			<tbody>
+                <tr>
+                    <th>用户名</th>
+                    <td><input type="text" name="info[nickname]" id="nickname" value="<?php echo $member['nickname'] ?>" class="input-text"></td>
+                </tr>
 				<tr> 
-					<th width="120">账号名称</th>
+					<th width="120">邀请码</th>
 					<td><?php echo $member['username']?><?php if($member['islock']) {?><img title="锁定" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?><?php if($member['vip']) {?><img title="VIP会员" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?></td> 
 				</tr>
                 <tr>
@@ -109,10 +113,6 @@ include $this->admin_tpl('header', 'admin');
 				<tr>
 					<th>确认密码</th>  
 					<td><input type="password" name="info[pwdconfirm]" id="pwdconfirm" class="input-text"></td>
-				</tr>
-                <tr> 
-					<th>昵称</th>
-					<td><input type="text" name="info[nickname]" id="nickname" value="<?php echo $member['nickname'] ?>" class="input-text"></td> 
 				</tr>
 				<tr>
 					<th>邮箱</th>  
