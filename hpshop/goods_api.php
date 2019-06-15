@@ -315,6 +315,20 @@ class goods_api{
 		}
 
 		$where = ' isok = 1 and on_sale = 1 ';
+		if(!empty($_POST['catid'])){
+			$rid = $_POST['catid'];
+			$did = childrenids($rid);
+			$did = array_unique($did);
+
+			$did = implode(',', $did);
+			if(empty($did)){
+				$did = $rid;
+			}else{
+				$did .= ','.$rid;
+			}
+
+			$where .=' and catid in ('.$did.') ';
+		}
 		if (!empty($_POST['sercon'])) {
 			$where .= " and goods_name like '%".$_POST['sercon']."%' ";
 			if ( !empty($uid) ) {
