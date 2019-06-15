@@ -93,10 +93,10 @@ $(function(){
 			<td width="80">用户名</td> 
 			<td><input type="text" name="info[username]"  class="input-text" id="username"></input></td>
 		</tr> -->
-		<tr>
-			<td width="80">用户名</td> 
-			<td>随机生成</td>
-		</tr>
+        <tr>
+            <td>昵称</td>
+            <td><input type="text" name="info[nickname]" id="nickname" value="" class="input-text"></input></td>
+        </tr>
 		<tr>
 			<td>密码</td> 
 			<td><input type="password" name="info[password]" class="input-text" id="password" value=""></input></td>
@@ -105,10 +105,7 @@ $(function(){
 			<td>确认密码</td> 
 			<td><input type="password" name="info[pwdconfirm]" class="input-text" id="pwdconfirm" value=""></input></td>
 		</tr>
-		<tr>
-			<td>昵称</td> 
-			<td><input type="text" name="info[nickname]" id="nickname" value="" class="input-text"></input></td>
-		</tr>
+
 		<tr>
 			<td>邮箱</td>
 			<td>

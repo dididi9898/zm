@@ -62,11 +62,11 @@ include $this->admin_tpl('header', 'admin');
 <div class="explain-col search-form">
 <select name="type" >
     <option value="">请选择</option>
-    <option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>>用户名</option>
+    <option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>>邀请码</option>
     <option value="2" <?php if ($_GET['type']==2) {?>selected<?php }?>>用户ID</option>
     <!-- <option value="3" <?php if ($_GET['type']==3) {?>selected<?php }?>>姓名</option> -->
     <option value="4" <?php if ($_GET['type']==4) {?>selected<?php }?>>手机号</option>
-    <option value="5" <?php if ($_GET['type']==5) {?>selected<?php }?>>昵称</option>
+    <option value="5" <?php if ($_GET['type']==5) {?>selected<?php }?>>用户名</option>
 </select>
 <input type="text" value="<?php echo $_GET['q']?>" class="input-text" name="q">
 
@@ -101,7 +101,7 @@ include $this->admin_tpl('header', 'admin');
 			<th width="35" align="center"><input type="checkbox" value="" id="check_box" onclick="selectall('id[]');"></th>
             <th align="center"><strong>用户ID</strong></th>
             <th align="center"><strong>用户名</strong></th>
-            <th align="center"><strong>昵称</strong></th>
+            <th align="center"><strong>邀请码</strong></th>
             <th align="center"><strong>手机号码</strong></th>
             <th align="center"><strong>邮箱</strong></th>
             <th align="center"><strong>会员组</strong></th>
@@ -122,18 +122,17 @@ if(is_array($info)){
 	<tr <?php if($info['audit']==4){?> style="text-decoration: line-through; color: #999;"<?php } ?>>
 		<td align="center" width="35"><input type="checkbox" name="id[]" value="<?php echo $info['userid']?>"></td>
         <td align="center"><?php echo $info['userid']?></td>
+        <td align="center"> <?php if(empty($info['headimgurl'])){?>
+                <img src="statics/images/member/nophoto.gif" height="18" width="18" onerror="this.src='statics/images/member/nophoto.gif'">
+            <?php }else{ ?>
+                <img src="<?php echo $info['headimgurl']?>" height="18" width="18">
+            <?php }?><?php echo $info['nickname']?> <a href="javascript:void(0);" onclick="view('<?php echo $info['userid']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
+
         <td align="center">
-        <?php if(empty($info['headimgurl'])){?>
-            <img src="statics/images/member/nophoto.gif" height="18" width="18" onerror="this.src='statics/images/member/nophoto.gif'">
-        <?php }else{ ?>
-        	<img src="<?php echo $info['headimgurl']?>" height="18" width="18">
-        <?php }?>
         <?php if($info['vip']) {?><img title="VIP会员" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?>
         <?php echo $info['username']?>
-        <a href="javascript:void(0);" onclick="view('<?php echo $info['userid']?>')"><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a>
-
         </td>
-        <td align="center"><?php echo $info['nickname']?></td>
+
         <td align="center"><?php echo $info['mobile']?></td>
         <td align="center"><?php echo $info['email']?></td>
         <td align="center">

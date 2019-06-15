@@ -20,8 +20,12 @@ include $this->admin_tpl('header', 'admin');
 					<th width="120">用户ID</th>
 					<td><?php echo $member['userid']?></td>
 				</tr>
+                <tr>
+                    <th>用户名</th>
+                    <td><?php echo $member['nickname']?></td>
+                </tr>
 				<tr>
-					<th width="120">用户名</th>
+					<th width="120">邀请码</th>
 					<td><?php echo $member['username']?><?php if($member['islock']) {?><img title="锁定" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?><?php if($member['vip']) {?><img title="VIP会员" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?></td>
 				</tr>
                 <tr>
@@ -34,10 +38,7 @@ include $this->admin_tpl('header', 'admin');
                     <?php }?>
                     </td>
 				</tr>
-                <tr>
-					<th>昵称</th>
-					<td><?php echo $member['nickname']?></td>
-				</tr>
+
                 <tr>
                     <th width="120">真实姓名</th>
                     <td><?php echo $member['realname']?></td>

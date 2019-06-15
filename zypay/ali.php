@@ -188,12 +188,50 @@ class ali {
 				//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
 		    }
 		    else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-                $order_db = pc_base::load_model('zy_order_model');
-                $info = $order_db->get_one(array("ordersn"=>$out_trade_no));
-                if($info["try_status"] == 0)
-                    $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no, "status"=>'2'), array("ordersn"=>$out_trade_no));
-                else
-                    $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no, "status"=>'4'), array("ordersn"=>$out_trade_no));
+                    $order_db = pc_base::load_model('zy_order_model');
+                    $ordergoods_db = pc_base::load_model('zy_order_goods_model');
+                    $goods_specs_db = pc_base::load_model('goods_specs_model');
+                    $goods_db = pc_base::load_model('goods_model');
+                    $info = $order_db->get_one(array("ordersn"=>$out_trade_no));
+                    $goodsInfo = $ordergoods_db->select(array("order_id"=>$info["order_id"]), "id,goods_id, is_count,is_xlCount,  specid, goods_num");
+                    foreach($goodsInfo as $k=>$v)
+                    {
+                        $ordergoods_db->update(array("is_xlCount"=>1), array("id"=>$v["id"]));
+                        if($v["specid"] && $v["is_xlCount"] == 0)
+                            $specidGoods[] = $v;
+                        elseif($v["is_xlCount"] == 0)
+                            $notSpecidGoods[] = $v;
+                    }
+                    if(isset($specidGoods))
+                    {
+                        foreach($specidGoods as $k=>$v)
+                        {
+                            $goods_specs_db->update(array("salenum"=>"+=".$v["goods_num"]), array("goodsid"=>$v["goods_id"], "specid"=>$v["specid"]));
+                            $goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                        }
+                    }
+                    if(isset($notSpecidGoods))
+                    {
+                        foreach($notSpecidGoods as $k=>$v)
+                        {
+                            $goods_db->update(array("salesnum"=>"+=".$v["goods_num"]), array("id"=>$v["goods_id"]));
+                        }
+                    }
+
+                    $data=[
+                        'userid'=>$info["userid"],
+                        'oid'=>$info["order_id"],
+                    ];
+
+                    //更新积分 分销佣金
+                    $url = APP_PATH."index.php?m=zypoints&c=api&a=api_update_points";
+                    $return = json_decode(_crul_post($url,$data),true);
+
+                    if($info["try_status"] == 0)
+                        $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no, "status"=>'2'), array("ordersn"=>$out_trade_no));
+                    else
+                        $order_db->update(array("pay_type"=>1,"aliTradeNo"=>$trade_no, "status"=>'4'), array("ordersn"=>$out_trade_no));
+
 		    }
 			//——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
             //write_log('支付宝支付异步回调：'.json_encode($_POST));
@@ -459,8 +497,8 @@ class ali {
             $subject = "惠集信购商品";
 
             //付款金额，必填
-            $total_amount = 0.01;
-//            $total_amount = $info["totalprice"];
+//            $total_amount = 0.01;
+            $total_amount = $info["totalprice"];
 
             //商品描述，可空
            $body = "惠集信购商品";
@@ -529,7 +567,7 @@ class ali {
 			require_once 'classes/alipay/wap/config.php';
 			if (!empty($_POST['WIDout_trade_no']) || !empty($_POST['WIDtrade_no'])){
 
-			    exit(1);
+//			    exit('1');
 			    //商户订单号和支付宝交易号不能同时为空。 trade_no、  out_trade_no如果同时存在优先取trade_no
 			    //商户订单号，和支付宝交易号二选一
 			    $out_trade_no = trim($_POST['WIDout_trade_no']);
@@ -552,14 +590,14 @@ class ali {
 			    $RequestBuilder->setRefundAmount($refund_amount);
 			    $RequestBuilder->setRefundReason($refund_reason);
 			    $RequestBuilder->setOutRequestNo($out_request_no);
-
+                unset($config["notify_url"]);
 			    $Response = new AlipayTradeService($config);
 			    $result=$Response->Refund($RequestBuilder);
 			    return ;
 			}
 		}
 
-		include template('zypay', 'wap_refund');		
+		//include template('zypay', 'wap_refund');
 	}
 
 	/**
