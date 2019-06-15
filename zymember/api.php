@@ -2183,7 +2183,7 @@ class api{
 					'url'=>$url,
 					'thumb'=>$cinfo['data']['thumb'],
 					'title'=>$cinfo['data']['goods_name'],
-					'price'=>$cinfo['data']['market_price'],
+					'price'=>$cinfo['data']['shop_price'],
 					'userid'=>$userid,
 					'id' => $state,
 				]
