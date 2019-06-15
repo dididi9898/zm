@@ -468,8 +468,8 @@ class zyorder_api{
                 $curl = [
                 'WIDout_trade_no'=>$orderData["ordersn"],
                 'WIDtrade_no'=>$orderData["aliTradeNo"],
-                'WIDrefund_amount'=>0.05 ,
-//                'WIDrefund_amount'=>$orderData["goods_price"]*$orderData["number"],
+//                'WIDrefund_amount'=>0.01 ,
+                'WIDrefund_amount'=>$orderData["goods_price"]*$orderData["number"],
                 "WIDout_request_no"=>time() + mt_rand(100,999),
 
                 ];

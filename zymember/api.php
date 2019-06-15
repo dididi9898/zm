@@ -2157,7 +2157,7 @@ class api{
 		if($cinfo['code'] == 1 && $exist_result)
 		{
 			//生成商品链接
-			$url = APP_PATH."index.php?m=zymember&c=index&a=collect&gid=".$id;
+			$url = APP_PATH."index.php?m=hpshop&c=index&a=goodsinfo&id=".$id;
 		
 			$data = array(
 				'pid'=>$_POST['id'],

@@ -1,32 +1,54 @@
-﻿{php $SEO['site_title'] = '收藏'}
-{template "zymember","top-head"}
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{if isset($SEO['title']) && !empty($SEO['title'])}{$SEO['title']}{/if}{$SEO['site_title']}</title>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
 
+    <link rel="stylesheet" href="{APP_PATH}statics/public/layui-v2.4.5/layui/css/layui.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/public/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/public/icon/iconfont.css">
+    <link rel="stylesheet" href="{APP_PATH}statics/public/swiper-4.4.6/dist/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
+    <style>
+        .c1{
+            float: right;
+            position: absolute;
+            bottom: 0.2rem;
+            right: 0.2rem;
+            border-radius: 10rem;
+            border-style: none;
+            line-height: 0.65rem;
+            background-color: #f5222d;
+            color: #fff;
+            padding: 0 0.248rem;
+        }
+    </style>
+</head>
+{php $SEO['site_title'] = '收藏'}
+<link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
 <body>
-    <div class="personal-head">
-        <div class="fl head-icon">
-			<a onClick="javascript :history.back(-1);">
-				<i class="layui-icon layui-icon-left"></i>
-			</a>
+    <div class='per-head'>
+        <div class='per-head-left'>
+            <a onClick="javascript :history.back(-1);" >
+                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw' style="margin-top: 0">
+            </a>
         </div>
-        <div class="fl head-icon">
+        <a class='per-head-hd'>收藏</a>
+        <div class='per-head-right'>
         </div>
-        <div class="title">
-            <span>收藏</span>
-        </div>
-        <div class="fr head-icon">
-        </div>
-        <div class="fr head-icon">
-        </div>
-
+        <div class='clear'></div>
     </div>
 	<div class="h5"></div>
     <!--收藏-->
-    <div class="layui-container" style="background: #f5f5f5; min-height: calc(100vh - 0.5rem)">
-		<div class="box box-indent sm-fs">
+    <!--<div class="layui-container" style="background: #f5f5f5; min-height: calc(100vh - 0.5rem)">-->
+		<!--<div class="box box-indent sm-fs">-->
 			<!-- 单天 -->
-			<ul class="footprint pt05 pb05 layui-row" id="collect_list"></ul>
-		</div>
-    </div>
+    <div class="pl1 pr1"  id="collect_list"></div>
+		<!--</div>-->
+    <!--</div>-->
 	<style>
 		.layui-flow-more{display: block;clear: both;}
 	</style>
@@ -61,9 +83,9 @@
 									console.log(res);
 									//假设你的列表返回在data集合中
 									layui.each(res.data, function(index, item){
-										var href = '<a href="'+ item.url +'" class="d-b hidden"><div class="img img-contain p-r"><img src="'+item.thumb+'" class="p-a"></div>'+'</a>';
-										var text = '<div class="text p-r lh4 h4"><div class="bg-fs pl05 pr05" style=" width: calc(100% - 0.3rem);overflow: hidden;"><span class="c-e2513c"><i>￥</i>'+item.price+'</span></div><div class="p-a mr05"><botton class="delete" data-id="'+item.pid+'"><i class="layui-icon layui-icon-delete bg-fs c-d2d2d2"></i></botton></div></div>';
-									    lis.push('<li class="footprint-list layui-col-xs6 layui-col-sm6 layui-col-md6"><div class=" bg-fff radius05">'+ href + text +'</div></li>');
+										var href = '<a href="'+ item.url +'" class="d-b hidden"><div class="img" style="height: 3rem"><img src="'+item.thumb+'" ></div>';
+										var text = '<div class="pl1"><h3>'+ item.title +'</h3><p style="position: absolute;bottom: 0.2rem;">价格：<span>￥'+item.price +'</span></p><div class="sp-yj">	<s>&nbsp;</s></div><a :href="#" ><botton class="c1"  onclick="del('+item.pid+')">删除</botton></a></div></a>';
+									    lis.push('<div class="index-sp" id="collect_'+item.pid+'">'+ href + text +'');
 									}); 
 				/*<li class="footprint-list layui-col-xs6 layui-col-sm6 layui-col-md6">
 					<a href="" class="d-b bg-fff hidden radius05">
@@ -87,36 +109,33 @@
 				    });
 				});
 			
-				$('#collect_list').on('click','.delete',function(){
-					console.log($(this).data('id'));
-					var id = $(this).data('id');
-					var $this = $(this).parents('.footprint-list');
-					if(id){
-						layer.confirm('你确定要删除这件藏品吗？', {
-							btn: ['确定', '取消'] //可以无限个按钮
-						}, function(index, layero){
-							aj.post('index.php?m=zymember&c=api&a=collect_del',{id:id},function(data){
-								console.log(data);
-								if (data.status == 'error') {
-									layer.msg(data.message);
-								}else{
-									layer.msg(data.message);
-									$this.remove();
-									
-								}
-							})
-						  //按钮【按钮一】的回调
-						}, function(index){
-						  //按钮【按钮二】的回调
-						});
-						
-					}else{
-						layer.msg('未知错误');
-					}
-				})
+
 			
 			
         }();
+        function del(id){
+
+            if(id){
+                layer.confirm('你确定要删除这件藏品吗？', {
+                    btn: ['确定', '取消'] //可以无限个按钮
+                }, function(index, layero){
+                    aj.post('index.php?m=zymember&c=api&a=collect_del',{id:id},function(data){
+                        console.log(data);
+                        if (data.status == 'error') {
+                            layer.msg(data.message);
+                        }else{
+                            layer.msg(data.message);
+                            $("#collect_"+id).empty();
+                        }
+                    })
+                    //按钮【按钮一】的回调
+                }, function(index){
+                    //按钮【按钮二】的回调
+                });
+            }else{
+                layer.msg('未知错误');
+            }
+        }
     </script>
 </body>
 

@@ -121,4 +121,5 @@ function returnAjaxData($code, $info="成功", $data=[])//ajax返回函数
     exit(json_encode(array_merge($resule, $resule_info),JSON_UNESCAPED_UNICODE));
 }
 
+
  ?>
