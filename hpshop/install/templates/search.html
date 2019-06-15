@@ -65,8 +65,9 @@
     function changeData(data)
     {
         var sercon = "{$_GET[sercon]}";
+		var catid = "{$_GET[catid]}";
         var type = data;
-        window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+sercon+"&type="+type;
+        window.location.href="index.php?m=hpshop&c=index&a=search&catid="+catid+"&sercon="+sercon+"&type="+type;
 //        $('#rq').empty();
 //        var id_data = "sergoods_"+Math.ceil(Math.random() * 10000);
 //        console.log(id_data);
@@ -112,6 +113,7 @@
     <script>
         //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
         var sercon = "{$_GET[sercon]}";
+        var catid = "{$_GET[catid]}";
         var type = "{php if(isset($_GET[type])) echo $_GET[type]; else echo '1';}";
         ;
         ! function () {
@@ -174,15 +176,15 @@
 						},
 						submit_search:function(){
 							if(this.search){
-								aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.search},function(data){
-									console.log(data);
-								});
+//								aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{sercon:this.search},function(data){
+//									console.log(data);
+//								});
+								window.location.href="index.php?m=hpshop&c=index&a=search&catid="+catid+"&sercon="+this.search;
 
 							}else{
 								layer.msg('搜索内容不能为空');
 							}
 							//console.log(this.search);
-							window.location.href="index.php?m=hpshop&c=index&a=search&sercon="+this.search;
 						},
                         showHistory:function(data){
 							this.search = data;
@@ -218,7 +220,7 @@
                     var lis = [];
                     console.log(page);
                     //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-                    aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon , 'page':page, 'type':type},function(data){
+                    aj.post('index.php?m=hpshop&c=goods_api&a=sergoods',{'sercon':sercon , 'page':page, 'type':type, 'catid':catid},function(data){
                         console.log(data.data);
                         console.log('ji5');
                         if(data.code==207){
