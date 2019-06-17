@@ -322,7 +322,7 @@ class zyorder_api{
 		if($_GET['status']==1){
 			$where.= ' AND status=1';
 		}else if($_GET['status']==2){
-			$where.= ' AND (status=2 OR status=11) ';
+			$where.= ' AND (status=2 OR status=11 OR status=10) ';
 		}else if($_GET['status']==3){
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
