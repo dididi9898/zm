@@ -33,11 +33,12 @@
 				{{#  layui.each(item.data, function(i, v){ }}
 				<li class="footprint-list layui-col-xs4 layui-col-sm4 layui-col-md4">
 					<div class=" bg-fff">
+						<a href="{{ v.url }}">
 						<div class="img img-contain p-r"><img src="{{ v.thumb}}" class="p-a"></div>
 						<div class="text p-r lh4 h4">
 							<div class="bg-fs pl05 pr05" style=" width: calc(100% - 0.3rem);overflow: hidden;"><span class="c-e2513c"><i>￥</i>{{ v.price }}</span></div>
 						</div>
-						
+						</a>
 					</div>
 				</li>
 				{{#  }); }}
