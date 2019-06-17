@@ -106,4 +106,11 @@ class frontApi
         Res::AssertOk($this->member->TXAffirm( $info, $money),"2");
         returnAjaxData("1", "提现成功");
     }
+    function getMoneyInfo()
+    {
+        $neadArg = ["userid"=>[true, 1]];
+        $info = checkArg($neadArg);
+        $moneyInfo = Res::AssertOk($this->member->getMoneyInfo($info));
+        returnAjaxData("1", "查询成功", $moneyInfo);
+    }
 }

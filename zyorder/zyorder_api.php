@@ -322,7 +322,7 @@ class zyorder_api{
 		if($_GET['status']==1){
 			$where.= ' AND status=1';
 		}else if($_GET['status']==2){
-			$where.= ' AND (status=2 OR status=11) ';
+			$where.= ' AND (status=2 OR status=11 OR status=10) ';
 		}else if($_GET['status']==3){
 			$where.= ' AND status=3';
 		}else if($_GET['status']==4){
@@ -379,6 +379,32 @@ class zyorder_api{
 		$totalcount = $this->order_db->count($where);
 		foreach ($orders as $k => $v) {
 			$goodsinfo = $this->uordgoodsinfo(0,$v['order_id'], $_GET['status']);
+			if($v["status"] == "1" && $v["try_status"] != '1')
+            {
+                if(time() - $v["addtime"] > 3600)
+                {
+                    $specidGoods = [];
+                    $notSpecidGoods = [];
+                    $result = $this->order_db->update(array('status'=>6),array('order_id'=>$v["order_id"]));
+                    $order_info = $this->order_db->get_one(array('order_id'=>$v["order_id"]));
+                    $this->coupon_cancel($order_info['couponid']);
+                    $goodsInfo = $this->ordergoods_db->select(array("order_id"=>$v["order_id"]), "id,goods_id, is_count, specid, goods_num");
+                    foreach($goodsInfo as $ki=>$vi)
+                    {
+                        if($vi["specid"] && $vi["is_count"] == 1)
+                            $specidGoods[] = $vi;
+                        elseif($vi["is_count"] == 1)
+                            $notSpecidGoods[] = $vi;
+                    }
+                    foreach($specidGoods as $ki=>$vi)
+                        $this->goods_specs_db->update(array("specstock"=>"+=".$vi["goods_num"]), array("goodsid"=>$vi["goods_id"], "specid"=>$vi["specid"]));
+
+                    foreach($notSpecidGoods as $ki=>$vi)
+                        $this->goods_db->update(array("stock"=>"+=".$vi["goods_num"]), array("id"=>$vi["goods_id"]));
+                    unset($orders[$k]);
+                    continue;
+                }
+            }
 			$orders[$k]['goodsinfo'] = $goodsinfo;
 			$orders[$k]["id"] = $v["order_id"];
 			$orders[$k]['storename'] = $snamarr[$v['storeid']]['shopname'];

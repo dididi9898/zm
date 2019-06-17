@@ -2165,7 +2165,8 @@ class api{
 				'url'=>$url,
 				'thumb'=>$cinfo['data']['thumb'],
 				'title'=>$cinfo['data']['goods_name'],
-				'price'=>$cinfo['data']['market_price'],
+				'price'=>$cinfo['data']['shop_price'],
+				'addtime'=>time(),
 				'userid'=>$userid,
 			);
 			$state = $this->member_collect_db->insert($data,true);
@@ -2315,7 +2316,7 @@ class api{
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 		}
 
-		$cinfo = $this->member_collect_db->select(array('userid'=>$userid));
+		$cinfo = $this->member_collect_db->select(array('userid'=>$userid), "*", "", "addtime Desc");
 
 		//==================	操作失败-验证 START
 		if($cinfo){
