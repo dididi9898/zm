@@ -184,6 +184,20 @@ class Fx
         $member = modelFactory::Create()->getModel("member");
         return $member->get_one(array('username'=>$info['yqm']), "userid");
     }
+    public function getMoneyInfo($info)
+    {
+        $money = modelFactory::Create()->getModel("zyfxmoney");
+        try{
+            $moneyInfo = $money->get_one($info);
+            if(empty($moneyInfo))
+                Error("没有该用户信息");
+        }
+        catch (Exception $e)
+        {
+            return Res::Error($e->getMessage());
+        }
+        return $moneyInfo;
+    }
 
     //****************************************************************************************************************
     //和后台的交互代码
