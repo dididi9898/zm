@@ -188,6 +188,7 @@ class Fx
     {
         $money = modelFactory::Create()->getModel("zyfxmoney");
         try{
+
             $moneyInfo = $money->get_one($info);
             if(empty($moneyInfo))
                 Error("没有该用户信息");
@@ -196,7 +197,7 @@ class Fx
         {
             return Res::Error($e->getMessage());
         }
-        return $moneyInfo;
+        return Res::Success($moneyInfo);
     }
 
     //****************************************************************************************************************

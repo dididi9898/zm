@@ -167,9 +167,10 @@ class index{
 	public function brokerage2wallet()
 	{
 		// 从资金账户里获取资金总额
-		$params = array('id'=>$this->userid,"key"=>"zyfunds1");
+		$userid=$this->userid;
+		$params = array('userid'=>$this->userid);
 		$paramstring = http_build_query($params);
-		$account = $this->juhecurl('',$paramstring);
+		$account = $this->juhecurl(APP_PATH.'index.php?m=zyfx&c=frontApi&a=getMoneyInfo',$paramstring);
 
 		include template('zyfunds', 'brokerage2wallet');
 	}

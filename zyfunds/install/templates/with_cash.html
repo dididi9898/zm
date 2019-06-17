@@ -6,7 +6,7 @@
     <title>我的钱包</title>
     <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
     <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
-    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_ocuxyk7vg8.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_laogz5q6wf8.css">
     <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
     <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
@@ -49,6 +49,36 @@
         background-color: #f1f1f1;
     }
     .tx-list .per-head-hd{float: left;}
+    .tx-head{
+        background: #55acef;
+        width: 100%;
+        height: 3rem;
+    }
+    .tx-head ul {
+        display: flex;
+        color: white;
+        font-size: 1rem;
+    }
+    .tx-head a {
+        color: white;
+    }
+    .tx-head li{
+        width: 33.33%;
+        text-align: center;
+        vertical-align: middle;
+        float: left;
+        display:block;
+        padding-top: 0.5rem;
+    }
+    .tx-head li .iconfont{
+        font-size: 1rem;
+    }
+    .tx-head li p{
+        font-size: 0.3rem;
+    }
+    .tx-head li span{
+        font-size: 0.4rem;
+    }
 </style>
 <body style="background: #f1f1f1">
     <!--head_food-->
@@ -64,25 +94,29 @@
         </div>
         <div class='clear'></div>
     </div>
-    <!--<div class="tx-head">-->
-        <!--<ul>-->
-            <!--<li>-->
-                <!--<div class="iconfont icon-redenvelope"></div>-->
-                <!--<p>我的佣金</p>-->
-                <!--<span>￥0.00</span>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<div class="iconfont icon-moneybag"></div>-->
-                <!--<p>余额</p>-->
-                <!--<span>￥0.00</span>-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<div class="iconfont icon-redenvelope"></div>-->
-                <!--<p>我的佣金</p>-->
-            <!--</li>-->
-            <!--<div class="clear"></div>-->
-        <!--</ul>-->
-    <!--</div>-->
+    <div class="tx-head">
+        <ul>
+            <li>
+                <a href="{APP_PATH}index.php?m=zyfunds&c=index&a=brokerage2wallet">
+                <div class="iconfont icon-tixian2"></div>
+                <p>佣金转出</p>
+                </a>
+            </li>
+
+            <li id="app">
+                <div class="iconfont icon-yue"></div>
+                <p>余额</p>
+                <p style="font-size: 0.4rem;">￥{{data['cash']}}</p>
+            </li>
+            <li>
+                <a href="{APP_PATH}index.php?m=zyfunds&c=index&a=wallet">
+                <div class="iconfont icon-tixian2-copy"></div>
+                <p>提现</p>
+                </a>
+            </li>
+            <div class="clear"></div>
+        </ul>
+    </div>
     <div class="bt10"></div>
     <div class="bg-fff pl2 pr2 tx-way">
         <div class="tx-nav">
@@ -188,7 +222,7 @@
     </div>
 
 
-
+    {template "zyfunds",'footer'}
     <!--head_food_end-->
     <script>
         $('.tx-way').click(function(){
@@ -216,6 +250,11 @@
 
             });
         })
+        var data = {$res};
+        var vm = new Vue({
+            el: '#app',
+            data: data,
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,191 @@
+﻿<!doctype html>
+<meta name="viewport" content="width=device-width, target-densitydpi=high-dpi" />
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>佣金提现</title>
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{APP_PATH}statics/zm/css/t-style.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1119981_laogz5q6wf8.css">
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/auto-size.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/zm/layer/layer.js"></script>
+</head>
+<style type="text/css">
+    .tx-nav .tx-icon{
+        float: left;
+        line-height: 1rem;
+    }
+    .tx-nav .fr{
+        line-height: 1rem;
+    }
+    .tx-nav .fr img{
+        width: 20px;
+        vertical-align:middle;
+    }
+    .tx-nav .fl p{margin-bottom: 0.1rem;font-size: 0.4rem;}
+    .tx-nav .fl span{
+        color: #666;
+    }
+    .tx-cz-input{overflow: hidden;}
+    .c-666{color: #666}
+    .tx-cz-input span{
+        font-size: 1rem
+    }
+    .tx-cz-input .fl{
+        line-height: 1rem;
+    }
+    .tx-cz-input .fl input{
+        line-height: 1rem;
+    }
+    .bdt1-f1f1f1{border-top: 1px solid #f1f1f1}
+    .tx-list{
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f1f1f1;
+    }
+    .tx-list .per-head-hd{float: left;}
+    .tx-head{
+        background: #55acef;
+        width: 100%;
+        height: 3rem;
+    }
+    .tx-head ul{
+        display: flex;
+        color: white;
+        font-size: 1rem;
+    }
+    .tx-head li{
+        width: 33.33%;
+        text-align: center;
+        vertical-align: middle;
+        float: left;
+        display:block;
+        padding-top: 0.5rem;
+    }
+    .tx-head li .iconfont{
+        font-size: 1rem;
+    }
+    .tx-head li p{
+        font-size: 0.3rem;
+    }
+    .tx-head li span{
+        font-size: 0.4rem;
+    }
+</style>
+<body style="background: #f1f1f1">
+    <!--head_food-->
+    <div class='per-head'>
+        <div class='per-head-left'>
+            <a href='javascript:history.go(-1);'>
+                <img src='{APP_PATH}statics/zm/images/fh-b.png' class='tb-dw'>
+            </a>
+        </div>
+        <a class='per-head-hd'>佣金提现</a>
+        <div class='per-head-right'>
+            <img src='{APP_PATH}statics/zm/images/gd-b.png' class='tb-dw'>
+        </div>
+        <div class='clear'></div>
+    </div>
+    <div class="bt10"></div>
+    <form id="myform">
+    <div class="bg-fff pl2 pr2">
+        <div class="bt10"></div>
+        <h2 class="lg-fs c-666">提现佣金金额</h2>
+        <div class="bt10"></div>
+        <div class="tx-cz-input">
+            <span class="lg-fs fl">￥</span>
+            <div class="fl">
+                <input type="text" class="lg-fs tx_money">
+            </div>
+            <div class="clear"></div>
+            <div class="bt10"></div>
+        </div>
+        <div class="bdt1-f1f1f1 c-666 md-fs">
+            <div class="bt10"></div>
+            <div>佣金余额<span  id="app">{{WTXmoney}}</span>元 <a class="all" style="color: grey">全部转出</a></div>
+            <div class="bt10"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="bt20"></div>
+    <div class="wjmm">
+        <a href="#">
+            <button type="button" class="shopdran">确认提现</button>
+        </a>
+    </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <script type="text/javascript" src="{APP_PATH}statics/public/js/leftTime.min.js"></script>
+    <script src="{APP_PATH}statics/public/js/ajax.js"></script>
+    <script src="{APP_PATH}statics/public/swiper-4.4.6/dist/js/swiper.min.js"></script>
+
+    <!--head_food_end-->
+    <script>
+        /* 全部提现 */
+        var uid='{$userid}';
+        $(function (){
+            aj.get('index.php?m=zyfx&c=frontApi&a=getMoneyInfo', {  'userid': uid }, function (data) {
+                console.log(data.data);
+                if (data.status == 'error') {
+                    layer.msg(data.message);
+                    if(data.code=='-1'){
+                        setTimeout("javascript:location.href='index.php?m=zymember&c=index&a=login'", 1000);
+                    }
+                } else {
+                    var info = new Vue({
+                        el: '#app',
+                        data: data.data,
+                        methods:{
+
+                        }
+                    });
+                };
+            });
+        });
+        $('.all').on('click',function(){
+            var value = $(this).siblings('span').html();
+            console.log(value);
+            $('.tx_money').val(value);
+        });
+        /* 提交 */
+        $('.shopdran').on('click',function(){
+            var text = $('.tx_money').val();
+            console.log(text);
+            var allmoney = parseFloat($(".all").siblings('span').html());
+            if(text==''){
+                layer.msg('请输入提现金额');
+                return false;
+            }
+            if(text==0){
+                layer.msg('请输入有效的金额');
+                return false;
+            }
+            if(!$.isNumeric(text)){
+                layer.msg('请输入正确的金额格式');
+                return false;
+            }
+            if (allmoney < text) {
+                layer.msg('提现金额超出资金范围');
+                return false;
+            }
+
+            if(uid) {
+                aj.post('index.php?m=zyfunds&c=zyfunds_api&a=fx_tx', {'userid': uid, 'money': text}, function (data) {
+                    console.log(data);
+                    if (data.status == 'error') {
+                        layer.msg(data.message);
+                    } else {
+                        layer.msg(data.message);
+                        setTimeout("javascript:location.href='index.php?m=zymember&c=index'", 1000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
