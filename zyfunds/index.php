@@ -153,28 +153,26 @@ class index{
 	public function with_cash()
 	{
 		// 从资金账户里获取资金总额
-		$url = $this->zyconfig_db->get_one(array('key'=>'zyfunds2')); // cash
+		$url = $this->zyconfig_db->get_one(array('key'=>'zyfunds2'));
 		$params = array('id'=>$this->userid,"key"=>"zyfunds1");
 		$paramstring = http_build_query($params);
-		$account = $this->juhecurl($url['url'],$paramstring);
-
-		/* 显示账户是用默认还是选择的账户 */
-		$where['userid'] = $this->userid;
-
-		if(empty($_GET['id'])){
-			$is_first = 1;
-			$id = '';
-		}else{
-			$id = $_GET['id'];
-			$is_first = '';
-		}
-
-		$urls = $this->zyconfig_db->get_one(array('key'=>'zyfunds3'));  // account
-		$param = array('is_first'=>$is_first,'userid'=>$this->userid,'id'=>$id,'limit'=>1);
-		$paramstrings = http_build_query($param);
-		$result = $this->juhecurl($urls['url'],$paramstrings);
+		$res = $this->juhecurl($url['url'],$paramstring);
 
 		include template('zyfunds', 'with_cash');
+	}
+
+	/**
+	 * 佣金提现
+	 */
+	public function brokerage2wallet()
+	{
+		// 从资金账户里获取资金总额
+		$userid=$this->userid;
+		$params = array('userid'=>$this->userid);
+		$paramstring = http_build_query($params);
+		$account = $this->juhecurl(APP_PATH.'index.php?m=zyfx&c=frontApi&a=getMoneyInfo',$paramstring);
+
+		include template('zyfunds', 'brokerage2wallet');
 	}
 
 	/*

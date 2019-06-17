@@ -16,7 +16,8 @@ class zyfunds_api
         $this->zyfound_tx_db = pc_base::load_model('zyfound_tx_model');
         $this->zyfound_account_db = pc_base::load_model('zyfound_account_model');
         $this->zyconfig_db = pc_base::load_model('zyconfig_model');
-        $this->zymember_db = pc_base::load_model('zymember_model');
+        $this->zymember_db = pc_base::load_model('member_model');
+        $this->zyfxmoney_db = pc_base::load_model("zyfxmoney_model");
     }
 
     /**
@@ -1059,5 +1060,55 @@ class zyfunds_api
         $paramstring = http_build_query($data);
         $res = $this->juhecurl($url['url'],$paramstring);
         exit($res);
+    }
+
+    /*
+     * 佣金提现
+     * @param amount 金额
+     * @param userid 用户ID
+     */
+    public function fx_tx($money,$userid){
+        $money = empty($money)?$_POST['money']:$money;
+
+        if(empty($money)){
+            $res = ['status'=>'error','code'=>10001,'message'=>'请输入有效佣金'];
+            exit(json_encode($res,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        }
+
+        $_userid = param::get_cookie("_userid");
+        $userid = $_POST['userid'];
+
+        if($userid){
+            $userid = $userid;
+        }else{
+            $userid = $_userid;
+        }
+
+        if(!$userid){
+            $res = ['status'=>'error','code'=>-1,'message'=>'用户不存在'];
+            exit(json_encode($res,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        }
+        $data = array(
+            "userid" => $userid,
+            "money" => $money,
+        );
+        $paramstring = http_build_query($data);
+        $res = $this->juhecurl(APP_PATH.'index.php?m=zyfx&c=frontApi&a=TXAffirm',$paramstring);
+        $res=json_decode($res,true);
+        if($res['status']='success'){
+
+            $info = $this->zymember_db->get_one(array('userid'=>$userid));
+            $money+=$info['amount'];
+            $bool=$this->zymember_db->update(array('amount'=>$money),array('userid'=>$userid));
+            if($bool) {
+                $res = ['status' => 'success', 'code' => 200, 'message' => '佣金提现成功'];
+            }
+            else {
+                $res = ['status' => 'error', 'code' => -200, 'message' => '佣金提现失败'];
+            }
+            exit(json_encode($res,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        }else {
+            exit(($res));
+        }
     }
 }
